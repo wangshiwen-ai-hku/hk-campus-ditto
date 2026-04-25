@@ -1,0 +1,13 @@
+{
+  "name": "campus-ditto-hk",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "demo": "concurrently -k \"npm --prefix backend run dev\" \"npm --prefix frontend run dev -- --host 0.0.0.0\"",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "seed": "npm --prefix backend run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

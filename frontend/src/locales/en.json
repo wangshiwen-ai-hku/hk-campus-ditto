@@ -1,0 +1,185 @@
+{
+  "brand": "Campus Ditto HK",
+  "nav": {
+    "how": "How it works",
+    "safety": "Safety",
+    "faq": "FAQ",
+    "join": "Join now",
+    "signOut": "Sign out"
+  },
+  "home": {
+    "hero": {
+      "getADate": "get a date every",
+      "wednesday": "wednesday",
+      "atYourSchool": "@YOUR SCHOOL",
+      "nextDrop": "Next HK Campus Drop: Wednesday at 7PM",
+      "joinDrop": "Join Next Drop →"
+    },
+    "stats": "{students} Students Joined • 100% University Verified • {dates} Dates Met •",
+    "why": {
+      "badge": "Stopping the swipe culture in HK",
+      "title": "One intentional <br/> <1>Wednesday</1> date",
+      "desc": "Tired of endless swiping and \"Hi\" that go nowhere? We drop one intentional match for you every Wednesday. No games, just one high-signal connection from your campus.",
+      "noSwiping": "No Swiping",
+      "noSwipingDesc": "Our algorithm does the heavy lifting for you.",
+      "campusSafe": "Campus Safe",
+      "campusSafeDesc": "Only students with verified .edu.hk emails.",
+      "personalized": "Personalized",
+      "personalizedDesc": "Matched based on values, vibe, and availability."
+    },
+    "curated": {
+      "title": "Curated campus <br/> dates that actually <br/> happen.",
+      "desc": "We don't just match you; we suggest a safe, high-vibe spot on your campus and a simple idea to break the ice.",
+      "cta": "Start your journey →"
+    },
+    "stepsTitle": "How to get a date",
+    "steps": {
+      "step1": {
+        "title": "Tell us your type",
+        "desc": "Complete your profile before Tuesday night.",
+        "example": "e.g. 'I love night views at TST'",
+        "detailQuote": "\"Your profile is your digital vibe. We don't just ask for your degree, we ask for your soul.\" ✨",
+        "interests": "Interests",
+        "interestsDesc": "From Cantopop to Tech Ethics",
+        "vibeTags": "Vibe Tags",
+        "vibeTagsDesc": "Cloud-chaser, Night-owl, or Library-dweller",
+        "encryptionNote": "Your data is encrypted and only shared with your match."
+      },
+      "step2": {
+        "title": "Wednesday drop",
+        "desc": "Receive one high-intent match at 7PM.",
+        "example": "e.g. Matching with a fellow HKUer",
+        "detailQuote": "\"Every Wednesday at 7PM, the magic happens. No more choice paralysis. Just one person.\" ✉️",
+        "algoFocus": "Algorithm Focus",
+        "algoFocusDesc": "\"High Signal, Low Noise\"",
+        "userQuote": "\"I checked my phone at 7:01 and there was this person from my own college. It felt intentional.\" — CUHK Junior"
+      },
+      "step3": {
+        "title": "Share availability",
+        "desc": "Confirm a simple meeting time.",
+        "example": "e.g. 'Let's meet at Book Cafe!'",
+        "detailQuote": "\"We find the overlap in your schedules so you don't have to play text-tag.\" ☕",
+        "check1": "Choose from pre-set safe campus spots.",
+        "check2": "Suggested under-1-hour date format.",
+        "check3": "High commitment, low pressure meets."
+      },
+      "step4": {
+        "title": "Go on a date",
+        "desc": "Refine future matches based on feedback.",
+        "example": "e.g. 'Had a great vibe, retry!'",
+        "detailQuote": "\"Meet in the real world. That's where the chemistry happens.\" 🌟",
+        "match": "Match!",
+        "friends": "Friends",
+        "retry": "Retry",
+        "userQuote": "\"Feedback improves the HK campus pool for everyone. Your input shapes the next drop.\""
+      }
+    },
+    "faqTitle": "Common Questions",
+    "faqSubtitle": "Everything you need to know about the Wednesday Drop.",
+    "faqs": [
+      {
+        "q": "How does the matching work?",
+        "a": "Our algorithm doesn't just look at 'likes'. It analyzes your interests, values, and even your weekly availability. We aim for high-signal connections that have a high probability of a great first campus meet."
+      },
+      {
+        "q": "Is it restricted to .edu.hk emails?",
+        "a": "Yes. To ensure safety and a community of peers, we only allow students from supported Hong Kong universities with valid institutional emails."
+      },
+      {
+        "q": "Why only one match per week?",
+        "a": "Endless browsing leads to decision fatigue and shallow connections. By giving you one intentional match every Wednesday, we help you focus on really getting to know one person at a time."
+      },
+      {
+        "q": "What if I get a bad match?",
+        "a": "You're always in control. After every drop, you can provide feedback. If you identify as a 'pass' or 'rematch', our algorithm learns your preferences for the next cycle. Safety and comfort are our top priorities."
+      },
+      {
+        "q": "Where should we meet?",
+        "a": "We always suggest safe, public spots on your own campus. Keep it low-pressure, keep it public, and keep it under an hour for the first meet."
+      }
+    ],
+    "footerTitle": "Ready to meet your <br/> next campus connection?",
+    "footerCta": "Get Started Now →",
+    "footerDesc": "Join 147k+ Students across HK"
+  },
+  "join": {
+    "title": "Join your next Wednesday drop",
+    "pageTitle": "Student onboarding",
+    "subtitle": "Use a supported university email, verify with the demo code, then complete a preference profile for the next Wednesday drop.",
+    "emailLabel": "University Email",
+    "emailPlaceholder": "name@connect.hku.hk",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Full name",
+    "sendCode": "Send code",
+    "verifyCodeLabel": "Verification Code",
+    "verifyBtn": "Verify",
+    "majorLabel": "Major",
+    "majorPlaceholder": "Major",
+    "bioLabel": "Bio",
+    "bioPlaceholder": "Tell us about yourself...",
+    "languages": "Languages",
+    "interests": "Interests",
+    "availability": "Availability",
+    "saveBtn": "Save profile",
+    "dashboardBtn": "Open dashboard",
+    "demoCodeMsg": "Demo verification code: {code}",
+    "verifiedMsg": "Verified. Continue your profile.",
+    "verifyFirstMsg": "Please verify your email first to save your profile.",
+    "savedMsg": "Profile saved! Redirecting to your dashboard..."
+  },
+  "student": {
+    "title": "Student dashboard",
+    "signInPrompt": "Please sign in to view your dashboard.",
+    "loading": "Loading profile…",
+    "hi": "Hi, {name}!",
+    "major": "Major",
+    "pending": "Pending",
+    "languages": "Languages",
+    "currentDrop": "Current Drop",
+    "compatibility": "Compatibility score: ",
+    "aboutThem": "About them",
+    "curatedDate": "Curated Date",
+    "scheduling": "Scheduling",
+    "waitOverlap": "Wait for overlap",
+    "overlap": "Overlap: {slots}",
+    "noneYet": "None yet",
+    "notesSys": "Notes for System",
+    "notesPlaceholder": "What should the system learn?",
+    "lovedIt": "Loved it",
+    "pass": "Pass",
+    "requestRematch": "Request rematch",
+    "findingMatch": "Finding you a new match...",
+    "feedbackSaved": "Feedback saved.",
+    "nextDropView": {
+      "title": "You're in the next drop!",
+      "desc": "At Ditto, we believe in quality over quantity. Instead of swiping, you get **one intentional match** every Wednesday at 7:00 PM.",
+      "countdownTitle": "Next Match Drop In",
+      "checkBack": "Check back on Wednesday!",
+      "verified": "Verified Students Only",
+      "verifiedDesc": "We ensure everyone is a real person from your campus.",
+      "highSignal": "High Signal Matching",
+      "highSignalDesc": "Our algorithm focuses on shared interests and values."
+    }
+  },
+  "admin": {
+    "title": "Admin console",
+    "pageTitle": "Operator dashboard",
+    "resetDemo": "Reset demo data",
+    "runDrop": "Run Wednesday drop",
+    "msgCreated": "Created {count} new match(es).",
+    "msgReset": "Demo data reset.",
+    "stats": {
+      "students": "Students",
+      "profiles": "Profiles",
+      "dates": "Dates",
+      "rematch": "Rematch"
+    },
+    "recentMatches": "Recent matches",
+    "score": "score",
+    "open": "Open",
+    "studentDir": "Student Directory",
+    "incomplete": "Incomplete",
+    "view": "View",
+    "loading": "Loading records…"
+  }
+}

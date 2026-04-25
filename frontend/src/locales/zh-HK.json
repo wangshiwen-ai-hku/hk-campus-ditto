@@ -1,0 +1,185 @@
+{
+  "brand": "Campus Ditto HK",
+  "nav": {
+    "how": "點樣運作",
+    "safety": "安全",
+    "faq": "常見問題",
+    "join": "立即加入",
+    "signOut": "登出"
+  },
+  "home": {
+    "hero": {
+      "getADate": "逢星期三送你",
+      "wednesday": "一個約會",
+      "atYourSchool": "@你嘅大學",
+      "nextDrop": "下一次配對：星期三晚7點",
+      "joinDrop": "加入下一次配對 →"
+    },
+    "stats": "{students} 個學生已加入 • 100% 大學電郵驗證 • {dates} 次成功見面 •",
+    "why": {
+      "badge": "打破香港的左滑右滑文化",
+      "title": "星期三<br/> <1>認真約會</1>",
+      "desc": "厭倦咗無止境嘅 Swipe 同埋無下文嘅「Hi」？我哋每個星期三為你送上一個認真嘅配對。無需要估估吓，只做同校高質素配對。",
+      "noSwiping": "唔需要 Swipe",
+      "noSwipingDesc": "我哋嘅演算法幫你搞掂。",
+      "campusSafe": "校園安全",
+      "campusSafeDesc": "只限已驗證 .edu.hk 電郵嘅學生。",
+      "personalized": "個人化",
+      "personalizedDesc": "根據價值觀、Vibe、同得閒時間去配對。"
+    },
+    "curated": {
+      "title": "真係可以<br/>成事嘅<br/>校園約會。",
+      "desc": "我哋唔只俾配對你；仲會建議一個你校內安全、氣氛好嘅地方，兼一個簡單嘅破冰話題。",
+      "cta": "即刻開始 →"
+    },
+    "stepsTitle": "點樣有約會",
+    "steps": {
+      "step1": {
+        "title": "話俾我哋知你鍾意咩",
+        "desc": "喺星期二晚之前填好你張 Profile。",
+        "example": "例如：『我鍾意去尖沙咀睇夜景』",
+        "detailQuote": "\"你嘅 Profile 就係你嘅 Digital Vibe。我哋唔單止問你讀咩科，仲想了解你個人。\" ✨",
+        "interests": "興趣",
+        "interestsDesc": "由廣東歌到科技倫理",
+        "vibeTags": "Vibe 標籤",
+        "vibeTagsDesc": "追雲者、夜貓子、或圖書館達人",
+        "encryptionNote": "你嘅資料已加密，只會分享俾同你配對嘅人。"
+      },
+      "step2": {
+        "title": "星期三配對出爐",
+        "desc": "晏晝7點收到一個認真配對。",
+        "example": "例如：同一個港大同學 Match",
+        "detailQuote": "\"每個星期三夜晚7點，奇蹟發生。唔使再患得患失，就只係一個人。\" ✉️",
+        "algoFocus": "算法焦點",
+        "algoFocusDesc": "\"高訊號，低噪音\"",
+        "userQuote": "\"我 7:01 㩒開電話，見到一個同我同 College 嘅人。感覺好命中注定。\" — 中大 Year 3 學生"
+      },
+      "step3": {
+        "title": "分享有空時間",
+        "desc": "確認一個簡單見面時間。",
+        "example": "例如：『不如去 Book Cafe 見！』",
+        "detailQuote": "\"我哋幫你搵你哋時間表重疊嘅時段，唔使再夾來夾去。\" ☕",
+        "check1": "喺預先設定好嘅校園安全地點揀。",
+        "check2": "建議一小時內嘅初次約會。",
+        "check3": "高誠意、低壓力嘅見面。"
+      },
+      "step4": {
+        "title": "出去約會",
+        "desc": "根據反饋改善下次配對。",
+        "example": "例如：『氣氛好好，再約！』",
+        "detailQuote": "\"喺現實世界見面，先至會有火花。\" 🌟",
+        "match": "有 Feel！",
+        "friends": "做住朋友先",
+        "retry": "再試吓",
+        "userQuote": "\"你俾嘅 Feedback 會改善所有人嘅配對質素。下次 Drop 會因為你而變得更好。\""
+      }
+    },
+    "faqTitle": "常見問題",
+    "faqSubtitle": "關於星期三配對，你想知嘅一切",
+    "faqs": [
+      {
+        "q": "配對係點運作？",
+        "a": "我哋嘅演算法唔單止睇『樣』，仲會分析你嘅興趣、價值觀，甚至你個禮拜幾時得閒，務求幫你搵到個最有可能喺校園見面嘅對象。"
+      },
+      {
+        "q": "淨係可以用 .edu.hk 電郵？",
+        "a": "係。為咗確保社群內都係真係學生，所以只限支援嘅香港大學嘅機構電郵。"
+      },
+      {
+        "q": "點解一星期得一次配對？",
+        "a": "無止境咁轆只會令人眼花撩亂同埋無誠意。每個星期三俾一個認真嘅 Match 你，幫你專心認識一個人。"
+      },
+      {
+        "q": "如果 Match 得唔好點算？",
+        "a": "主導權喺你手。每次配對後你都可以俾 Feedback。如果你揀『Pass』或『Rematch』，演算法會學你口味，下次配對會更好。安全同舒服係我哋首要考慮。"
+      },
+      {
+        "q": "去邊度見面好？",
+        "a": "我哋會建議你大學嘅公眾地方，好似港大 Book Cafe 或中大未圓湖。保持低壓力，公開，同埋初次見面一小時內。"
+      }
+    ],
+    "footerTitle": "準備好認識下一個<br/>同校嘅佢未？",
+    "footerCta": "即刻開始 →",
+    "footerDesc": "超過 147k+ 香港學生已經加入"
+  },
+  "join": {
+    "title": "加入下一次星期三配對",
+    "pageTitle": "學生加入",
+    "subtitle": "用大學電郵，透過 Demo Code 驗證，然後填好資料等下個星期三配對。",
+    "emailLabel": "大學電郵",
+    "emailPlaceholder": "name@connect.hku.hk",
+    "nameLabel": "全名",
+    "namePlaceholder": "全名",
+    "sendCode": "傳送驗證碼",
+    "verifyCodeLabel": "驗證碼",
+    "verifyBtn": "驗證",
+    "majorLabel": "主修科目",
+    "majorPlaceholder": "主修科目",
+    "bioLabel": "簡介",
+    "bioPlaceholder": "介紹下你自己...",
+    "languages": "語言",
+    "interests": "興趣",
+    "availability": "得閒時間",
+    "saveBtn": "儲存個人檔案",
+    "dashboardBtn": "打開控制面板",
+    "demoCodeMsg": "示範驗證碼：{code}",
+    "verifiedMsg": "已驗證，繼續填寫。",
+    "verifyFirstMsg": "請先驗證電郵。",
+    "savedMsg": "已儲存！即將跳轉到面板..."
+  },
+  "student": {
+    "title": "學生控制面板",
+    "signInPrompt": "請先登入。",
+    "loading": "載入中…",
+    "hi": "你好, {name}！",
+    "major": "主修科目",
+    "pending": "未填寫",
+    "languages": "語言",
+    "currentDrop": "今個星期配對",
+    "compatibility": "契合度: ",
+    "aboutThem": "關於佢",
+    "curatedDate": "建議約會",
+    "scheduling": "時間夾檔",
+    "waitOverlap": "等緊重疊時間",
+    "overlap": "重疊時間：{slots}",
+    "noneYet": "暫時未有",
+    "notesSys": "俾系統嘅筆記",
+    "notesPlaceholder": "有咩想系統學到？",
+    "lovedIt": "好鍾意",
+    "pass": "Pass",
+    "requestRematch": "要求重新配對",
+    "findingMatch": "搵緊新配對...",
+    "feedbackSaved": "反饋已儲存。",
+    "nextDropView": {
+      "title": "你已經加入咗下一次配對！",
+      "desc": "Ditto 相信重質不重量。唔駛再 Swipe，每個星期三 7:00 PM 你會收到一 個**認真嘅配對**。",
+      "countdownTitle": "下一次配對倒數",
+      "checkBack": "星期三見！",
+      "verified": "只限已驗證學生",
+      "verifiedDesc": "確保每個人都係你同學。",
+      "highSignal": "高訊號配對",
+      "highSignalDesc": "演算法專注喺共同興趣同價值觀。"
+    }
+  },
+  "admin": {
+    "title": "管理員控制面板",
+    "pageTitle": "管理員控制面板",
+    "resetDemo": "重置示範數據",
+    "runDrop": "運行星期三配對",
+    "msgCreated": "新建立咗 {count} 個配對。",
+    "msgReset": "示範數據已重置。",
+    "stats": {
+      "students": "學生人數",
+      "profiles": "完成資料",
+      "dates": "約會次數",
+      "rematch": "重新配對"
+    },
+    "recentMatches": "最近配對",
+    "score": "分數",
+    "open": "打開",
+    "studentDir": "學生目錄",
+    "incomplete": "未完成",
+    "view": "查看",
+    "loading": "載入中…"
+  }
+}

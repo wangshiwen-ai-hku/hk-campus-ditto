@@ -1,0 +1,403 @@
+{
+  "universities": [
+    {
+      "id": "hku",
+      "name": "The University of Hong Kong",
+      "shortName": "HKU",
+      "domains": [
+        "hku.hk",
+        "connect.hku.hk"
+      ],
+      "campuses": [
+        "Pok Fu Lam"
+      ],
+      "safeSpots": [
+        "Main Library Café",
+        "Sun Yat-sen Place",
+        "Composite Building Coffee Corner"
+      ]
+    },
+    {
+      "id": "cuhk",
+      "name": "The Chinese University of Hong Kong",
+      "shortName": "CUHK",
+      "domains": [
+        "link.cuhk.edu.hk",
+        "cuhk.edu.hk"
+      ],
+      "campuses": [
+        "Sha Tin"
+      ],
+      "safeSpots": [
+        "Yasumoto Terrace",
+        "Lake Ad Excellentiam",
+        "United College Coffee Corner"
+      ]
+    },
+    {
+      "id": "hkust",
+      "name": "The Hong Kong University of Science and Technology",
+      "shortName": "HKUST",
+      "domains": [
+        "connect.ust.hk",
+        "ust.hk"
+      ],
+      "campuses": [
+        "Clear Water Bay"
+      ],
+      "safeSpots": [
+        "Academic Concourse",
+        "Seafront Piazza",
+        "Shaw Auditorium Café"
+      ]
+    },
+    {
+      "id": "polyu",
+      "name": "The Hong Kong Polytechnic University",
+      "shortName": "PolyU",
+      "domains": [
+        "connect.polyu.hk",
+        "polyu.edu.hk"
+      ],
+      "campuses": [
+        "Hung Hom"
+      ],
+      "safeSpots": [
+        "VA Terrace",
+        "Innovation Tower Plaza",
+        "Campus Café"
+      ]
+    },
+    {
+      "id": "cityu",
+      "name": "City University of Hong Kong",
+      "shortName": "CityUHK",
+      "domains": [
+        "cityu.edu.hk"
+      ],
+      "campuses": [
+        "Kowloon Tong"
+      ],
+      "safeSpots": [
+        "Festival Walk Bridge",
+        "Yeung Kin Man Courtyard",
+        "Creative Media Centre Lounge"
+      ]
+    },
+    {
+      "id": "hkbu",
+      "name": "Hong Kong Baptist University",
+      "shortName": "HKBU",
+      "domains": [
+        "hkbu.edu.hk"
+      ],
+      "campuses": [
+        "Kowloon Tong"
+      ],
+      "safeSpots": [
+        "AAB Courtyard",
+        "Visual Arts Deck",
+        "Baptist University Road Café"
+      ]
+    },
+    {
+      "id": "lingnan",
+      "name": "Lingnan University",
+      "shortName": "Lingnan",
+      "domains": [
+        "ln.edu.hk"
+      ],
+      "campuses": [
+        "Tuen Mun"
+      ],
+      "safeSpots": [
+        "New Academic Block Atrium",
+        "Student Commons",
+        "Campus Coffee Point"
+      ]
+    },
+    {
+      "id": "eduhk",
+      "name": "The Education University of Hong Kong",
+      "shortName": "EdUHK",
+      "domains": [
+        "eduhk.hk",
+        "eduhk.edu.hk"
+      ],
+      "campuses": [
+        "Tai Po"
+      ],
+      "safeSpots": [
+        "Central Plaza",
+        "Library Café",
+        "Tai Po Lookout Garden"
+      ]
+    }
+  ],
+  "students": [
+    {
+      "yearOfStudy": "Year 4",
+      "major": "Law",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "Final-year HKU law student who likes low-pressure dates, bookstores, and people with a sense of humour.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "matcha",
+        "museum dates",
+        "books",
+        "harbour walks"
+      ],
+      "vibeTags": [
+        "calm",
+        "witty",
+        "curious"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.716Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-hku-alyssa",
+      "fullName": "Alyssa Chan",
+      "email": "alyssa@connect.hku.hk",
+      "universityId": "hku"
+    },
+    {
+      "yearOfStudy": "Year 3",
+      "major": "Architecture",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "Architecture student who notices the little things. Best date format: coffee plus a slow campus walk.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "design",
+        "harbour walks",
+        "coffee",
+        "film photography"
+      ],
+      "vibeTags": [
+        "creative",
+        "warm",
+        "observant"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-hku-daniel",
+      "fullName": "Daniel Wong",
+      "email": "daniel@connect.hku.hk",
+      "universityId": "hku"
+    },
+    {
+      "yearOfStudy": "Year 3",
+      "major": "Psychology",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "Into thoughtful conversation, emotional intelligence, and a great playlist.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "coffee",
+        "psychology",
+        "running",
+        "cantopop"
+      ],
+      "vibeTags": [
+        "empathetic",
+        "playful",
+        "grounded"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-cuhk-zoe",
+      "fullName": "Zoe Lau",
+      "email": "zoe@link.cuhk.edu.hk",
+      "universityId": "cuhk"
+    },
+    {
+      "yearOfStudy": "Year 3",
+      "major": "Medicine",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "Med student who values punctuality, warmth, and someone who can laugh at bad jokes.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "fitness",
+        "podcasts",
+        "coffee",
+        "sunset walks"
+      ],
+      "vibeTags": [
+        "steady",
+        "kind",
+        "smart"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-cuhk-ethan",
+      "fullName": "Ethan Ho",
+      "email": "ethan@link.cuhk.edu.hk",
+      "universityId": "cuhk"
+    },
+    {
+      "yearOfStudy": "Year 3",
+      "major": "Business",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "UST business student. I like easy chemistry, clear communication, and scenic coffee spots.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "startups",
+        "beach sunsets",
+        "coffee",
+        "travel plans"
+      ],
+      "vibeTags": [
+        "direct",
+        "energetic",
+        "friendly"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-hkust-mia",
+      "fullName": "Mia Cheng",
+      "email": "mia@connect.ust.hk",
+      "universityId": "hkust"
+    },
+    {
+      "yearOfStudy": "Year 3",
+      "major": "Engineering",
+      "gender": "Prefer not to say",
+      "seeking": "Meaningful connection",
+      "bio": "Engineering student who prefers one good conversation over endless texting.",
+      "languages": [
+        "English",
+        "Cantonese"
+      ],
+      "interests": [
+        "coding",
+        "coffee",
+        "basketball",
+        "night views"
+      ],
+      "vibeTags": [
+        "loyal",
+        "funny",
+        "focused"
+      ],
+      "dealBreakers": [
+        "ghosting"
+      ],
+      "verificationStatus": "verified",
+      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "optedIn": true,
+      "availability": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "profileComplete": true,
+      "id": "demo-hkust-ryan",
+      "fullName": "Ryan Lee",
+      "email": "ryan@connect.ust.hk",
+      "universityId": "hkust"
+    }
+  ],
+  "matches": [
+    {
+      "id": "demo-match-1",
+      "createdAt": "2026-04-23T09:18:06.717Z",
+      "dropDate": "2026-04-23T09:18:06.717Z",
+      "userAId": "demo-hku-alyssa",
+      "userBId": "demo-hku-daniel",
+      "score": 92,
+      "status": "scheduled",
+      "reasonsForA": [
+        "Both of you like calm first dates with coffee and walking",
+        "Shared interest in visual culture, architecture, and city spaces",
+        "Similar pace: thoughtful, observant, low-drama energy"
+      ],
+      "reasonsForB": [
+        "You both prefer intentional dates over endless back-and-forth chat",
+        "Alyssa values humour and design sensibility, which maps well to your profile",
+        "Strong overlap on harbour walks, coffee, and reflective conversation"
+      ],
+      "posterHeadline": "A campus coffee date with real conversation energy",
+      "curatedDateTitle": "Golden-hour walk + coffee",
+      "curatedDateSpot": "Main Library Café, HKU",
+      "curatedDateTips": [
+        "Start with one thing you are each excited about this week",
+        "Take a short campus loop after drinks",
+        "Keep the first meet to 45-60 minutes"
+      ],
+      "overlapSlots": [
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "confirmedSlot": "Fri 4pm",
+      "feedback": []
+    }
+  ],
+  "verificationCodes": []
+}

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Ditto HK Demo</title>
+  <style>
+    :root{--ink:#17111d;--rose:#ff6fae;--blush:#ffe7f1;--butter:#fff7db;--mint:#d7fff0;--bg:linear-gradient(180deg,#fff8fb 0%,#fffef8 100%)}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    .card{background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(12px);border-radius:28px;box-shadow:0 12px 40px rgba(23,17,29,.08)}
+    .row{display:flex;gap:12px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .hero,.grid2,.grid3,.grid4,.stats,.match{display:grid;gap:18px}
+    .hero{grid-template-columns:1.1fr .9fr}.grid2{grid-template-columns:.7fr 1.3fr}.grid3{grid-template-columns:repeat(3,1fr)}.grid4{grid-template-columns:repeat(4,1fr)}.stats{grid-template-columns:repeat(3,1fr)}.match{grid-template-columns:.8fr 1.2fr}
+    .p{padding:24px}.lg{padding:32px}.label{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:rgba(23,17,29,.45);font-weight:700}
+    h1{font-size:68px;line-height:1.02;margin:0;font-weight:900} h2{font-size:42px;margin:0;font-weight:900} h3{font-size:28px;margin:0;font-weight:900} p{line-height:1.75;color:rgba(23,17,29,.75)}
+    .btn,.pill,.chip{border-radius:999px;padding:12px 18px;font-weight:700;border:1px solid rgba(23,17,29,.08);background:#fff;cursor:pointer}
+    .btn.primary,.chip.active{background:var(--ink);color:#fff}
+    .pink{background:var(--blush)} .butter{background:var(--butter)} .mint{background:var(--mint)} .hidden{display:none}
+    .avatar{width:88px;height:88px;border-radius:28px;background:#fff;display:grid;place-items:center;font-size:28px;font-weight:900}
+    input,textarea{width:100%;padding:14px 16px;border-radius:18px;border:1px solid rgba(23,17,29,.12)}
+    @media (max-width: 980px){.hero,.grid2,.grid3,.grid4,.stats,.match{grid-template-columns:1fr} h1{font-size:44px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="between" style="margin-bottom:24px">
+      <div class="row" style="align-items:center"><div class="avatar" style="width:42px;height:42px;border-radius:16px;background:#17111d;color:#fff">D</div><div style="font-weight:900">Campus Ditto HK</div></div>
+      <div class="row">
+        <button class="pill" id="langBtn">廣東話</button>
+        <button class="btn primary" onclick="show('join')">Join</button>
+        <button class="btn" onclick="show('admin')">Admin</button>
+      </div>
+    </div>
+
+    <section id="landing">
+      <div class="hero">
+        <div>
+          <div class="pill">Hong Kong universities only</div>
+          <h1 id="heroTitle" style="margin-top:20px">One curated campus date, every Wednesday.</h1>
+          <p id="heroSub">Built for Hong Kong universities: verified students, intentional matching, and low-pressure first dates near campus.</p>
+          <div class="row">
+            <button class="btn primary" id="ctaJoin" onclick="show('join')">Start with your school email</button>
+            <button class="btn" onclick="show('admin')">Open demo dashboard</button>
+          </div>
+          <div class="row" style="margin-top:16px">
+            <button class="pill" onclick="loadDemo('alyssa')">Demo: Alyssa Chan</button>
+            <button class="pill" onclick="loadDemo('daniel')">Demo: Daniel Wong</button>
+            <button class="pill" onclick="loadDemo('zoe')">Demo: Zoe Lau</button>
+          </div>
+        </div>
+        <div class="card lg">
+          <div class="between">
+            <div>
+              <div class="label">Next Match Drop</div>
+              <div id="countdown" style="font-size:40px;font-weight:900;margin-top:8px">00:00:00:00</div>
+            </div>
+            <div class="pink p" style="border-radius:24px;text-align:right">
+              <div style="font-size:14px;font-weight:700;color:rgba(23,17,29,.6)">Wednesday 7:00 PM</div>
+              <div style="font-weight:900">Hong Kong time</div>
+            </div>
+          </div>
+          <div class="stats" style="margin-top:20px">
+            <div class="card p"><div style="font-size:14px;color:rgba(23,17,29,.55)">Students</div><div style="font-size:32px;font-weight:900">128</div></div>
+            <div class="card p"><div style="font-size:14px;color:rgba(23,17,29,.55)">Active matches</div><div style="font-size:32px;font-weight:900">46</div></div>
+            <div class="card p"><div style="font-size:14px;color:rgba(23,17,29,.55)">Scheduled dates</div><div style="font-size:32px;font-weight:900">21</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid4" style="margin-top:24px">
+        <div class="card p"><div class="label">Step 1</div><h3 id="s1" style="margin-top:10px">Tell us your type</h3><p id="s1b">Complete your profile before Tuesday night.</p></div>
+        <div class="card p"><div class="label">Step 2</div><h3 id="s2" style="margin-top:10px">Wednesday drop</h3><p id="s2b">Receive one high-intent match with a campus-safe date suggestion.</p></div>
+        <div class="card p"><div class="label">Step 3</div><h3 id="s3" style="margin-top:10px">Share availability</h3><p id="s3b">We look for overlap and confirm a simple first meet.</p></div>
+        <div class="card p"><div class="label">Step 4</div><h3 id="s4" style="margin-top:10px">Give feedback</h3><p id="s4b">Refine future drops based on what worked and what did not.</p></div>
+      </div>
+    </section>
+
+    <section id="join" class="hidden">
+      <div class="card lg">
+        <div class="label">Student onboarding</div>
+        <h2 style="margin-top:10px">Join your next Wednesday drop</h2>
+        <p>Use a Hong Kong university email, verify with the demo code, and build your student profile.</p>
+        <div class="row">
+          <input id="email" value="student@connect.hku.hk" />
+          <input id="fullname" value="Ada Wong" />
+        </div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn primary" onclick="msg('joinMsg','Demo verification code: 246810')">Send code</button>
+          <input id="code" value="246810" />
+          <button class="btn" onclick="msg('joinMsg','Verified. Continue your profile.')">Verify</button>
+        </div>
+        <div id="joinMsg" class="mint p" style="margin-top:16px;border-radius:24px">Demo verification code: 246810</div>
+        <div class="row" style="margin-top:16px">
+          <textarea placeholder="Bio">I like low-pressure dates, books, and good coffee.</textarea>
+          <textarea placeholder="Major">Law</textarea>
+        </div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn primary" onclick="show('student')">Save profile</button>
+          <button class="btn" onclick="show('landing')">Back to landing</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="student" class="hidden">
+      <div class="grid2">
+        <div class="card lg">
+          <div class="label">Student dashboard</div>
+          <div class="row" style="margin-top:16px;align-items:center">
+            <div class="avatar" id="avatar">AC</div>
+            <div>
+              <div id="studentName" style="font-size:24px;font-weight:900">Alyssa Chan</div>
+              <div id="studentMeta" style="color:rgba(23,17,29,.6)">HKU • Law</div>
+            </div>
+          </div>
+          <div class="label" style="margin-top:22px">Availability</div>
+          <div id="slots" class="row" style="margin-top:10px"></div>
+        </div>
+        <div class="card">
+          <div class="lg" style="background:#17111d;color:#fff;border-radius:28px 28px 0 0">
+            <div class="label" style="color:rgba(255,255,255,.55)">Current drop</div>
+            <h2 id="headline" style="margin-top:10px;color:#fff">A campus coffee date with real conversation energy</h2>
+            <div style="margin-top:10px;color:rgba(255,255,255,.75)">Compatibility score: <span id="score">92</span></div>
+          </div>
+          <div class="lg match">
+            <div class="pink p" style="border-radius:28px">
+              <div class="avatar" id="partnerAvatar">DW</div>
+              <div id="partnerName" style="font-size:28px;font-weight:900;margin-top:14px">Daniel Wong</div>
+              <div id="partnerMeta" style="color:rgba(23,17,29,.6)">Architecture • Year 3</div>
+              <p id="partnerBio">Architecture student who notices the little things. Best date format: coffee plus a slow campus walk.</p>
+            </div>
+            <div>
+              <div class="label">Why this match</div>
+              <div id="reasons" style="display:grid;gap:12px;margin-top:12px"></div>
+              <div class="butter p" style="border-radius:28px;margin-top:16px"><div class="label">Curated date</div><div id="spot" style="font-size:28px;font-weight:900;margin-top:8px">Main Library Café, HKU</div></div>
+              <div class="mint p" style="border-radius:28px;margin-top:16px"><div class="label">Scheduling</div><div id="confirmed" style="font-size:20px;font-weight:900;margin-top:8px">Confirmed: Fri 4pm</div></div>
+              <textarea id="feedback" style="margin-top:16px" placeholder="What should the system learn next time?"></textarea>
+              <div class="row" style="margin-top:16px">
+                <button class="btn primary" onclick="msg('fbMsg','Loved it saved.')">Loved it</button>
+                <button class="btn" onclick="msg('fbMsg','Pass saved.')">Pass</button>
+                <button class="btn" onclick="msg('fbMsg','Rematch requested.')">Request rematch</button>
+              </div>
+              <div id="fbMsg" class="hidden mint p" style="margin-top:16px;border-radius:24px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin" class="hidden">
+      <div class="between" style="margin-bottom:18px">
+        <div><div class="label">Admin console</div><h2 style="margin-top:8px">Operator dashboard</h2></div>
+        <div class="row">
+          <button class="btn" onclick="msg('adminMsg','Demo data reset.')">Reset demo data</button>
+          <button class="btn primary" onclick="msg('adminMsg','Created 2 new match(es).')">Run Wednesday drop</button>
+        </div>
+      </div>
+      <div id="adminMsg" class="hidden mint p" style="border-radius:24px;margin-bottom:18px"></div>
+      <div class="grid2">
+        <div class="card lg">
+          <div class="label">Recent matches</div>
+          <div id="matchList" style="display:grid;gap:14px;margin-top:16px"></div>
+        </div>
+        <div class="card lg">
+          <div class="label">Students</div>
+          <div id="studentList" style="display:grid;gap:14px;margin-top:16px"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const localeCopy = {
+      en: {
+        heroTitle: "One curated campus date, every Wednesday.",
+        heroSub: "Built for Hong Kong universities: verified students, intentional matching, and low-pressure first dates near campus.",
+        cta: "Start with your school email",
+        s1: "Tell us your type", s1b: "Complete your profile before Tuesday night.",
+        s2: "Wednesday drop", s2b: "Receive one high-intent match with a campus-safe date suggestion.",
+        s3: "Share availability", s3b: "We look for overlap and confirm a simple first meet.",
+        s4: "Give feedback", s4b: "Refine future drops based on what worked and what did not."
+      },
+      yue: {
+        heroTitle: "逢星期三，送你一個精心安排嘅校園約會。",
+        heroSub: "專為香港大學而設：學生認證、認真配對、校園附近低壓力第一次見面。",
+        cta: "用學校 email 開始",
+        s1: "講你鍾意咩類型", s1b: "星期二晚之前填好個人檔案。",
+        s2: "星期三配對投放", s2b: "收到一個高配對度對象，同安全校園約會建議。",
+        s3: "填可用時間", s3b: "系統搵重疊時段，再確認第一次見面。",
+        s4: "提供 feedback", s4b: "根據你鍾意同唔鍾意嘅地方優化之後配對。"
+      }
+    };
+    const users = {
+      alyssa: {
+        name:"Alyssa Chan", meta:"HKU • Law", avatar:"AC",
+        partner:"Daniel Wong", pmeta:"Architecture • Year 3", pavatar:"DW",
+        pbio:"Architecture student who notices the little things. Best date format: coffee plus a slow campus walk.",
+        score:"92", spot:"Main Library Café, HKU", confirmed:"Confirmed: Fri 4pm",
+        reasons:[
+          "Both of you like calm first dates with coffee and walking",
+          "Shared interest in design, books, and city spaces",
+          "Similar pace: thoughtful, observant, low-drama energy"
+        ]
+      },
+      daniel: {
+        name:"Daniel Wong", meta:"HKU • Architecture", avatar:"DW",
+        partner:"Alyssa Chan", pmeta:"Law • Year 4", pavatar:"AC",
+        pbio:"Final-year HKU law student who likes low-pressure dates, bookstores, and people with a sense of humour.",
+        score:"92", spot:"Main Library Café, HKU", confirmed:"Confirmed: Fri 4pm",
+        reasons:[
+          "You both prefer intentional dates over endless texting",
+          "Strong overlap on coffee, harbour walks, and reflective conversation",
+          "Alyssa values humour and design sensibility"
+        ]
+      },
+      zoe: {
+        name:"Zoe Lau", meta:"CUHK • Psychology", avatar:"ZL",
+        partner:"Ethan Ho", pmeta:"Medicine • Year 3", pavatar:"EH",
+        pbio:"Med student who values punctuality, warmth, and someone who can laugh at bad jokes.",
+        score:"88", spot:"Yasumoto Terrace, CUHK", confirmed:"Waiting for overlap or confirmation",
+        reasons:[
+          "Shared interests: coffee + cantopop",
+          "Matched energy: grounded + kind",
+          "You already have 2 overlapping time slots this week"
+        ]
+      }
+    };
+    const slotState = { values:["Fri 4pm","Sat 2pm","Sun 4pm"] };
+    const slotItems = ["Wed 6pm","Thu 6pm","Fri 4pm","Sat 2pm","Sun 4pm"];
+    let lang = "en";
+
+    function renderSlots() {
+      const box = document.getElementById("slots");
+      box.innerHTML = "";
+      slotItems.forEach((slot) => {
+        const btn = document.createElement("button");
+        btn.className = "chip" + (slotState.values.includes(slot) ? " active" : "");
+        btn.textContent = slot;
+        btn.onclick = () => {
+          if (slotState.values.includes(slot)) {
+            slotState.values = slotState.values.filter((v) => v !== slot);
+          } else {
+            slotState.values.push(slot);
+          }
+          renderSlots();
+        };
+        box.appendChild(btn);
+      });
+    }
+
+    function loadDemo(key) {
+      const u = users[key];
+      document.getElementById("studentName").textContent = u.name;
+      document.getElementById("studentMeta").textContent = u.meta;
+      document.getElementById("avatar").textContent = u.avatar;
+      document.getElementById("partnerName").textContent = u.partner;
+      document.getElementById("partnerMeta").textContent = u.pmeta;
+      document.getElementById("partnerAvatar").textContent = u.pavatar;
+      document.getElementById("partnerBio").textContent = u.pbio;
+      document.getElementById("score").textContent = u.score;
+      document.getElementById("spot").textContent = u.spot;
+      document.getElementById("confirmed").textContent = u.confirmed;
+      const list = document.getElementById("reasons");
+      list.innerHTML = "";
+      u.reasons.forEach((reason) => {
+        const div = document.createElement("div");
+        div.className = "card p";
+        div.textContent = reason;
+        list.appendChild(div);
+      });
+      show("student");
+    }
+
+    function renderAdmin() {
+      const matches = [
+        ["Alyssa Chan × Daniel Wong", "scheduled • score 92", "Main Library Café, HKU"],
+        ["Zoe Lau × Ethan Ho", "awaiting-availability • score 88", "Yasumoto Terrace, CUHK"]
+      ];
+      const students = [
+        "Alyssa Chan — HKU • Law",
+        "Daniel Wong — HKU • Architecture",
+        "Zoe Lau — CUHK • Psychology",
+        "Ethan Ho — CUHK • Medicine",
+        "Mia Cheng — HKUST • Business",
+        "Ryan Lee — HKUST • Engineering"
+      ];
+      const matchList = document.getElementById("matchList");
+      matchList.innerHTML = "";
+      matches.forEach((m, i) => {
+        const div = document.createElement("div");
+        div.className = "card p";
+        div.innerHTML = `<div class="between"><div><div style="font-weight:900">${m[0]}</div><div style="font-size:14px;color:rgba(23,17,29,.6)">${m[1]}</div></div><button class="pill" onclick="loadDemo('${i===0?'alyssa':'zoe'}')">Open</button></div><div style="margin-top:8px;color:rgba(23,17,29,.7)">Spot: ${m[2]}</div>`;
+        matchList.appendChild(div);
+      });
+      const studentList = document.getElementById("studentList");
+      studentList.innerHTML = "";
+      students.forEach((s, i) => {
+        const div = document.createElement("div");
+        div.className = "card p";
+        div.innerHTML = `<div class="between"><div><div style="font-weight:900">${s.split(" — ")[0]}</div><div style="font-size:14px;color:rgba(23,17,29,.6)">${s.split(" — ")[1]}</div></div><button class="pill" onclick="loadDemo('${i < 2 ? 'alyssa' : 'zoe'}')">View</button></div>`;
+        studentList.appendChild(div);
+      });
+    }
+
+    function show(id) {
+      ["landing","join","student","admin"].forEach((key) => document.getElementById(key).classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function msg(id, text) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.classList.remove("hidden");
+    }
+
+    function updateLocale() {
+      const c = localeCopy[lang];
+      document.getElementById("heroTitle").textContent = c.heroTitle;
+      document.getElementById("heroSub").textContent = c.heroSub;
+      document.getElementById("ctaJoin").textContent = c.cta;
+      document.getElementById("s1").textContent = c.s1;
+      document.getElementById("s1b").textContent = c.s1b;
+      document.getElementById("s2").textContent = c.s2;
+      document.getElementById("s2b").textContent = c.s2b;
+      document.getElementById("s3").textContent = c.s3;
+      document.getElementById("s3b").textContent = c.s3b;
+      document.getElementById("s4").textContent = c.s4;
+      document.getElementById("s4b").textContent = c.s4b;
+      document.getElementById("langBtn").textContent = lang === "en" ? "廣東話" : "English";
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const target = new Date();
+      const diffDays = ((3 - target.getDay() + 7) % 7) || 7;
+      target.setDate(target.getDate() + diffDays);
+      target.setHours(19, 0, 0, 0);
+      const ms = target - now;
+      const d = Math.floor(ms / 86400000);
+      const h = Math.floor((ms / 3600000) % 24);
+      const m = Math.floor((ms / 60000) % 60);
+      const s = Math.floor((ms / 1000) % 60);
+      document.getElementById("countdown").textContent = [d,h,m,s].map((n) => String(n).padStart(2,"0")).join(":");
+    }
+
+    document.getElementById("langBtn").onclick = () => {
+      lang = lang === "en" ? "yue" : "en";
+      updateLocale();
+    };
+
+    renderSlots();
+    renderAdmin();
+    updateLocale();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    show("landing");
+  </script>
+</body>
+</html>

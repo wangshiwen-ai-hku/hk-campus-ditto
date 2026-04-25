@@ -1,0 +1,185 @@
+{
+  "brand": "Campus Ditto HK",
+  "nav": {
+    "how": "如何运作",
+    "safety": "安全保障",
+    "faq": "常见问题",
+    "join": "立即加入",
+    "signOut": "退出登录"
+  },
+  "home": {
+    "hero": {
+      "getADate": "每个星期三为你送上",
+      "wednesday": "一个约会",
+      "atYourSchool": "@你的大学",
+      "nextDrop": "下一次匹配发布：周三 7PM",
+      "joinDrop": "加入下一次匹配 →"
+    },
+    "stats": "{students} 名学生已加入 • 100% 大学邮箱认证 • {dates} 次成功见面 •",
+    "why": {
+      "badge": "打破香港的无脑滑动文化",
+      "title": "周三的<br/> <1>走心约会</1>",
+      "desc": "厌倦了无止尽的左滑右滑和石沉大海的“Hi”？我们每周三为你送上一位高质量匹配对象。拒绝无聊游戏，只交本校朋友。",
+      "noSwiping": "无需滑动",
+      "noSwipingDesc": "我们的算法会为你包揽一切。",
+      "campusSafe": "校园安全",
+      "campusSafeDesc": "仅限验证过 .edu.hk 邮箱的学生。",
+      "personalized": "个性化推荐",
+      "personalizedDesc": "基于价值观、氛围感及空闲时间精准匹配。"
+    },
+    "curated": {
+      "title": "真正可以<br/>成行的<br/>校园约会。",
+      "desc": "我们不仅为你提供匹配；还会为你推荐校园内安全、氛围好的地点，以及轻松的破冰话题。",
+      "cta": "即刻开始 →"
+    },
+    "stepsTitle": "如何获得一次约会",
+    "steps": {
+      "step1": {
+        "title": "告诉我们你的偏好",
+        "desc": "在周二晚上之前完善个人资料。",
+        "example": "例如：“我喜欢尖沙咀的夜景”",
+        "detailQuote": "\"你的主页就是你的电子名片。我们不仅想知道你的专业，更想了解你的灵魂。\" ✨",
+        "interests": "兴趣爱好",
+        "interestsDesc": "从粤语流行到科技伦理",
+        "vibeTags": "氛围标签",
+        "vibeTagsDesc": "追云者、夜猫子或是图书馆常驻",
+        "encryptionNote": "你的数据已加密，仅向匹配对象展示。"
+      },
+      "step2": {
+        "title": "周三匹配发布",
+        "desc": "下午 7点 收到一个认真匹配。",
+        "example": "例如：匹配到一位港大同学",
+        "detailQuote": "\"每周三晚上 7点，魔法即刻上演。告别选择困难，只有那特别的一个。\" ✉️",
+        "algoFocus": "算法核心",
+        "algoFocusDesc": "\"高信号，低噪音\"",
+        "userQuote": "\"七点零一分打开手机，看到同学院的他。感觉像命中注定般巧妙。\" — 港中大 大三学生"
+      },
+      "step3": {
+        "title": "分享你的空闲时间",
+        "desc": "确认一个简单的见面时间。",
+        "example": "例如：“不如 Book Cafe 见！”",
+        "detailQuote": "\"系统会自动寻找你们的时间交集，省去来回扯皮。\" ☕",
+        "check1": "在预设的校园安全地点中选择。",
+        "check2": "强烈推荐时长控制在一小时内。",
+        "check3": "高诚意、低压力的初次会面。"
+      },
+      "step4": {
+        "title": "赴约去吧",
+        "desc": "提供反馈，优化下次匹配。",
+        "example": "例如：“氛围很棒，再试一次！”",
+        "detailQuote": "\"在现实中见面，才是火花擦出的瞬间。\" 🌟",
+        "match": "来电！",
+        "friends": "当朋友就好",
+        "retry": "再试一次",
+        "userQuote": "\"你的反馈能提升所有人的匹配质量。下周三的匹配将因你而更精准。\""
+      }
+    },
+    "faqTitle": "常见问题",
+    "faqSubtitle": "关于周三匹配，你想知道的一切",
+    "faqs": [
+      {
+        "q": "匹配机制是如何工作的？",
+        "a": "我们的算法不仅仅看‘脸’。它会综合分析你的兴趣爱好、价值观，甚至是一周日程，致力于促成极具默契的校园初见。"
+      },
+      {
+        "q": "仅限 .edu.hk 邮箱注册吗？",
+        "a": "是的。为了保障社区安全和圈子纯粹，我们仅支持使用认证学校机构邮箱登录。"
+      },
+      {
+        "q": "为什么要每周匹配一次？",
+        "a": "无止境的列表会造成审美疲劳。每周三送上唯一的高质量匹配，让你专注于好好认识眼前人。"
+      },
+      {
+        "q": "如果遇到不满意的对象怎么办？",
+        "a": "主动权永远在你手中。每次见面后你都可以反馈。无论是‘Pass’还是‘重新匹配’，算法都会学习你的偏好，安全与舒适永远排在第一位。"
+      },
+      {
+        "q": "我们在哪里见面最好？",
+        "a": "我们建议去本校内的公共场所见面，比如港大的 Book Cafe。尽量保持公开和零压力，首次碰面控制在一小时左右。"
+      }
+    ],
+    "footerTitle": "准备好认识下一个<br/>同校的TA了吗？",
+    "footerCta": "即刻开始 →",
+    "footerDesc": "超过 147k+ 香港高校生已加入"
+  },
+  "join": {
+    "title": "加入下一次周三匹配",
+    "pageTitle": "学生入驻",
+    "subtitle": "使用大学邮箱登录，通过验证码验证后完善资料，等待下个周三发布。",
+    "emailLabel": "大学邮箱",
+    "emailPlaceholder": "name@connect.hku.hk",
+    "nameLabel": "真实姓名",
+    "namePlaceholder": "姓名全称",
+    "sendCode": "发送验证码",
+    "verifyCodeLabel": "验证码",
+    "verifyBtn": "验证",
+    "majorLabel": "主修专业",
+    "majorPlaceholder": "专业名",
+    "bioLabel": "个人简介",
+    "bioPlaceholder": "向大家介绍下自己...",
+    "languages": "语言",
+    "interests": "兴趣",
+    "availability": "空闲时间",
+    "saveBtn": "保存主页",
+    "dashboardBtn": "打开控制台",
+    "demoCodeMsg": "演示验证码：{code}",
+    "verifiedMsg": "验证成功，请完善信息。",
+    "verifyFirstMsg": "保存资料前，请先验证邮箱。",
+    "savedMsg": "保存成功！即将跳转至仪表盘..."
+  },
+  "student": {
+    "title": "学生仪表盘",
+    "signInPrompt": "请先登录查看仪表盘。",
+    "loading": "加载中…",
+    "hi": "你好, {name}！",
+    "major": "主修专业",
+    "pending": "待完善",
+    "languages": "语言",
+    "currentDrop": "本周匹配",
+    "compatibility": "契合度：",
+    "aboutThem": "关于TA",
+    "curatedDate": "建议约会安排",
+    "scheduling": "时间安排",
+    "waitOverlap": "等待重合时段",
+    "overlap": "重合时段：{slots}",
+    "noneYet": "暂无",
+    "notesSys": "给系统的备忘",
+    "notesPlaceholder": "告诉系统哪些有用信息？",
+    "lovedIt": "非常喜欢",
+    "pass": "Pass不感冒",
+    "requestRematch": "申请重新匹配",
+    "findingMatch": "正在为您寻找新匹配...",
+    "feedbackSaved": "反馈已保存。",
+    "nextDropView": {
+      "title": "你已成功加入下次匹配池！",
+      "desc": "Ditto 坚信质量大于数量。告别盲目左滑，你将在每周三晚上 7点 收到一位**认真的匹配对象**。",
+      "countdownTitle": "下一次匹配倒计时",
+      "checkBack": "周三见！",
+      "verified": "仅限实名学生",
+      "verifiedDesc": "我们保证每一位都是来自你学校的真实同学。",
+      "highSignal": "高契合度匹配",
+      "highSignalDesc": "算法精准捕捉共同兴趣和价值观。"
+    }
+  },
+  "admin": {
+    "title": "管理控制台",
+    "pageTitle": "运营仪表盘",
+    "resetDemo": "重置演示数据",
+    "runDrop": "执行周三匹配发布",
+    "msgCreated": "新创建了 {count} 组匹配。",
+    "msgReset": "演示数据已经重置。",
+    "stats": {
+      "students": "注册学生",
+      "profiles": "完整档案",
+      "dates": "成功约会",
+      "rematch": "重新匹配"
+    },
+    "recentMatches": "最新匹配记录",
+    "score": "得分",
+    "open": "打开",
+    "studentDir": "学生名录",
+    "incomplete": "未完成",
+    "view": "查看",
+    "loading": "加载记录中…"
+  }
+}
