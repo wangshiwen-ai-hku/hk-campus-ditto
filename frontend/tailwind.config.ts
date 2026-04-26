@@ -5,12 +5,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#17111d",
-        rose: "#ff6fae",
-        blush: "#ffe7f1",
-        butter: "#fff7db",
-        mint: "#d7fff0",
-        lilac: "#ece6ff"
+        background: "#020617",
+        aura: "#FF0066", // Neon Crimson
+        harbour: "#0099FF", // Electric Blue
+        jade: "#00F5D4", // Neon Jade
+        gold: "#FFD700", // Golden street lights
+        ink: "#010409", // Deep obsidian
       },
       boxShadow: {
         soft: "0 12px 40px rgba(23,17,29,0.08)"

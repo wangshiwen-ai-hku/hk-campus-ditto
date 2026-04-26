@@ -163,7 +163,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -204,7 +204,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -245,7 +245,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -286,7 +286,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -327,7 +327,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -368,7 +368,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:59:37.696Z",
+      "joinedAt": "2026-04-19T10:03:33.199Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -384,8 +384,8 @@
   ],
   "matches": [
     {
-      "id": "7d8793e8-e73c-4445-b8f2-014f3a0b35bf",
-      "createdAt": "2026-04-26T08:59:37.707Z",
+      "id": "ea20399f-913e-4533-9aeb-3bd1677b8649",
+      "createdAt": "2026-04-26T10:03:33.212Z",
       "dropDate": "2026-04-29T11:00:00.000Z",
       "userAId": "demo-hkust-mia",
       "userBId": "demo-hkust-ryan",
@@ -417,21 +417,21 @@
       "feedback": [],
       "events": [
         {
-          "at": "2026-04-26T08:59:37.708Z",
+          "at": "2026-04-26T10:03:33.212Z",
           "kind": "created",
           "payload": {
             "score": 86
           }
         },
         {
-          "at": "2026-04-26T08:59:37.709Z",
+          "at": "2026-04-26T10:03:33.214Z",
           "kind": "status:notified",
           "payload": {
-            "dropAt": "2026-04-26T08:59:37.709Z"
+            "dropAt": "2026-04-26T10:03:33.214Z"
           }
         },
         {
-          "at": "2026-04-26T08:59:37.709Z",
+          "at": "2026-04-26T10:03:33.214Z",
           "kind": "status:awaiting-acceptance"
         }
       ],
@@ -439,8 +439,8 @@
       "universityId": "hkust"
     },
     {
-      "id": "c5b6e57b-7899-426b-9beb-d62052297289",
-      "createdAt": "2026-04-26T08:59:37.707Z",
+      "id": "e17648b8-5ddc-4e25-ba32-5f2a28f2d65d",
+      "createdAt": "2026-04-26T10:03:33.212Z",
       "dropDate": "2026-04-29T11:00:00.000Z",
       "userAId": "demo-cuhk-zoe",
       "userBId": "demo-cuhk-ethan",
@@ -474,36 +474,36 @@
           "userId": "demo-cuhk-zoe",
           "sentiment": "love",
           "notes": "Warm conversation and good campus coffee.",
-          "at": "2026-04-26T08:59:37.719Z"
+          "at": "2026-04-26T10:03:33.223Z"
         },
         {
           "userId": "demo-cuhk-ethan",
           "sentiment": "love",
           "notes": "Easy timing and thoughtful match.",
-          "at": "2026-04-26T08:59:37.723Z"
+          "at": "2026-04-26T10:03:33.225Z"
         }
       ],
       "events": [
         {
-          "at": "2026-04-26T08:59:37.707Z",
+          "at": "2026-04-26T10:03:33.212Z",
           "kind": "created",
           "payload": {
             "score": 86
           }
         },
         {
-          "at": "2026-04-26T08:59:37.709Z",
+          "at": "2026-04-26T10:03:33.214Z",
           "kind": "status:notified",
           "payload": {
-            "dropAt": "2026-04-26T08:59:37.709Z"
+            "dropAt": "2026-04-26T10:03:33.214Z"
           }
         },
         {
-          "at": "2026-04-26T08:59:37.709Z",
+          "at": "2026-04-26T10:03:33.214Z",
           "kind": "status:awaiting-acceptance"
         },
         {
-          "at": "2026-04-26T08:59:37.711Z",
+          "at": "2026-04-26T10:03:33.216Z",
           "kind": "respond",
           "payload": {
             "userId": "demo-cuhk-zoe",
@@ -511,7 +511,7 @@
           }
         },
         {
-          "at": "2026-04-26T08:59:37.712Z",
+          "at": "2026-04-26T10:03:33.217Z",
           "kind": "respond",
           "payload": {
             "userId": "demo-cuhk-ethan",
@@ -519,11 +519,11 @@
           }
         },
         {
-          "at": "2026-04-26T08:59:37.712Z",
+          "at": "2026-04-26T10:03:33.217Z",
           "kind": "status:mutual-accepted"
         },
         {
-          "at": "2026-04-26T08:59:37.713Z",
+          "at": "2026-04-26T10:03:33.218Z",
           "kind": "slot-confirmed",
           "payload": {
             "slot": "Thu 6pm",
@@ -531,29 +531,29 @@
           }
         },
         {
-          "at": "2026-04-26T08:59:37.715Z",
+          "at": "2026-04-26T10:03:33.219Z",
           "kind": "status:place-confirmed"
         },
         {
-          "at": "2026-04-26T08:59:37.715Z",
+          "at": "2026-04-26T10:03:33.219Z",
           "kind": "status:scheduled"
         },
         {
-          "at": "2026-04-26T08:59:37.716Z",
+          "at": "2026-04-26T10:03:33.220Z",
           "kind": "status:happened",
           "payload": {
             "by": "demo-cuhk-ethan"
           }
         },
         {
-          "at": "2026-04-26T08:59:37.719Z",
+          "at": "2026-04-26T10:03:33.223Z",
           "kind": "status:feedback-collected",
           "payload": {
             "by": "demo-cuhk-zoe"
           }
         },
         {
-          "at": "2026-04-26T08:59:37.723Z",
+          "at": "2026-04-26T10:03:33.225Z",
           "kind": "feedback",
           "payload": {
             "template": "post_date_2h",
@@ -561,7 +561,7 @@
           }
         },
         {
-          "at": "2026-04-26T08:59:37.723Z",
+          "at": "2026-04-26T10:03:33.225Z",
           "kind": "status:closed"
         }
       ],
@@ -569,12 +569,12 @@
         {
           "userId": "demo-cuhk-zoe",
           "choice": "yes",
-          "at": "2026-04-26T08:59:37.711Z"
+          "at": "2026-04-26T10:03:33.216Z"
         },
         {
           "userId": "demo-cuhk-ethan",
           "choice": "yes",
-          "at": "2026-04-26T08:59:37.712Z"
+          "at": "2026-04-26T10:03:33.217Z"
         }
       ],
       "universityId": "cuhk",
@@ -592,8 +592,8 @@
     },
     {
       "id": "demo-match-1",
-      "createdAt": "2026-04-26T08:59:37.696Z",
-      "dropDate": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
+      "dropDate": "2026-04-26T10:03:33.199Z",
       "userAId": "demo-hku-alyssa",
       "userBId": "demo-hku-daniel",
       "score": 92,
@@ -628,54 +628,54 @@
   "inviteCodes": [
     {
       "code": "DITTO-HK-001",
-      "createdAt": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-002",
-      "createdAt": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-003",
-      "createdAt": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-004",
-      "createdAt": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-005",
-      "createdAt": "2026-04-26T08:59:37.696Z",
+      "createdAt": "2026-04-26T10:03:33.199Z",
       "note": "demo"
     }
   ],
   "surveys": [
     {
-      "id": "78a6c088-9f38-4c38-85e0-9da35c0061b5",
+      "id": "584026fb-61e8-410f-971e-7872848b0ab1",
       "userId": "demo-cuhk-zoe",
-      "matchId": "c5b6e57b-7899-426b-9beb-d62052297289",
+      "matchId": "e17648b8-5ddc-4e25-ba32-5f2a28f2d65d",
       "template": "post_date_2h",
       "answers": {
         "oneLine": "Warm conversation and good campus coffee.",
         "vibeScore": 8
       },
       "derivedSignals": [],
-      "at": "2026-04-26T08:59:37.719Z"
+      "at": "2026-04-26T10:03:33.223Z"
     },
     {
-      "id": "29cb1d43-7030-4ce2-a63b-01dd86d51af4",
+      "id": "e42514a1-a1bc-4093-9842-877beb8a8425",
       "userId": "demo-cuhk-ethan",
-      "matchId": "c5b6e57b-7899-426b-9beb-d62052297289",
+      "matchId": "e17648b8-5ddc-4e25-ba32-5f2a28f2d65d",
       "template": "post_date_2h",
       "answers": {
         "oneLine": "Easy timing and thoughtful match.",
         "vibeScore": 8
       },
       "derivedSignals": [],
-      "at": "2026-04-26T08:59:37.723Z"
+      "at": "2026-04-26T10:03:33.225Z"
     }
   ]
 }

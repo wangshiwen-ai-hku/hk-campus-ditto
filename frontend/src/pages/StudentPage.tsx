@@ -151,14 +151,14 @@ export function StudentPage({ userId }: { userId: string | null; }) {
   return (
     <main className="mx-auto max-w-7xl px-5 py-16">
       <div className="mb-12">
-        <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-pink-400 mb-2">{t("student.title")}</div>
+        <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-aura mb-2">{t("student.title")}</div>
         <h1 className="text-5xl font-black">{t("student.hi", { name: profile.fullName.split(" ")[0] })}</h1>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[400px_1fr]">
         <SectionCard className="h-fit">
           <div className="flex flex-col items-center text-center">
-            <div className="mb-6 flex h-32 w-32 items-center justify-center rounded-[40px] bg-gradient-to-br from-pink-500 to-rose-400 text-4xl font-black text-white shadow-xl shadow-pink-500/20">
+            <div className="mb-6 flex h-32 w-32 items-center justify-center rounded-[40px] bg-gradient-to-br from-aura to-harbour text-4xl font-black text-white shadow-xl shadow-[rgba(255,0,102,0.2)]">
               {initials(profile.fullName)}
             </div>
             <h2 className="text-2xl font-black">{profile.fullName}</h2>
@@ -192,7 +192,7 @@ export function StudentPage({ userId }: { userId: string | null; }) {
               <div className="relative z-10">
                 <div className="text-xs font-black uppercase tracking-[0.4em] text-white/50 mb-4 px-3 py-1 rounded-full bg-white/10 w-fit">{t("student.currentDrop")}</div>
                 <h2 className="text-4xl font-black mb-2">{view.match.posterHeadline}</h2>
-                <div className="text-white/60 font-medium">{t("student.compatibility")} <span className="text-pink-400 font-black">{view.match.score}%</span></div>
+                <div className="text-white/60 font-medium">{t("student.compatibility")} <span className="text-aura font-black">{view.match.score}%</span></div>
               </div>
             </div>
 
@@ -213,14 +213,14 @@ export function StudentPage({ userId }: { userId: string | null; }) {
                     <h3 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">{t("student.aboutThem")}</h3>
                     <p className="text-white/70 leading-relaxed text-lg">{view.partner.bio}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
-                        {partnerChips.map((chip) => <span key={chip} className="rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm text-pink-400 font-medium italic">#{chip}</span>)}
+                        {partnerChips.map((chip) => <span key={chip} className="rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm text-aura font-medium italic">#{chip}</span>)}
                     </div>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="rounded-2xl bg-white/5 border border-white/10 p-5">
                       <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-2">{t("student.curatedDate")}</div>
-                      <div className="text-xl font-black text-pink-400">{view.match.curatedDateTitle}</div>
+                      <div className="text-xl font-black text-aura">{view.match.curatedDateTitle}</div>
                       <div className="text-sm text-white/60 mt-1">{view.match.curatedDateSpot}</div>
                     </div>
                     <div className="rounded-2xl bg-white/5 border border-white/10 p-5">
@@ -250,7 +250,7 @@ export function StudentPage({ userId }: { userId: string | null; }) {
 
                     {canRespond ? (
                       <div className="mt-5 flex flex-wrap gap-3">
-                        <button className="rounded-full bg-pink-500 px-6 py-3 font-black text-white hover:bg-pink-400 transition-all" onClick={() => respond("yes")}>Accept match</button>
+                        <button className="rounded-full bg-aura px-6 py-3 font-black text-white hover:bg-aura transition-all" onClick={() => respond("yes")}>Accept match</button>
                         <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all" onClick={() => respond("no")}>Decline</button>
                       </div>
                     ) : null}
@@ -277,13 +277,13 @@ export function StudentPage({ userId }: { userId: string | null; }) {
                   <div className="pt-6 border-t border-white/5">
                     <label className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3 block">{t("student.notesSys")}</label>
                     <textarea 
-                      className="w-full min-h-[100px] rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all mb-4" 
+                      className="w-full min-h-[100px] rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all mb-4" 
                       value={note} 
                       onChange={(e) => setNote(e.target.value)} 
                       placeholder={t("student.notesPlaceholder")} 
                     />
                     <div className="flex flex-wrap gap-3">
-                      <button disabled={!canFeedback} className="rounded-full bg-pink-500 px-8 py-3 font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("love")}>{t("student.lovedIt")}</button>
+                      <button disabled={!canFeedback} className="rounded-full bg-aura px-8 py-3 font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("love")}>{t("student.lovedIt")}</button>
                       <button disabled={!canFeedback} className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("pass")}>{t("student.pass")}</button>
                       <button disabled={!canFeedback} className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("rematch")}>{t("student.requestRematch")}</button>
                     </div>
@@ -297,10 +297,10 @@ export function StudentPage({ userId }: { userId: string | null; }) {
         ) : (
           <SectionCard className="flex flex-col items-center justify-center p-20 text-center bg-gradient-to-br from-white/5 to-transparent">
             <div className="relative mb-10">
-              <div className="h-32 w-32 rounded-full bg-pink-500/10 flex items-center justify-center text-5xl animate-pulse">
+              <div className="h-32 w-32 rounded-full bg-aura/10 flex items-center justify-center text-5xl animate-pulse">
                 ⌛
               </div>
-              <div className="absolute top-0 right-0 h-8 w-8 rounded-full bg-pink-500 flex items-center justify-center text-xs font-bold text-white shadow-lg">
+              <div className="absolute top-0 right-0 h-8 w-8 rounded-full bg-aura flex items-center justify-center text-xs font-bold text-white shadow-lg">
                 1
               </div>
             </div>
@@ -312,7 +312,7 @@ export function StudentPage({ userId }: { userId: string | null; }) {
             
             <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 w-full max-w-md">
                 <div className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">{t('student.nextDropView.countdownTitle')}</div>
-                <div className="text-3xl sm:text-4xl font-black text-pink-400 tabular-nums flex justify-center gap-2">
+                <div className="text-3xl sm:text-4xl font-black text-aura tabular-nums flex justify-center gap-2">
                    <span>{timeLeft.d}<span className="text-sm ml-1 text-white/30">{t('student.countdown.days')}</span></span>
                    <span>{timeLeft.h}<span className="text-sm ml-1 text-white/30">{t('student.countdown.hours')}</span></span>
                    <span>{timeLeft.m}<span className="text-sm ml-1 text-white/30">{t('student.countdown.minutes')}</span></span>
@@ -323,14 +323,14 @@ export function StudentPage({ userId }: { userId: string | null; }) {
 
             <div className="mt-12 grid gap-4 w-full max-w-md text-left">
                 <div className="flex gap-4 items-start">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-pink-500" />
+                    <div className="mt-1 h-2 w-2 rounded-full bg-aura" />
                     <div>
                         <div className="font-bold">{t('student.nextDropView.verified')}</div>
                         <div className="text-sm text-white/40">{t('student.nextDropView.verifiedDesc')}</div>
                     </div>
                 </div>
                 <div className="flex gap-4 items-start">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-pink-500" />
+                    <div className="mt-1 h-2 w-2 rounded-full bg-aura" />
                     <div>
                         <div className="font-bold">{t('student.nextDropView.highSignal')}</div>
                         <div className="text-sm text-white/40">{t('student.nextDropView.highSignalDesc')}</div>

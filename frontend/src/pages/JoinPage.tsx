@@ -15,7 +15,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
-  const [inviteCode, setInviteCode] = useState("DITTO-HK-001");
+  const [inviteCode, setInviteCode] = useState("AURA-HK-001");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
   const [profileId, setProfileId] = useState(userId ?? "");
@@ -88,7 +88,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     <main className="mx-auto max-w-4xl px-5 py-20">
       <SectionCard>
         <div className="mb-8 text-center">
-            <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-pink-400 mb-2">{t("join.title")}</div>
+            <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-aura mb-2">{t("join.title")}</div>
             <h1 className="text-5xl font-black">{t("join.pageTitle")}</h1>
             <p className="mt-4 text-white/50 leading-relaxed max-w-2xl mx-auto">{t("join.subtitle")}</p>
         </div>
@@ -98,7 +98,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             <div className="space-y-4">
                 <label className="text-xs font-black uppercase tracking-widest text-white/50">{t("join.emailLabel")}</label>
                 <input 
-                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" 
+                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" 
                   placeholder={t("join.emailPlaceholder")} 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
@@ -107,7 +107,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             <div className="space-y-4">
                 <label className="text-xs font-black uppercase tracking-widest text-white/50">{t("join.nameLabel")}</label>
                 <input 
-                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" 
+                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" 
                   placeholder={t("join.namePlaceholder")} 
                   value={fullName} 
                   onChange={(e) => setFullName(e.target.value)} 
@@ -118,7 +118,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           <div className="space-y-4">
             <label className="text-xs font-black uppercase tracking-widest text-white/50">邀请码 (Invite Code)</label>
             <input 
-              className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" 
+              className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" 
               placeholder="DITTO-HK-001" 
               value={inviteCode} 
               onChange={(e) => setInviteCode(e.target.value)} 
@@ -136,7 +136,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             <div className="flex-1 space-y-4 w-full">
                 <label className="text-xs font-black uppercase tracking-widest text-white/50">{t("join.verifyCodeLabel")}</label>
                 <input 
-                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" 
+                  className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" 
                   value={code} 
                   onChange={(e) => setCode(e.target.value)} 
                 />
@@ -153,11 +153,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           <div className="grid gap-6">
             <div className="space-y-4">
                 <label className="text-xs font-black uppercase tracking-widest text-white/50">{t("join.majorLabel")}</label>
-                <input className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" placeholder={t("join.majorPlaceholder")} value={major} onChange={(e) => setMajor(e.target.value)} />
+                <input className="w-full rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" placeholder={t("join.majorPlaceholder")} value={major} onChange={(e) => setMajor(e.target.value)} />
             </div>
             <div className="space-y-4">
                 <label className="text-xs font-black uppercase tracking-widest text-white/50">{t("join.bioLabel")}</label>
-                <textarea className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all" placeholder={t("join.bioPlaceholder")} value={bio} onChange={(e) => setBio(e.target.value)} />
+                <textarea className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-white px-5 py-4 text-black focus:outline-none focus:ring-2 focus:ring-aura/50 transition-all" placeholder={t("join.bioPlaceholder")} value={bio} onChange={(e) => setBio(e.target.value)} />
             </div>
           </div>
 
@@ -170,7 +170,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-white/5">
             <button 
               disabled={loading || !profileId}
-              className="rounded-full bg-pink-500 px-10 py-5 text-xl font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50" 
+              className="rounded-full bg-aura px-10 py-5 text-xl font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50" 
               onClick={saveProfile}
             >
               {t("join.saveBtn")}

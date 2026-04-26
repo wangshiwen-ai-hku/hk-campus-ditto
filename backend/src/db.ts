@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { promises as fs, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pg from "pg";
@@ -36,7 +36,9 @@ function postgresPool(): pg.Pool {
   }
   pool ??= new Pool({
     connectionString: env.db.databaseUrl,
-    ssl: env.db.databaseUrl.includes("sslmode=require") ? { rejectUnauthorized: false } : undefined,
+    ssl: {
+      ca: readFileSync(path.join(__dirname, "..", "prod-ca-2021.crt")).toString(),
+    },
   });
   return pool;
 }

@@ -17,7 +17,7 @@ export function TagSelector({ title, values, setValues, items }: { title: string
               onClick={() => toggle(item)}
               className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
                 active 
-                  ? "bg-pink-500 text-white shadow-lg shadow-pink-500/20 scale-105" 
+                  ? "bg-aura text-white shadow-lg shadow-[rgba(255,0,102,0.2)] scale-105" 
                   : "border border-white/5 bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60"
               }`}
             >

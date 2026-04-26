@@ -4,7 +4,7 @@
 
 :root {
   color: #ffffff;
-  background: #030711;
+  background: #020617;
   font-family: "Nunito", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,7 +16,7 @@
 html, body, #root { 
   margin: 0; 
   min-height: 100%; 
-  background-color: #030711;
+  background-color: #020617;
   font-family: "Nunito", sans-serif;
   color: #ffffff;
 }
@@ -27,7 +27,7 @@ h1, h2, h3, .font-romantic {
 
 
 .hover-glow {
-  @apply transition-all duration-500 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(244,114,182,0.25)] hover:border-pink-500/50 hover:bg-white/[0.08];
+  @apply transition-all duration-500 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(255,0,102,0.25)] hover:border-aura hover:border-opacity-50 hover:bg-white/[0.08];
 }
 
 body { min-width: 320px; }
@@ -39,8 +39,8 @@ button, input, textarea, select { font: inherit; }
 
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -68,14 +68,14 @@ button, input, textarea, select { font: inherit; }
 }
 
 .text-neon {
-  text-shadow: 0 0 10px rgba(244,114,182,0.5), 0 0 20px rgba(244,114,182,0.3);
+  text-shadow: 0 0 10px rgba(255,0,102,0.5), 0 0 20px rgba(0,153,255,0.3);
 }
 
 .bg-mesh {
   background-image: 
-    radial-gradient(at 0% 0%, rgba(244, 114, 182, 0.15) 0, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(59, 130, 246, 0.1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.15) 0, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(255, 0, 102, 0.15) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(0, 153, 255, 0.1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 0, 102, 0.15) 0, transparent 50%);
 }
 
 .bg-noise {
@@ -87,12 +87,12 @@ button, input, textarea, select { font: inherit; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  opacity: 0.15;
+  opacity: 0.1;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 .frosted-bg {
-  @apply fixed inset-0 -z-20 h-full w-full object-cover blur-[60px] brightness-[0.4] saturate-[1.2] scale-110;
+  @apply fixed inset-0 -z-20 h-full w-full object-cover blur-[60px] brightness-[0.3] saturate-[1.4] scale-110;
 }
 

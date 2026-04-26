@@ -26,11 +26,11 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
           <p className="text-white/60 text-lg italic">{t("home.steps.step1.detailQuote")}</p>
           <div className="grid grid-cols-2 gap-4 mt-6">
             <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                <div className="text-pink-400 font-black tracking-tighter mb-1 uppercase text-xs">{t("home.steps.step1.interests")}</div>
+                <div className="text-aura font-black tracking-tighter mb-1 uppercase text-xs">{t("home.steps.step1.interests")}</div>
                 <div className="text-sm text-white/60">{t("home.steps.step1.interestsDesc")}</div>
             </div>
             <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                <div className="text-pink-400 font-black tracking-tighter mb-1 uppercase text-xs">{t("home.steps.step1.vibeTags")}</div>
+                <div className="text-aura font-black tracking-tighter mb-1 uppercase text-xs">{t("home.steps.step1.vibeTags")}</div>
                 <div className="text-sm text-white/60">{t("home.steps.step1.vibeTagsDesc")}</div>
             </div>
           </div>
@@ -46,8 +46,8 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       details: (
         <div className="space-y-4">
           <p className="text-white/60 text-lg italic">{t("home.steps.step2.detailQuote")}</p>
-          <div className="bg-pink-500/10 p-6 rounded-3xl border border-pink-500/20 text-center my-6">
-             <div className="text-sm font-black text-pink-400 uppercase tracking-widest mb-2">{t("home.steps.step2.algoFocus")}</div>
+          <div className="bg-aura/10 p-6 rounded-3xl border border-aura/20 text-center my-6">
+             <div className="text-sm font-black text-aura uppercase tracking-widest mb-2">{t("home.steps.step2.algoFocus")}</div>
              <div className="text-2xl font-black text-white italic font-romantic">{t("home.steps.step2.algoFocusDesc")}</div>
           </div>
           <p className="text-white/40 text-sm italic">{t("home.steps.step2.userQuote")}</p>
@@ -64,15 +64,15 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
           <p className="text-white/60 text-lg italic">{t("home.steps.step3.detailQuote")}</p>
           <ul className="space-y-4 mt-6">
              <li className="flex gap-4 items-center">
-                <div className="h-6 w-6 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 text-xs">✔</div>
+                <div className="h-6 w-6 rounded-full bg-aura/20 flex items-center justify-center text-aura text-xs">✔</div>
                 <span className="text-white/70">{t("home.steps.step3.check1")}</span>
              </li>
              <li className="flex gap-4 items-center">
-                <div className="h-6 w-6 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 text-xs">✔</div>
+                <div className="h-6 w-6 rounded-full bg-aura/20 flex items-center justify-center text-aura text-xs">✔</div>
                 <span className="text-white/70">{t("home.steps.step3.check2")}</span>
              </li>
              <li className="flex gap-4 items-center">
-                <div className="h-6 w-6 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 text-xs">✔</div>
+                <div className="h-6 w-6 rounded-full bg-aura/20 flex items-center justify-center text-aura text-xs">✔</div>
                 <span className="text-white/70">{t("home.steps.step3.check3")}</span>
              </li>
           </ul>
@@ -134,7 +134,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
             <h3 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white opacity-90 drop-shadow-lg font-romantic">
               {t("home.hero.atYourSchool")}
             </h3>
-            <div className="absolute bottom-[-5px] left-0 right-0 h-1 bg-pink-500 rounded-full opacity-50" />
+            <div className="absolute bottom-[-5px] left-0 right-0 h-1 bg-aura rounded-full opacity-50" />
           </div>
         </div>
 
@@ -142,7 +142,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
           <div className="aspect-[3.5/4.5] overflow-hidden rounded-[32px] border-[10px] border-white bg-white p-1 shadow-2xl rotate-[-1deg] transition-transform hover:rotate-0 hover:scale-[1.03]">
             <img src={heroImg} alt="HKU Couple" className="h-full w-full rounded-[20px] object-cover" />
           </div>
-          <div className="absolute top-[10%] left-[-15%] rotate-[-20deg] text-pink-500 drop-shadow-lg animate-pulse">
+          <div className="absolute top-[10%] left-[-15%] rotate-[-20deg] text-aura drop-shadow-lg animate-pulse">
             <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
@@ -150,7 +150,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
         </div>
 
         <div className="mb-12">
-          <div className="text-[12vw] md:text-[80px] font-black italic tabular-nums text-pink-500 drop-shadow-[0_0_20px_rgba(244,114,182,0.4)] font-romantic">
+          <div className="text-[12vw] md:text-[80px] font-black italic tabular-nums text-aura drop-shadow-[0_0_20px_rgba(255,0,102,0.4)] font-romantic">
             {tick || "00:00:00:00"}
           </div>
           <div className="mt-2 space-y-1">
@@ -175,16 +175,16 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
         </div>
       </div>
 
-      {/* Why Ditto Section */}
+      {/* Why Aura Section */}
       <section className="mx-auto mt-40 max-w-6xl px-5 text-center">
-        <div className="mb-20 inline-block rounded-full border border-pink-500/30 bg-pink-500/10 px-6 py-2 text-sm font-bold text-pink-400">
+        <div className="mb-20 inline-block rounded-full border border-aura/30 bg-aura/10 px-6 py-2 text-sm font-bold text-aura">
            {t("home.why.badge")}
         </div>
         
         <div className="grid gap-20 md:grid-cols-2 items-center text-left">
           <div className="space-y-8">
             <h2 className="text-5xl md:text-6xl font-black leading-tight font-romantic italic">
-              <span dangerouslySetInnerHTML={{ __html: t("home.why.title").replace("<1>", "<span class='text-pink-500'>").replace("</1>", "</span>") }} />
+              <span dangerouslySetInnerHTML={{ __html: t("home.why.title").replace("<1>", "<span class='text-aura'>").replace("</1>", "</span>") }} />
             </h2>
             <p className="text-xl text-white/60 leading-relaxed">
               {t("home.why.desc")}
@@ -196,14 +196,14 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
                  { title: t("home.why.personalized"), desc: t("home.why.personalizedDesc") }
                ].map((item, i) => (
                  <div key={i} className="flex gap-4 items-center">
-                    <div className="h-2 w-2 rounded-full bg-pink-500"/>
+                    <div className="h-2 w-2 rounded-full bg-aura"/>
                     <div className="text-lg"><span className="font-black text-white">{item.title}:</span> <span className="text-white/50">{item.desc}</span></div>
                  </div>
                ))}
             </div>
           </div>
           <div className="relative group">
-            <div className="absolute -inset-4 bg-pink-500/20 blur-xl rounded-[40px] transition-all group-hover:bg-pink-500/30" />
+            <div className="absolute -inset-4 bg-aura/20 blur-xl rounded-[40px] transition-all group-hover:bg-aura/30" />
             <img src={galleryImg} className="relative rounded-[40px] shadow-2xl border border-white/10" alt="HK Students Gallery" />
           </div>
         </div>
@@ -217,7 +217,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
                 <p className="text-lg text-white/50">
                     {t("home.curated.desc")}
                 </p>
-                <Link to="/join" className="inline-block font-black text-pink-400 hover:text-pink-300 underline underline-offset-8 decoration-2">{t("home.curated.cta")}</Link>
+                <Link to="/join" className="inline-block font-black text-aura hover:text-aura underline underline-offset-8 decoration-2">{t("home.curated.cta")}</Link>
             </div>
             <div className="flex-1 w-full scale-110">
                 <img src={dateSpotImg} className="rounded-3xl shadow-2xl object-cover aspect-square" alt="Date Spot" />
@@ -229,7 +229,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       <section className="mx-auto mt-40 max-w-7xl px-5">
         <div className="mb-16 text-center">
             <h2 className="text-4xl md:text-5xl font-romantic font-black mb-4 uppercase tracking-tighter italic">{t("home.stepsTitle")}</h2>
-            <div className="h-1 w-20 bg-pink-500 mx-auto rounded-full" />
+            <div className="h-1 w-20 bg-aura mx-auto rounded-full" />
         </div>
         <div className="grid gap-6 md:grid-cols-4">
             {STEPS.map((step, i) => (
@@ -238,12 +238,12 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
                 onClick={() => setActiveStep(i)}
                 className="group cursor-pointer hover-glow block rounded-[32px] border border-white/5 bg-white/[0.01] p-8 transition-all"
             >
-                <div className="mb-6 text-5xl font-romantic italic font-black text-white/5 transition-colors group-hover:text-pink-500/30">{step.step}</div>
+                <div className="mb-6 text-5xl font-romantic italic font-black text-white/5 transition-colors group-hover:text-aura/30">{step.step}</div>
                 <h3 className="mb-3 text-2xl font-romantic font-black italic">{step.title}</h3>
                 <p className="text-sm leading-relaxed text-white/50 mb-6">{step.desc}</p>
                 
-                <div className="mt-4 rounded-xl bg-pink-500/5 p-4 border border-pink-500/10 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <p className="text-xs font-medium italic text-pink-300/80">{step.example}</p>
+                <div className="mt-4 rounded-xl bg-aura/5 p-4 border border-aura/10 opacity-60 group-hover:opacity-100 transition-opacity">
+                    <p className="text-xs font-medium italic text-aura/80">{step.example}</p>
                 </div>
             </div>
             ))}
@@ -271,7 +271,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
             {(t("home.faqs", { returnObjects: true }) as {q: string, a: string}[]).map((faq, i) => (
                 <details key={i} className="group rounded-[24px] border border-white/5 bg-white/[0.02] transition-all hover:bg-white/[0.04]">
                     <summary className="flex cursor-pointer items-center justify-between p-6 list-none">
-                        <span className="text-lg font-black tracking-tight group-open:text-pink-400 transition-colors">{faq.q}</span>
+                        <span className="text-lg font-black tracking-tight group-open:text-aura transition-colors">{faq.q}</span>
                         <span className="text-2xl text-white/20 transition-transform group-open:rotate-45">+</span>
                     </summary>
                     <div className="px-6 pb-6 text-white/50 leading-relaxed italic">
@@ -285,7 +285,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       {/* Footer CTA */}
       <section className="mx-auto mt-40 max-w-4xl px-5 text-center">
         <h2 className="text-5xl font-black mb-10 tracking-tighter font-romantic italic"><span dangerouslySetInnerHTML={{ __html: t("home.footerTitle") }} /></h2>
-        <Link to="/join" className="group relative inline-flex items-center gap-3 rounded-full bg-pink-500 px-12 py-6 text-2xl font-black text-white shadow-[0_0_40px_rgba(236,72,153,0.3)] transition-all hover:scale-110 active:scale-95">
+        <Link to="/join" className="group relative inline-flex items-center gap-3 rounded-full bg-aura px-12 py-6 text-2xl font-black text-white shadow-[0_0_40px_rgba(255,0,102,0.3)] transition-all hover:scale-110 active:scale-95">
           {t("home.footerCta")}
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </Link>

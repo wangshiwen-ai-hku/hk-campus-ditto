@@ -35,7 +35,7 @@ export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
     <main className="mx-auto max-w-7xl px-5 py-16">
       <div className="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
         <div>
-            <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-pink-400 mb-2">{t("admin.title")}</div>
+            <div className="inline-block text-xs font-black uppercase tracking-[0.4em] text-aura mb-2">{t("admin.title")}</div>
             <h1 className="text-5xl font-black">{t("admin.pageTitle")}</h1>
         </div>
         <div className="flex flex-wrap gap-4">
@@ -44,14 +44,14 @@ export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
         </div>
       </div>
 
-      {message ? <div className="mb-8 rounded-2xl bg-pink-500/20 border border-pink-500/30 p-4 text-center text-sm text-pink-300 animate-pulse">{message}</div> : null}
+      {message ? <div className="mb-8 rounded-2xl bg-aura/20 border border-aura/30 p-4 text-center text-sm text-aura animate-pulse">{message}</div> : null}
       
       {data ? (
         <div className="grid gap-8">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
                 { label: t("admin.stats.students"), val: data.stats.students, color: "text-blue-400" },
-                { label: t("admin.stats.profiles"), val: data.stats.completedProfiles, color: "text-pink-400" },
+                { label: t("admin.stats.profiles"), val: data.stats.completedProfiles, color: "text-aura" },
                 { label: t("admin.stats.dates"), val: data.stats.scheduledDates, color: "text-green-400" },
                 { label: t("admin.stats.rematch"), val: data.stats.rematchFlags, color: "text-yellow-400" }
             ].map(stat => (
@@ -70,7 +70,7 @@ export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
                   <div key={match.id} className="rounded-2xl border border-white/5 bg-white/5 p-5 transition-all hover:border-white/20 hover:bg-white/10 group">
                     <div className="flex items-center justify-between gap-4">
                       <div>
-                        <div className="text-lg font-black group-hover:text-pink-400 transition-colors">{match.userALabel} × {match.userBLabel}</div>
+                        <div className="text-lg font-black group-hover:text-aura transition-colors">{match.userALabel} × {match.userBLabel}</div>
                         <div className="text-xs text-white/40 mt-1 uppercase tracking-widest">{match.status} • {t("admin.score")} {match.score}</div>
                       </div>
                       <button className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-bold hover:bg-white text-white hover:text-black transition-all" onClick={() => handleUserSelect(match.userAId)}>{t("admin.open")}</button>

@@ -11,7 +11,7 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
       <header className="sticky top-0 z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-6">
           <Link to="/" className="flex items-center gap-3 text-2xl font-black italic tracking-tighter">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]">D</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]">A</span>
             <span className="hidden sm:inline">{t("brand")}</span>
           </Link>
           <div className="flex items-center gap-3 sm:gap-6">

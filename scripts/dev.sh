@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Campus Ditto HK - Development Launcher
+# Aura HK - Development Launcher
 # Starts both Backend (Port 8787) and Frontend (Port 5173)
 
 # Function to kill child processes on exit
 cleanup() {
     echo ""
-    echo "Stopping Campus Ditto services..."
+    echo "Stopping Aura services..."
     kill $(jobs -p)
     exit
 }
 
 trap cleanup SIGINT
 
-echo "🚀 Starting Campus Ditto HK Development Environment..."
+echo "🚀 Starting Aura HK Development Environment..."
 
 export ADMIN_SECRET="${ADMIN_SECRET:-dev-secret-change-me}"
 export VITE_ADMIN_SECRET="${VITE_ADMIN_SECRET:-$ADMIN_SECRET}"

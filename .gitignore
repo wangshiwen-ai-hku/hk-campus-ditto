@@ -65,3 +65,4 @@ logs
 .cache/
 .DS_Store
 tmp/
+*.crt

@@ -113,6 +113,6 @@ app.post("/api/dev/reset", requireAdmin, async (_req, res) => {
 });
 
 app.listen(env.port, () => {
-  console.log(`Campus Ditto HK API listening on http://localhost:${env.port}`);
+  console.log(`Aura HK API listening on http://localhost:${env.port}`);
   console.log(`LLM provider=${env.llm.provider} model=${env.llm.model} | email provider=${env.email.provider}`);
 });
