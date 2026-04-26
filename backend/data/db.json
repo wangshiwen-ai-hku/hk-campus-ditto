@@ -136,6 +136,9 @@
   ],
   "students": [
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 4",
       "major": "Law",
       "gender": "Prefer not to say",
@@ -160,7 +163,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -174,6 +177,9 @@
       "universityId": "hku"
     },
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 3",
       "major": "Architecture",
       "gender": "Prefer not to say",
@@ -198,7 +204,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -212,6 +218,9 @@
       "universityId": "hku"
     },
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 3",
       "major": "Psychology",
       "gender": "Prefer not to say",
@@ -236,7 +245,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -250,6 +259,9 @@
       "universityId": "cuhk"
     },
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 3",
       "major": "Medicine",
       "gender": "Prefer not to say",
@@ -274,7 +286,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -288,6 +300,9 @@
       "universityId": "cuhk"
     },
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 3",
       "major": "Business",
       "gender": "Prefer not to say",
@@ -312,7 +327,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -326,6 +341,9 @@
       "universityId": "hkust"
     },
     {
+      "crossUniOk": false,
+      "blockedUserIds": [],
+      "onboardingStage": "complete",
       "yearOfStudy": "Year 3",
       "major": "Engineering",
       "gender": "Prefer not to say",
@@ -350,7 +368,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-19T08:37:47.682Z",
+      "joinedAt": "2026-04-19T08:59:37.696Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -366,9 +384,216 @@
   ],
   "matches": [
     {
+      "id": "7d8793e8-e73c-4445-b8f2-014f3a0b35bf",
+      "createdAt": "2026-04-26T08:59:37.707Z",
+      "dropDate": "2026-04-29T11:00:00.000Z",
+      "userAId": "demo-hkust-mia",
+      "userBId": "demo-hkust-ryan",
+      "score": 86,
+      "status": "awaiting-acceptance",
+      "reasonsForA": [
+        "Shared signal: coffee",
+        "3 overlapping time slot(s)",
+        "Both verified at the same campus"
+      ],
+      "reasonsForB": [
+        "Shared signal: coffee",
+        "3 overlapping time slot(s)",
+        "Both verified at the same campus"
+      ],
+      "posterHeadline": "One intentional date for HKUST",
+      "curatedDateTitle": "Coffee + short campus loop",
+      "curatedDateSpot": "Academic Concourse",
+      "curatedDateTips": [
+        "Aim for a low-pressure first meet",
+        "Keep the first date under an hour",
+        "Use the talking points to break the ice"
+      ],
+      "overlapSlots": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "feedback": [],
+      "events": [
+        {
+          "at": "2026-04-26T08:59:37.708Z",
+          "kind": "created",
+          "payload": {
+            "score": 86
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.709Z",
+          "kind": "status:notified",
+          "payload": {
+            "dropAt": "2026-04-26T08:59:37.709Z"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.709Z",
+          "kind": "status:awaiting-acceptance"
+        }
+      ],
+      "acceptances": [],
+      "universityId": "hkust"
+    },
+    {
+      "id": "c5b6e57b-7899-426b-9beb-d62052297289",
+      "createdAt": "2026-04-26T08:59:37.707Z",
+      "dropDate": "2026-04-29T11:00:00.000Z",
+      "userAId": "demo-cuhk-zoe",
+      "userBId": "demo-cuhk-ethan",
+      "score": 86,
+      "status": "closed",
+      "reasonsForA": [
+        "Shared signal: coffee",
+        "3 overlapping time slot(s)",
+        "Both verified at the same campus"
+      ],
+      "reasonsForB": [
+        "Shared signal: coffee",
+        "3 overlapping time slot(s)",
+        "Both verified at the same campus"
+      ],
+      "posterHeadline": "One intentional date for CUHK",
+      "curatedDateTitle": "Coffee + short campus loop",
+      "curatedDateSpot": "United College Coffee Corner",
+      "curatedDateTips": [
+        "Aim for a low-pressure first meet",
+        "Keep the first date under an hour",
+        "Use the talking points to break the ice"
+      ],
+      "overlapSlots": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "feedback": [
+        {
+          "userId": "demo-cuhk-zoe",
+          "sentiment": "love",
+          "notes": "Warm conversation and good campus coffee.",
+          "at": "2026-04-26T08:59:37.719Z"
+        },
+        {
+          "userId": "demo-cuhk-ethan",
+          "sentiment": "love",
+          "notes": "Easy timing and thoughtful match.",
+          "at": "2026-04-26T08:59:37.723Z"
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-04-26T08:59:37.707Z",
+          "kind": "created",
+          "payload": {
+            "score": 86
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.709Z",
+          "kind": "status:notified",
+          "payload": {
+            "dropAt": "2026-04-26T08:59:37.709Z"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.709Z",
+          "kind": "status:awaiting-acceptance"
+        },
+        {
+          "at": "2026-04-26T08:59:37.711Z",
+          "kind": "respond",
+          "payload": {
+            "userId": "demo-cuhk-zoe",
+            "choice": "yes"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.712Z",
+          "kind": "respond",
+          "payload": {
+            "userId": "demo-cuhk-ethan",
+            "choice": "yes"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.712Z",
+          "kind": "status:mutual-accepted"
+        },
+        {
+          "at": "2026-04-26T08:59:37.713Z",
+          "kind": "slot-confirmed",
+          "payload": {
+            "slot": "Thu 6pm",
+            "by": "demo-cuhk-zoe"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.715Z",
+          "kind": "status:place-confirmed"
+        },
+        {
+          "at": "2026-04-26T08:59:37.715Z",
+          "kind": "status:scheduled"
+        },
+        {
+          "at": "2026-04-26T08:59:37.716Z",
+          "kind": "status:happened",
+          "payload": {
+            "by": "demo-cuhk-ethan"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.719Z",
+          "kind": "status:feedback-collected",
+          "payload": {
+            "by": "demo-cuhk-zoe"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.723Z",
+          "kind": "feedback",
+          "payload": {
+            "template": "post_date_2h",
+            "by": "demo-cuhk-ethan"
+          }
+        },
+        {
+          "at": "2026-04-26T08:59:37.723Z",
+          "kind": "status:closed"
+        }
+      ],
+      "acceptances": [
+        {
+          "userId": "demo-cuhk-zoe",
+          "choice": "yes",
+          "at": "2026-04-26T08:59:37.711Z"
+        },
+        {
+          "userId": "demo-cuhk-ethan",
+          "choice": "yes",
+          "at": "2026-04-26T08:59:37.712Z"
+        }
+      ],
+      "universityId": "cuhk",
+      "proposedSlots": [
+        "Thu 6pm",
+        "Fri 4pm",
+        "Sat 2pm"
+      ],
+      "proposedPlace": {
+        "name": "United College Coffee Corner",
+        "reason": "Picked from your campus safe-spot list as a sensible neutral choice.",
+        "source": "rule"
+      },
+      "confirmedSlot": "Thu 6pm"
+    },
+    {
       "id": "demo-match-1",
-      "createdAt": "2026-04-26T08:37:47.682Z",
-      "dropDate": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
+      "dropDate": "2026-04-26T08:59:37.696Z",
       "userAId": "demo-hku-alyssa",
       "userBId": "demo-hku-daniel",
       "score": 92,
@@ -403,29 +628,54 @@
   "inviteCodes": [
     {
       "code": "DITTO-HK-001",
-      "createdAt": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-002",
-      "createdAt": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-003",
-      "createdAt": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-004",
-      "createdAt": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
       "note": "demo"
     },
     {
       "code": "DITTO-HK-005",
-      "createdAt": "2026-04-26T08:37:47.682Z",
+      "createdAt": "2026-04-26T08:59:37.696Z",
       "note": "demo"
     }
   ],
-  "surveys": []
+  "surveys": [
+    {
+      "id": "78a6c088-9f38-4c38-85e0-9da35c0061b5",
+      "userId": "demo-cuhk-zoe",
+      "matchId": "c5b6e57b-7899-426b-9beb-d62052297289",
+      "template": "post_date_2h",
+      "answers": {
+        "oneLine": "Warm conversation and good campus coffee.",
+        "vibeScore": 8
+      },
+      "derivedSignals": [],
+      "at": "2026-04-26T08:59:37.719Z"
+    },
+    {
+      "id": "29cb1d43-7030-4ce2-a63b-01dd86d51af4",
+      "userId": "demo-cuhk-ethan",
+      "matchId": "c5b6e57b-7899-426b-9beb-d62052297289",
+      "template": "post_date_2h",
+      "answers": {
+        "oneLine": "Easy timing and thoughtful match.",
+        "vibeScore": 8
+      },
+      "derivedSignals": [],
+      "at": "2026-04-26T08:59:37.723Z"
+    }
+  ]
 }
