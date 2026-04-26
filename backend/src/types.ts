@@ -10,6 +10,28 @@ export interface University {
   safeSpots: string[];
 }
 
+export interface LifeSignals {
+  coffeeOrTea?: string[];
+  weekendVibe?: string;
+  spendingTier?: "budget" | "moderate" | "splurge";
+  petAffinity?: "dog" | "cat" | "both" | "none";
+  energyMode?: "introvert" | "extrovert" | "ambivert";
+  firstDateLength?: "short" | "medium" | "long";
+}
+
+export interface MindSignals {
+  devTools?: string[];
+  consumptionStyle?: string;
+  recentMindChange?: string;
+  mediaTaste?: string[];
+}
+
+export interface SocialSignals {
+  githubUrl?: string;
+  socialNotes?: string;
+  socialAffinity?: string;
+}
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -30,6 +52,57 @@ export interface StudentProfile {
   optedIn: boolean;
   availability: string[];
   profileComplete: boolean;
+  // upgrade fields (all optional for backward compat)
+  crossUniOk?: boolean;
+  blockedUserIds?: string[];
+  lifeSignals?: LifeSignals;
+  mindSignals?: MindSignals;
+  socialSignals?: SocialSignals;
+  personaSummary?: string;
+  vibeWeights?: Record<string, number>;
+  onboardingStage?: "auth" | "basic" | "life" | "mind" | "social" | "complete";
+}
+
+export type MatchStatus =
+  | "pending"
+  | "notified"
+  | "awaiting-acceptance"
+  | "mutual-accepted"
+  | "declined"
+  | "slot-proposing"
+  | "slot-confirmed"
+  | "place-confirmed"
+  | "scheduled"
+  | "happened"
+  | "feedback-collected"
+  | "closed"
+  | "rematch-requested"
+  | "awaiting-availability";
+
+export interface MatchEvent {
+  at: string;
+  kind: string;
+  payload?: Record<string, unknown>;
+}
+
+export interface MatchAcceptance {
+  userId: string;
+  choice: "yes" | "no" | "skip";
+  at: string;
+}
+
+export interface ProposedPlace {
+  name: string;
+  address?: string;
+  reason: string;
+  source: "rule" | "llm";
+}
+
+export interface LlmRationale {
+  compatibility: number;
+  sparks: string[];
+  risks: string[];
+  openerTopic: string;
 }
 
 export interface MatchRecord {
@@ -39,7 +112,7 @@ export interface MatchRecord {
   userAId: string;
   userBId: string;
   score: number;
-  status: "pending" | "awaiting-availability" | "scheduled" | "rematch-requested";
+  status: MatchStatus;
   reasonsForA: string[];
   reasonsForB: string[];
   posterHeadline: string;
@@ -54,12 +127,48 @@ export interface MatchRecord {
     notes: string;
     at: string;
   }>;
+  // upgrade fields
+  events?: MatchEvent[];
+  acceptances?: MatchAcceptance[];
+  proposedSlots?: string[];
+  proposedPlace?: ProposedPlace;
+  llmRationale?: LlmRationale;
+  universityId?: string;
 }
 
 export interface VerificationCode {
   email: string;
-  code: string;
+  codeHash: string;
   expiresAt: string;
+  attempts: number;
+  createdAt: string;
+}
+
+export interface InviteCode {
+  code: string;
+  createdAt: string;
+  note?: string;
+  batch?: string;
+  universityId?: string;
+  usedBy?: string;
+  usedAt?: string;
+}
+
+export type SurveyTemplate =
+  | "onboarding_life"
+  | "onboarding_mind"
+  | "onboarding_social"
+  | "post_date_2h"
+  | "post_date_24h";
+
+export interface Survey {
+  id: string;
+  userId: string;
+  matchId?: string;
+  template: SurveyTemplate;
+  answers: Record<string, unknown>;
+  derivedSignals: string[];
+  at: string;
 }
 
 export interface Database {
@@ -67,4 +176,6 @@ export interface Database {
   students: StudentProfile[];
   matches: MatchRecord[];
   verificationCodes: VerificationCode[];
+  inviteCodes: InviteCode[];
+  surveys: Survey[];
 }

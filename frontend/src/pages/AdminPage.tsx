@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useTranslation } from "react-i18next";
-import type { Locale, MatchRecord, StudentProfile } from "../types";
+import type { MatchRecord, StudentProfile } from "../types";
 import { SectionCard } from "../components/SectionCard";
 
-export function AdminPage({ locale, onUser }: { locale: Locale; onUser: (id: string) => void; }) {
+export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [data, setData] = useState<{ stats: { students: number; completedProfiles: number; scheduledDates: number; rematchFlags: number; }; students: Array<StudentProfile & { universityLabel: string }>; matches: Array<MatchRecord & { userALabel: string; userBLabel: string }>; } | null>(null);
@@ -20,8 +20,9 @@ export function AdminPage({ locale, onUser }: { locale: Locale; onUser: (id: str
   useEffect(() => { load().catch(console.error); }, []);
 
   async function runDrop() {
-    const result = await api.runMatchmaking() as { created: MatchRecord[] };
-    setMessage(t("admin.msgCreated", { count: result.created.length }));
+    const result = await api.runMatchmaking(false) as { created: number };
+    await api.triggerDrop();
+    setMessage(t("admin.msgCreated", { count: result.created }));
     await load();
   }
   async function resetDemo() {

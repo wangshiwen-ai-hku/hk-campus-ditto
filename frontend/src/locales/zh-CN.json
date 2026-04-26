@@ -15,7 +15,7 @@
       "nextDrop": "下一次匹配发布：周三 7PM",
       "joinDrop": "加入下一次匹配 →"
     },
-    "stats": "{students} 名学生已加入 • 100% 大学邮箱认证 • {dates} 次成功见面 •",
+    "stats": "{{students}} 名学生已加入 • 100% 大学邮箱认证 • {{dates}} 次成功见面 •",
     "why": {
       "badge": "打破香港的无脑滑动文化",
       "title": "周三的<br/> <1>走心约会</1>",
@@ -122,7 +122,7 @@
     "availability": "空闲时间",
     "saveBtn": "保存主页",
     "dashboardBtn": "打开控制台",
-    "demoCodeMsg": "演示验证码：{code}",
+    "demoCodeMsg": "演示验证码：{{code}}",
     "verifiedMsg": "验证成功，请完善信息。",
     "verifyFirstMsg": "保存资料前，请先验证邮箱。",
     "savedMsg": "保存成功！即将跳转至仪表盘..."
@@ -131,7 +131,7 @@
     "title": "学生仪表盘",
     "signInPrompt": "请先登录查看仪表盘。",
     "loading": "加载中…",
-    "hi": "你好, {name}！",
+    "hi": "你好, {{name}}！",
     "major": "主修专业",
     "pending": "待完善",
     "languages": "语言",
@@ -141,7 +141,7 @@
     "curatedDate": "建议约会安排",
     "scheduling": "时间安排",
     "waitOverlap": "等待重合时段",
-    "overlap": "重合时段：{slots}",
+    "overlap": "重合时段：{{slots}}",
     "noneYet": "暂无",
     "notesSys": "给系统的备忘",
     "notesPlaceholder": "告诉系统哪些有用信息？",
@@ -150,9 +150,15 @@
     "requestRematch": "申请重新匹配",
     "findingMatch": "正在为您寻找新匹配...",
     "feedbackSaved": "反馈已保存。",
+    "countdown": {
+      "days": "天",
+      "hours": "时",
+      "minutes": "分",
+      "seconds": "秒"
+    },
     "nextDropView": {
       "title": "你已成功加入下次匹配池！",
-      "desc": "Ditto 坚信质量大于数量。告别盲目左滑，你将在每周三晚上 7点 收到一位**认真的匹配对象**。",
+      "desc": "Ditto 坚信质量大于数量. 告别盲目左滑, 你将在每周三晚上 7点 收到一位**认真的匹配对象**。",
       "countdownTitle": "下一次匹配倒计时",
       "checkBack": "周三见！",
       "verified": "仅限实名学生",
@@ -166,7 +172,7 @@
     "pageTitle": "运营仪表盘",
     "resetDemo": "重置演示数据",
     "runDrop": "执行周三匹配发布",
-    "msgCreated": "新创建了 {count} 组匹配。",
+    "msgCreated": "新创建了 {{count}} 组匹配。",
     "msgReset": "演示数据已经重置。",
     "stats": {
       "students": "注册学生",

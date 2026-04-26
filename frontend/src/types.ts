@@ -29,7 +29,27 @@ export interface StudentProfile {
   optedIn: boolean;
   availability: string[];
   profileComplete: boolean;
+  personaSummary?: string;
+  proposedSlots?: string[];
+  blockedUserIds?: string[];
+  crossUniOk?: boolean;
 }
+
+export type MatchStatus =
+  | "pending"
+  | "notified"
+  | "awaiting-acceptance"
+  | "mutual-accepted"
+  | "declined"
+  | "slot-proposing"
+  | "slot-confirmed"
+  | "place-confirmed"
+  | "scheduled"
+  | "happened"
+  | "feedback-collected"
+  | "closed"
+  | "rematch-requested"
+  | "awaiting-availability";
 
 export interface MatchRecord {
   id: string;
@@ -38,7 +58,7 @@ export interface MatchRecord {
   userAId: string;
   userBId: string;
   score: number;
-  status: "pending" | "awaiting-availability" | "scheduled" | "rematch-requested";
+  status: MatchStatus;
   reasonsForA: string[];
   reasonsForB: string[];
   posterHeadline: string;
@@ -47,6 +67,18 @@ export interface MatchRecord {
   curatedDateTips: string[];
   overlapSlots: string[];
   confirmedSlot?: string;
+  proposedSlots?: string[];
+  proposedPlace?: {
+    name: string;
+    address?: string;
+    reason: string;
+    source: "rule" | "llm";
+  };
+  acceptances?: Array<{
+    userId: string;
+    choice: "yes" | "no" | "skip";
+    at: string;
+  }>;
   feedback: Array<{
     userId: string;
     sentiment: "love" | "pass" | "rematch";
@@ -58,6 +90,6 @@ export interface MatchRecord {
 export interface MetaResponse {
   universities: University[];
   nextDrop: string;
-  stats: { students: number; activeMatches: number; scheduledDates: number; };
+  stats: { students: number; activeMatches: number; scheduledDates: number; availableInvites?: number; };
   demoAccounts: Array<{ id: string; fullName: string; email: string; universityId: string; }>;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../lib/api";
 import { useTranslation } from "react-i18next";
-import type { Locale, MatchRecord, StudentProfile } from "../types";
+import type { MatchRecord, StudentProfile } from "../types";
 import { SectionCard } from "../components/SectionCard";
 
 type MatchView = {
@@ -13,26 +13,126 @@ function initials(name: string) {
   return name.split(" ").map((p) => p[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 }
 
-export function StudentPage({ locale, userId }: { locale: Locale; userId: string | null; }) {
+function getNextDropTime() {
+  const now = new Date();
+  const next = new Date();
+  const day = now.getDay();
+  const diff = (3 - day + 7) % 7 || 7;
+  next.setDate(now.getDate() + diff);
+  next.setHours(19, 0, 0, 0);
+  return next.getTime();
+}
+
+export function StudentPage({ userId }: { userId: string | null; }) {
   const { t } = useTranslation();
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [view, setView] = useState<MatchView | null>(null);
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
 
   useEffect(() => {
+    const target = getNextDropTime();
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = target - now;
+      if (distance < 0) {
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
+        return;
+      }
+      setTimeLeft({
+        d: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        s: Math.floor((distance % (1000 * 60)) / 1000)
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  async function refresh() {
     if (!userId) return;
-    api.getProfile(userId).then((u) => setProfile(u as StudentProfile)).catch(console.error);
-    api.getCurrentMatch(userId).then((d) => setView((d as { matchView: MatchView | null }).matchView)).catch(console.error);
+    const [profileRes, matchRes] = await Promise.all([
+      api.getProfile(userId),
+      api.getCurrentMatch()
+    ]);
+    setProfile(profileRes as StudentProfile);
+    setView((matchRes as { matchView: MatchView | null }).matchView);
+  }
+
+  useEffect(() => {
+    refresh().catch(console.error);
   }, [userId]);
 
   const partnerChips = useMemo(() => view?.partner.interests.slice(0, 4) ?? [], [view]);
+  const proposedSlots = view?.match.proposedSlots?.length ? view.match.proposedSlots : view?.match.overlapSlots ?? [];
+  const myAcceptance = view?.match.acceptances?.find((x) => x.userId === profile?.id)?.choice;
+  const canRespond = view ? ["notified", "awaiting-acceptance"].includes(view.match.status) : false;
+  const canConfirmSlot = view ? ["slot-proposing", "awaiting-availability"].includes(view.match.status) && proposedSlots.length > 0 : false;
+  const canPickPlace = view?.match.status === "slot-confirmed";
+  const canMarkHappened = view?.match.status === "scheduled";
+  const canFeedback = view ? ["happened", "feedback-collected"].includes(view.match.status) : false;
+
+  function updateMatch(match: MatchRecord) {
+    setView((prev) => prev ? { ...prev, match } : prev);
+  }
+
+  async function respond(choice: "yes" | "no") {
+    if (!view) return;
+    try {
+      const res = await api.respondToMatch(view.match.id, choice) as { match: MatchRecord };
+      updateMatch(res.match);
+      setMessage(choice === "yes" ? "已接受。等待对方确认或进入时间选择。" : "已拒绝，本轮 match 已结束。");
+    } catch (e: any) {
+      setMessage(e.message);
+    }
+  }
+
+  async function confirmSlot(slot: string) {
+    if (!view) return;
+    try {
+      const res = await api.confirmSlot(view.match.id, slot) as { match: MatchRecord };
+      updateMatch(res.match);
+      setMessage("时间已确认。下一步选择约会地点。");
+    } catch (e: any) {
+      setMessage(e.message);
+    }
+  }
+
+  async function pickPlace() {
+    if (!view) return;
+    try {
+      const res = await api.pickPlace(view.match.id) as { match: MatchRecord };
+      updateMatch(res.match);
+      setMessage("地点已确认，约会已排期。");
+    } catch (e: any) {
+      setMessage(e.message);
+    }
+  }
+
+  async function markHappened() {
+    if (!view) return;
+    try {
+      const res = await api.markHappened(view.match.id) as { match: MatchRecord };
+      updateMatch(res.match);
+      setMessage("已标记完成。现在可以提交约会反馈。");
+    } catch (e: any) {
+      setMessage(e.message);
+    }
+  }
 
   async function sendFeedback(sentiment: "love" | "pass" | "rematch") {
     if (!view || !profile) return;
-    const res = await api.submitFeedback(view.match.id, { userId: profile.id, sentiment, notes: note }) as { matchView: MatchView | null };
-    setView(res.matchView);
-    setMessage(sentiment === "rematch" ? t("student.findingMatch") : t("student.feedbackSaved"));
+    try {
+      const res = await api.submitFeedback(view.match.id, "post_date_2h", {
+        oneLine: note,
+        vibeScore: sentiment === "love" ? 8 : sentiment === "rematch" ? 5 : 2
+      }, sentiment) as { match: MatchRecord };
+      updateMatch(res.match);
+      setMessage(sentiment === "rematch" ? t("student.findingMatch") : t("student.feedbackSaved"));
+    } catch (e: any) {
+      setMessage(e.message);
+    }
   }
 
   if (!userId) {
@@ -130,6 +230,50 @@ export function StudentPage({ locale, userId }: { locale: Locale; userId: string
                     </div>
                   </div>
 
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-2">Match workflow</div>
+                        <div className="text-lg font-black text-white">{view.match.status}</div>
+                        {myAcceptance ? <div className="text-sm text-white/50 mt-1">Your response: {myAcceptance}</div> : null}
+                        {view.match.proposedPlace ? (
+                          <div className="text-sm text-white/60 mt-2">
+                            {view.match.proposedPlace.name}
+                            {view.match.proposedPlace.address ? ` · ${view.match.proposedPlace.address}` : ""}
+                          </div>
+                        ) : null}
+                      </div>
+                      <button className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm font-bold text-white hover:bg-white hover:text-black transition-all" onClick={() => refresh().catch(console.error)}>
+                        Refresh
+                      </button>
+                    </div>
+
+                    {canRespond ? (
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <button className="rounded-full bg-pink-500 px-6 py-3 font-black text-white hover:bg-pink-400 transition-all" onClick={() => respond("yes")}>Accept match</button>
+                        <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all" onClick={() => respond("no")}>Decline</button>
+                      </div>
+                    ) : null}
+
+                    {canConfirmSlot ? (
+                      <div className="mt-5">
+                        <div className="mb-3 text-xs font-bold uppercase tracking-widest text-white/30">Confirm time</div>
+                        <div className="flex flex-wrap gap-3">
+                          {proposedSlots.map((slot) => (
+                            <button key={slot} className="rounded-full border border-green-400/30 bg-green-400/10 px-5 py-2 text-sm font-bold text-green-300 hover:bg-green-400 hover:text-black transition-all" onClick={() => confirmSlot(slot)}>
+                              {slot}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      {canPickPlace ? <button className="rounded-full bg-white px-6 py-3 font-black text-black hover:bg-white/90 transition-all" onClick={pickPlace}>Pick place</button> : null}
+                      {canMarkHappened ? <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all" onClick={markHappened}>Mark happened</button> : null}
+                    </div>
+                  </div>
+
                   <div className="pt-6 border-t border-white/5">
                     <label className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3 block">{t("student.notesSys")}</label>
                     <textarea 
@@ -139,10 +283,11 @@ export function StudentPage({ locale, userId }: { locale: Locale; userId: string
                       placeholder={t("student.notesPlaceholder")} 
                     />
                     <div className="flex flex-wrap gap-3">
-                      <button className="rounded-full bg-pink-500 px-8 py-3 font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95" onClick={() => sendFeedback("love")}>{t("student.lovedIt")}</button>
-                      <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all" onClick={() => sendFeedback("pass")}>{t("student.pass")}</button>
-                      <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all" onClick={() => sendFeedback("rematch")}>{t("student.requestRematch")}</button>
+                      <button disabled={!canFeedback} className="rounded-full bg-pink-500 px-8 py-3 font-black text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("love")}>{t("student.lovedIt")}</button>
+                      <button disabled={!canFeedback} className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("pass")}>{t("student.pass")}</button>
+                      <button disabled={!canFeedback} className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 transition-all disabled:cursor-not-allowed disabled:opacity-40" onClick={() => sendFeedback("rematch")}>{t("student.requestRematch")}</button>
                     </div>
+                    {!canFeedback ? <div className="mt-3 text-xs text-white/40">Feedback opens after the date is marked as happened.</div> : null}
                   </div>
                   {message ? <div className="rounded-xl bg-green-500/20 px-4 py-2 text-sm text-green-300 border border-green-500/30 text-center">{message}</div> : null}
                 </div>
@@ -165,9 +310,14 @@ export function StudentPage({ locale, userId }: { locale: Locale; userId: string
               {t('student.nextDropView.desc')}
             </p>
             
-            <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 w-full max-w-sm">
+            <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 w-full max-w-md">
                 <div className="text-xs font-black uppercase tracking-[0.3em] text-white/30 mb-2">{t('student.nextDropView.countdownTitle')}</div>
-                <div className="text-4xl font-black text-pink-400 tabular-nums">03:14:22:15</div>
+                <div className="text-3xl sm:text-4xl font-black text-pink-400 tabular-nums flex justify-center gap-2">
+                   <span>{timeLeft.d}<span className="text-sm ml-1 text-white/30">{t('student.countdown.days')}</span></span>
+                   <span>{timeLeft.h}<span className="text-sm ml-1 text-white/30">{t('student.countdown.hours')}</span></span>
+                   <span>{timeLeft.m}<span className="text-sm ml-1 text-white/30">{t('student.countdown.minutes')}</span></span>
+                   <span>{timeLeft.s}<span className="text-sm ml-1 text-white/30">{t('student.countdown.seconds')}</span></span>
+                </div>
                 <div className="mt-2 text-xs text-white/40 italic">{t('student.nextDropView.checkBack')}</div>
             </div>
 

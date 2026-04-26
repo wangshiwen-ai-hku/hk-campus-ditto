@@ -160,7 +160,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.716Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -198,7 +198,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -236,7 +236,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -274,7 +274,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -312,7 +312,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -350,7 +350,7 @@
         "ghosting"
       ],
       "verificationStatus": "verified",
-      "joinedAt": "2026-04-16T09:18:06.717Z",
+      "joinedAt": "2026-04-19T08:37:47.682Z",
       "optedIn": true,
       "availability": [
         "Thu 6pm",
@@ -367,8 +367,8 @@
   "matches": [
     {
       "id": "demo-match-1",
-      "createdAt": "2026-04-23T09:18:06.717Z",
-      "dropDate": "2026-04-23T09:18:06.717Z",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "dropDate": "2026-04-26T08:37:47.682Z",
       "userAId": "demo-hku-alyssa",
       "userBId": "demo-hku-daniel",
       "score": 92,
@@ -399,5 +399,33 @@
       "feedback": []
     }
   ],
-  "verificationCodes": []
+  "verificationCodes": [],
+  "inviteCodes": [
+    {
+      "code": "DITTO-HK-001",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "note": "demo"
+    },
+    {
+      "code": "DITTO-HK-002",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "note": "demo"
+    },
+    {
+      "code": "DITTO-HK-003",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "note": "demo"
+    },
+    {
+      "code": "DITTO-HK-004",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "note": "demo"
+    },
+    {
+      "code": "DITTO-HK-005",
+      "createdAt": "2026-04-26T08:37:47.682Z",
+      "note": "demo"
+    }
+  ],
+  "surveys": []
 }

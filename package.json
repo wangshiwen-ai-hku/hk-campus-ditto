@@ -5,7 +5,10 @@
   "scripts": {
     "demo": "concurrently -k \"npm --prefix backend run dev\" \"npm --prefix frontend run dev -- --host 0.0.0.0\"",
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
-    "seed": "npm --prefix backend run seed"
+    "seed": "npm --prefix backend run seed",
+    "invites:generate": "node scripts/generate-invites.mjs",
+    "test:backend": "npm --prefix backend run build && node scripts/backend-logic-tests.mjs",
+    "smoke:backend": "node scripts/backend-smoke.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

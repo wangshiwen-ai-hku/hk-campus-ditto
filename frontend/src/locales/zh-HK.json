@@ -15,7 +15,7 @@
       "nextDrop": "下一次配對：星期三晚7點",
       "joinDrop": "加入下一次配對 →"
     },
-    "stats": "{students} 個學生已加入 • 100% 大學電郵驗證 • {dates} 次成功見面 •",
+    "stats": "{{students}} 個學生已加入 • 100% 大學電郵驗證 • {{dates}} 次成功見面 •",
     "why": {
       "badge": "打破香港的左滑右滑文化",
       "title": "星期三<br/> <1>認真約會</1>",
@@ -122,7 +122,7 @@
     "availability": "得閒時間",
     "saveBtn": "儲存個人檔案",
     "dashboardBtn": "打開控制面板",
-    "demoCodeMsg": "示範驗證碼：{code}",
+    "demoCodeMsg": "示範驗證碼：{{code}}",
     "verifiedMsg": "已驗證，繼續填寫。",
     "verifyFirstMsg": "請先驗證電郵。",
     "savedMsg": "已儲存！即將跳轉到面板..."
@@ -131,7 +131,7 @@
     "title": "學生控制面板",
     "signInPrompt": "請先登入。",
     "loading": "載入中…",
-    "hi": "你好, {name}！",
+    "hi": "你好, {{name}}！",
     "major": "主修科目",
     "pending": "未填寫",
     "languages": "語言",
@@ -141,7 +141,7 @@
     "curatedDate": "建議約會",
     "scheduling": "時間夾檔",
     "waitOverlap": "等緊重疊時間",
-    "overlap": "重疊時間：{slots}",
+    "overlap": "重疊時間：{{slots}}",
     "noneYet": "暫時未有",
     "notesSys": "俾系統嘅筆記",
     "notesPlaceholder": "有咩想系統學到？",
@@ -150,6 +150,12 @@
     "requestRematch": "要求重新配對",
     "findingMatch": "搵緊新配對...",
     "feedbackSaved": "反饋已儲存。",
+    "countdown": {
+      "days": "日",
+      "hours": "時",
+      "minutes": "分",
+      "seconds": "秒"
+    },
     "nextDropView": {
       "title": "你已經加入咗下一次配對！",
       "desc": "Ditto 相信重質不重量。唔駛再 Swipe，每個星期三 7:00 PM 你會收到一 個**認真嘅配對**。",
@@ -166,7 +172,7 @@
     "pageTitle": "管理員控制面板",
     "resetDemo": "重置示範數據",
     "runDrop": "運行星期三配對",
-    "msgCreated": "新建立咗 {count} 個配對。",
+    "msgCreated": "新建立咗 {{count}} 個配對。",
     "msgReset": "示範數據已重置。",
     "stats": {
       "students": "學生人數",

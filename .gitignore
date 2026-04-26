@@ -64,3 +64,4 @@ logs
 # Misc
 .cache/
 .DS_Store
+tmp/
