@@ -32,6 +32,28 @@ export interface SocialSignals {
   socialAffinity?: string;
 }
 
+export interface DatingPreferences {
+  birthday?: string;
+  ethnicity?: string;
+  heightCm?: number;
+  datingGoal?: "life_partner" | "long_term" | "casual" | "friends" | "unsure";
+  dateGenders?: string[];
+  ageRange?: {
+    min: number;
+    max: number;
+  };
+  ethnicityPreferences?: string[];
+  attractionSignals?: {
+    heightAndBuild?: string;
+    facialFeatures?: string;
+    energyAndVibe?: string;
+    flexible?: string[];
+  };
+  matchMode?: "fast" | "balanced" | "intentional" | "wait_for_the_one";
+  phoneNumber?: string;
+  photoUrls?: string[];
+}
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -58,6 +80,7 @@ export interface StudentProfile {
   lifeSignals?: LifeSignals;
   mindSignals?: MindSignals;
   socialSignals?: SocialSignals;
+  datingPreferences?: DatingPreferences;
   personaSummary?: string;
   vibeWeights?: Record<string, number>;
   onboardingStage?: "auth" | "basic" | "life" | "mind" | "social" | "complete";
@@ -158,6 +181,10 @@ export type SurveyTemplate =
   | "onboarding_life"
   | "onboarding_mind"
   | "onboarding_social"
+  | "onboarding_basics"
+  | "onboarding_preferences"
+  | "onboarding_attraction"
+  | "onboarding_media"
   | "post_date_2h"
   | "post_date_24h";
 

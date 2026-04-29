@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { useTranslation } from "react-i18next";
 import type { MatchRecord, StudentProfile } from "../types";
 import { SectionCard } from "../components/SectionCard";
+import { setStoredToken } from "../lib/session";
 
 export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
   const { t } = useTranslation();
@@ -11,8 +12,10 @@ export function AdminPage({ onUser }: { onUser: (id: string) => void; }) {
   const [data, setData] = useState<{ stats: { students: number; completedProfiles: number; scheduledDates: number; rematchFlags: number; }; students: Array<StudentProfile & { universityLabel: string }>; matches: Array<MatchRecord & { userALabel: string; userBLabel: string }>; } | null>(null);
   const [message, setMessage] = useState("");
 
-  const handleUserSelect = (id: string) => {
-    onUser(id);
+  const handleUserSelect = async (id: string) => {
+    const session = await api.loginAsDevUser({ userId: id });
+    setStoredToken(session.token);
+    onUser(session.user.id);
     navigate("/student");
   };
 

@@ -93,3 +93,29 @@ export interface MetaResponse {
   stats: { students: number; activeMatches: number; scheduledDates: number; availableInvites?: number; };
   demoAccounts: Array<{ id: string; fullName: string; email: string; universityId: string; }>;
 }
+
+export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos";
+
+export interface Question {
+  id: string;
+  prompt?: string;
+  promptKey?: string;
+  whyItMatters?: string;
+  whyItMattersKey?: string;
+  kind: QuestionKind;
+  options?: string[];
+  optionsKeys?: string[];
+  placeholderKey?: string;
+  defaultValue?: unknown;
+  min?: number;
+  max?: number;
+}
+
+export interface QuestionGroup {
+  template: string;
+  title?: string;
+  titleKey?: string;
+  description?: string;
+  descriptionKey?: string;
+  questions: Question[];
+}

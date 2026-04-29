@@ -125,7 +125,125 @@
     "demoCodeMsg": "演示验证码：{{code}}",
     "verifiedMsg": "验证成功，请完善信息。",
     "verifyFirstMsg": "保存资料前，请先验证邮箱。",
-    "savedMsg": "保存成功！即将跳转至仪表盘..."
+    "savedMsg": "保存成功！即将跳转至仪表盘...",
+    "dev": {
+      "eyebrow": "加入 Ditto",
+      "title": "真实入驻流程",
+      "subtitle": "开发模式可跳过验证步骤，但后续资料和问卷仍走真实后端 API。",
+      "studentDashboard": "学生仪表盘",
+      "account": "账号",
+      "profile": "资料",
+      "done": "完成",
+      "session": "会话",
+      "user": "用户",
+      "email": "邮箱",
+      "mode": "模式",
+      "notSignedIn": "未登录",
+      "devMode": "开发快捷入口已启用",
+      "prodMode": "生产式验证",
+      "createUser": "创建测试用户并登录",
+      "openAdmin": "打开管理工具",
+      "accountDesc": "如需模拟生产流程，可请求验证码并验证；日常联调建议使用左侧开发按钮。",
+      "inviteCode": "邀请码",
+      "verifyContinue": "验证并继续",
+      "profileBasics": "基础资料",
+      "profileDesc": "这里会真实保存 profile，并决定用户是否能进入匹配池。",
+      "year": "年级",
+      "vibeTags": "氛围标签",
+      "crossCampus": "允许跨校区候选人进入测试池",
+      "saveProfileContinue": "保存资料并继续",
+      "saveSection": "保存{{section}}",
+      "completeTitle": "入驻完成",
+      "completeDesc": "你已经走完真实资料和问卷流程。现在可以去 Admin 立即生成匹配并发布，然后回到学生页查看。",
+      "runMatchAdmin": "去 Admin 生成匹配",
+      "openStudent": "打开学生页",
+      "userCreated": "测试用户已创建并登录。继续体验真实入驻流程。",
+      "codeSent": "验证码已发送。",
+      "signedIn": "已登录，请继续完善资料。",
+      "profileSaved": "资料已保存。现在填写真实问卷。",
+      "sectionSaved": "已保存，继续下一段。",
+      "completeMsg": "入驻完成。你可以进入学生页，或去 Admin 生成匹配。",
+      "back": "返回",
+      "uploadPhotos": "上传照片",
+      "uploadPhotosHint": "本地测试最多添加 {{count}} 张清晰照片。",
+      "remove": "移除"
+    },
+    "tags": {
+      "coffee": "探店打卡",
+      "cantopop": "广东歌与独立音乐",
+      "art": "看展如M+",
+      "film": "胶片摄影",
+      "night": "夜游与夜景",
+      "hiking": "行山与自然",
+      "citywalk": "城市漫步",
+      "supper": "宵夜糖水",
+      "tech": "科技与创业",
+      "thrifting": "古着与二手市场"
+    },
+    "vibes": {
+      "chill": "随性佛系",
+      "curious": "充满好奇",
+      "empathetic": "共情力强",
+      "playful": "幽默有趣",
+      "grounded": "踏实靠谱",
+      "creative": "天马行空",
+      "ambitious": "有上进心",
+      "warm": "像小太阳"
+    },
+    "slots": {
+      "wed_eve": "周三晚",
+      "thu_eve": "周四晚",
+      "fri_aft": "周五下午",
+      "fri_eve": "周五晚",
+      "sat_aft": "周六下午",
+      "sun_aft": "周日下午"
+    },
+    "langs": {
+      "english": "英文",
+      "cantonese": "广东话",
+      "mandarin": "普通话",
+      "japanese": "日语",
+      "korean": "韩语"
+    },
+    "placeholders": {
+      "fullName": "例如：张三",
+      "year": "例如：大三 / 研一",
+      "major": "例如：计算机科学",
+      "bio": "例如：喜欢咖啡，校园漫步，以及随性低压的初次约会...",
+      "select": "请选择..."
+    },
+    "degreeLevel": "学位 / 项目",
+    "grade": "就读年级",
+    "faculty": "学院",
+    "department": "系 / 专业",
+    "errors": {
+      "required": "请填写所有必填字段以继续。"
+    },
+    "degrees": {
+      "undergrad": "本科 (Undergraduate)",
+      "taught_master": "授课型硕士 (Taught Master)",
+      "mphil_phd": "研究型硕士/博士 (MPhil/PhD)",
+      "other": "其他 (Other)"
+    },
+    "grades": {
+      "y1": "Year 1 (大一/研一)",
+      "y2": "Year 2 (大二/研二)",
+      "y3": "Year 3 (大三/研三)",
+      "y4": "Year 4 (大四/研四)",
+      "y5_plus": "Year 5+ (五年级及以上)"
+    },
+    "faculties": {
+      "arts": "文学院 / 人文学科",
+      "business": "商学院 / 经济学院",
+      "engineering": "工程学院",
+      "science": "理学院",
+      "social": "社会科学院",
+      "medicine": "医学院 / 健康科学",
+      "law": "法学院",
+      "architecture": "建筑 / 设计学院",
+      "education": "教育学院",
+      "other": "其他"
+    }
   },
   "student": {
     "title": "学生仪表盘",
@@ -187,5 +305,180 @@
     "incomplete": "未完成",
     "view": "查看",
     "loading": "加载记录中…"
+  },
+  "onboarding": {
+    "groups": {
+      "basics": {
+        "title": "基本信息",
+        "desc": "让我们从你的基本信息开始。"
+      },
+      "prefs": {
+        "title": "约会偏好",
+        "desc": "你在寻找什么样的人？"
+      },
+      "attraction": {
+        "title": "背景与吸引力",
+        "desc": "你的兴趣是什么？什么样的特质吸引你？"
+      },
+      "media": {
+        "title": "媒体资料",
+        "desc": "添加能展示你面貌、风格和日常氛围的照片。"
+      }
+    },
+    "q": {
+      "gender": {
+        "prompt": "你的性别是什么？",
+        "why": "这有助于我们为你找到合适的匹配对象。"
+      },
+      "birthday": {
+        "prompt": "你的生日是哪天？",
+        "why": "我们只向他人显示你的年龄。"
+      },
+      "ethnicity": {
+        "prompt": "你的族裔是什么？",
+        "why": "可选信息，帮助我们更好地了解你的背景。"
+      },
+      "height": {
+        "prompt": "你的身高是多少？(cm)",
+        "why": "有些人对身高有偏好，这有助于更精准的匹配。"
+      },
+      "grade": {
+        "prompt": "你现在几年级？",
+        "why": "这有助于为你匹配处于相似人生阶段的人。"
+      },
+      "targetGender": {
+        "prompt": "你想和谁约会？",
+        "why": "这是一个硬性偏好，不只是排序信号。"
+      },
+      "datingGoal": {
+        "prompt": "你现在的约会目标是什么？",
+        "why": "这能确保目标不同的人不会被强行匹配在一起。"
+      },
+      "ageRange": {
+        "prompt": "你偏好的年龄范围是？",
+        "why": "用于划定让你感到舒适的约会界限。"
+      },
+      "targetEthnicity": {
+        "prompt": "你对哪些族裔感兴趣？(可选)",
+        "why": "可选偏好；如果你不介意，可以放宽选择。"
+      },
+      "matchMode": {
+        "prompt": "你希望我们多严格地筛选？",
+        "why": "控制我们是优先考虑匹配速度还是严格的偏好契合度。"
+      },
+      "hobbies": {
+        "prompt": "分享一些你的爱好和兴趣",
+        "why": "开放式的回答将丰富你的个人画像。",
+        "placeholder": "例如：探店，攀岩，阅读..."
+      },
+      "attractHeight": {
+        "prompt": "你通常会注意的外貌特征：身高 / 体型",
+        "why": "适度的具体要求有助于避免纯凭感觉的匹配。",
+        "placeholder": "175cm，运动型，宽肩..."
+      },
+      "attractFace": {
+        "prompt": "你通常会注意的外貌特征：面部 / 表情",
+        "why": "对于主观的吸引力，开放式文本比强制勾选单更灵活。",
+        "placeholder": "有神的眼睛，温暖的笑容，干净无胡须..."
+      },
+      "attractEnergy": {
+        "prompt": "你通常会被哪种能量或气场吸引？",
+        "why": "将模糊的化学反应偏好转化为我们可以对比的信号。",
+        "placeholder": "沉稳，文艺，自信..."
+      },
+      "hkMtrLocation": {
+        "prompt": "你平时主要在哪个地铁线/区域附近活动？",
+        "why": "跨海约会成本较高，这有助于算法就近匹配或规划约会地点。"
+      },
+      "languagePref": {
+        "prompt": "约会时最习惯使用哪种语言？",
+        "why": "香港是三语环境，语言同频很大程度上决定了初次约会的舒适度。"
+      },
+      "hkWeekendVibe": {
+        "prompt": "在香港，你理想的周末约会安排是？",
+        "why": "通过本地化的场景直接体现个人的生活方式。"
+      },
+      "mbtiE": {
+        "prompt": "MBTI: 能量来源",
+        "why": "你通常如何恢复精力？"
+      },
+      "mbtiS": {
+        "prompt": "MBTI: 信息感知",
+        "why": "你更倾向于如何处理信息？"
+      },
+      "mbtiT": {
+        "prompt": "MBTI: 决策方式",
+        "why": "你做决定时更看重什么？"
+      },
+      "mbtiJ": {
+        "prompt": "MBTI: 生活态度",
+        "why": "你倾向于如何安排生活？"
+      },
+      "photos": {
+        "prompt": "添加个人照片",
+        "why": "照片让匹配更真实，也便于测试后续媒体资料展示界面。"
+      },
+      "mediaNotes": {
+        "prompt": "关于这些照片，有什么希望系统知道的吗？",
+        "why": "可选说明，用于辅助理解你的媒体资料。",
+        "placeholder": "例如：第一张是日常状态，第二张是行山时拍的"
+      }
+    },
+    "opt": {
+      "male": "男生",
+      "female": "女生",
+      "non_binary": "非二元性别",
+      "everyone": "所有人",
+      "eth_indian": "美洲印第安人",
+      "eth_black": "非裔/黑人",
+      "eth_east_asian": "东亚人",
+      "eth_latinx": "拉丁裔",
+      "eth_middle_eastern": "中东人",
+      "eth_pacific": "太平洋岛民",
+      "eth_south_asian": "南亚人",
+      "eth_southeast_asian": "东南亚人",
+      "eth_white": "白人",
+      "eth_other": "其他",
+      "prefer_not_say": "不愿透露",
+      "no_pref": "没有偏好",
+      "year1": "大一",
+      "year2": "大二",
+      "year3": "大三",
+      "year4": "大四",
+      "master": "硕士",
+      "phd": "博士",
+      "life_partner": "终身伴侣",
+      "long_term": "长期关系",
+      "casual": "轻松约会",
+      "friends": "结交新朋友",
+      "unsure": "还不确定",
+      "mode_fast": "快速 (速度优先，不求完美)",
+      "mode_balanced": "平衡 (合适度尚可)",
+      "mode_intentional": "走心 (大部分偏好匹配)",
+      "mode_wait": "宁缺毋滥 (满足所有要求)",
+      "mtr_island": "港岛线 (如 HKU)",
+      "mtr_east": "东铁线 (如 CUHK)",
+      "mtr_tsuen_wan_kwun_tong": "荃湾/观塘线 (如 PolyU, CityU)",
+      "mtr_tuen_ma": "屯马线",
+      "mtr_other": "其他 / 多条线跑",
+      "lang_canto": "粤语 (Cantonese)",
+      "lang_mando": "普通话 (Mandarin)",
+      "lang_eng": "英语 (English)",
+      "lang_mixed": "混用 (如中英夹杂)",
+      "vibe_cafe": "中环/上环探店 (Cafe Hopping)",
+      "vibe_nature": "西贡行山/沙滩 (Nature)",
+      "vibe_city": "尖沙咀/铜锣湾逛街 (City)",
+      "vibe_dorm": "宅在宿舍/Hall",
+      "vibe_food": "茶餐厅/大排档地道美食",
+      "mbti_e": "E (外向 - 从人群中获取能量)",
+      "mbti_i": "I (内向 - 独处时恢复能量)",
+      "mbti_s": "S (实感 - 关注事实与细节)",
+      "mbti_n": "N (直觉 - 关注想法与概念)",
+      "mbti_t": "T (理智 - 逻辑与客观)",
+      "mbti_f": "F (情感 - 共情与和谐)",
+      "mbti_j": "J (计划 - 喜欢有条理和计划)",
+      "mbti_p": "P (随性 - 灵活且随遇而安)",
+      "mbti_none": "不清楚"
+    }
   }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-export function TagSelector({ title, values, setValues, items }: { title: string; values: string[]; setValues: (v: string[]) => void; items: string[]; }) {
+export function TagSelector({ title, values, setValues, items, renderLabel }: { title: string; values: string[]; setValues: (v: string[]) => void; items: string[]; renderLabel?: (item: string) => string; }) {
   function toggle(item: string) {
     setValues(values.includes(item) ? values.filter((v) => v !== item) : [...values, item]);
   }
@@ -21,7 +21,7 @@ export function TagSelector({ title, values, setValues, items }: { title: string
                   : "border border-white/5 bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60"
               }`}
             >
-              {item}
+              {renderLabel ? renderLabel(item) : item}
             </button>
           );
         })}

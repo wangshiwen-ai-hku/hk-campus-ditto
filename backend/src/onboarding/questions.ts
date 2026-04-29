@@ -1,136 +1,247 @@
-// Question bank for onboarding surveys.
-// Designed as 3 small thematic groups, ~5-7 questions each.
+// Question bank for onboarding surveys based on Ditto Questionnaire.
+// Designed as 3 thematic groups.
 // Each question carries a `whyItMatters` so the UI can show transparency.
 
-export type QuestionKind = "single" | "multi" | "text" | "scale";
+export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos";
 
 export interface Question {
   id: string;
-  prompt: string;
-  whyItMatters: string;
+  prompt?: string;
+  promptKey?: string;
+  whyItMatters?: string;
+  whyItMattersKey?: string;
   kind: QuestionKind;
   options?: string[];
+  optionsKeys?: string[];
+  placeholderKey?: string;
+  defaultValue?: unknown;
   min?: number;
   max?: number;
+  required?: boolean;
 }
 
 export interface QuestionGroup {
-  template: "onboarding_life" | "onboarding_mind" | "onboarding_social";
-  title: string;
-  description: string;
+  template:
+    | "onboarding_basics"
+    | "onboarding_preferences"
+    | "onboarding_attraction"
+    | "onboarding_media"
+    | "post_date_2h"
+    | "post_date_24h";
+  title?: string;
+  titleKey?: string;
+  description?: string;
+  descriptionKey?: string;
   questions: Question[];
 }
 
 export const onboardingGroups: QuestionGroup[] = [
   {
-    template: "onboarding_life",
-    title: "Life rhythm",
-    description: "How you actually spend your week — small clues, big signal.",
+    template: "onboarding_basics",
+    titleKey: "onboarding.groups.basics.title",
+    descriptionKey: "onboarding.groups.basics.desc",
     questions: [
       {
-        id: "coffeeOrTea",
-        prompt: "Your default order at a campus café",
-        whyItMatters: "Specific tastes (matcha, dirty, cold brew) hint at lifestyle and pace.",
-        kind: "multi",
-        options: ["latte", "matcha latte", "americano", "dirty", "cold brew", "milk tea", "specialty pour-over", "I don't drink caffeine"],
+        id: "gender",
+        promptKey: "onboarding.q.gender.prompt",
+        whyItMattersKey: "onboarding.q.gender.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.male", "onboarding.opt.female", "onboarding.opt.non_binary"],
       },
       {
-        id: "weekendVibe",
-        prompt: "Ideal Saturday 11am",
-        whyItMatters: "Weekend defaults reveal energy and social mode better than self-described traits.",
-        kind: "single",
-        options: ["sleep in & read", "brunch with friends", "hike or trail run", "gym + cafe", "still in lab", "gaming", "exploring a new neighbourhood"],
+        id: "birthday",
+        promptKey: "onboarding.q.birthday.prompt",
+        whyItMattersKey: "onboarding.q.birthday.why",
+        kind: "date",
       },
       {
-        id: "spendingTier",
-        prompt: "First-date budget you're comfortable with",
-        whyItMatters: "Aligning expectations on spending avoids silent friction.",
+        id: "ethnicity",
+        promptKey: "onboarding.q.ethnicity.prompt",
+        whyItMattersKey: "onboarding.q.ethnicity.why",
         kind: "single",
-        options: ["budget", "moderate", "splurge"],
+        optionsKeys: ["onboarding.opt.prefer_not_say", "onboarding.opt.eth_indian", "onboarding.opt.eth_black", "onboarding.opt.eth_east_asian", "onboarding.opt.eth_latinx", "onboarding.opt.eth_middle_eastern", "onboarding.opt.eth_pacific", "onboarding.opt.eth_south_asian", "onboarding.opt.eth_southeast_asian", "onboarding.opt.eth_white", "onboarding.opt.eth_other"],
+        defaultValue: "onboarding.opt.prefer_not_say",
+        required: true,
       },
       {
-        id: "petAffinity",
-        prompt: "Cat or dog?",
-        whyItMatters: "Classic axis. We'll honour your pick when matching.",
-        kind: "single",
-        options: ["dog", "cat", "both", "none"],
+        id: "height",
+        promptKey: "onboarding.q.height.prompt",
+        whyItMattersKey: "onboarding.q.height.why",
+        kind: "number",
+        min: 140,
+        max: 220,
+        required: true,
       },
       {
-        id: "energyMode",
-        prompt: "After a long week of classes you feel...",
-        whyItMatters: "Introvert/extrovert balance shapes who you click with.",
+        id: "hkMtrLocation",
+        promptKey: "onboarding.q.hkMtrLocation.prompt",
+        whyItMattersKey: "onboarding.q.hkMtrLocation.why",
         kind: "single",
-        options: ["introvert", "extrovert", "ambivert"],
+        optionsKeys: ["onboarding.opt.mtr_island", "onboarding.opt.mtr_east", "onboarding.opt.mtr_tsuen_wan_kwun_tong", "onboarding.opt.mtr_tuen_ma", "onboarding.opt.mtr_other"],
+        required: true,
       },
       {
-        id: "firstDateLength",
-        prompt: "Your ideal first date length",
-        whyItMatters: "We schedule the slot accordingly.",
+        id: "mbtiE",
+        promptKey: "onboarding.q.mbtiE.prompt",
+        whyItMattersKey: "onboarding.q.mbtiE.why",
         kind: "single",
-        options: ["short", "medium", "long"],
+        optionsKeys: ["onboarding.opt.mbti_e", "onboarding.opt.mbti_i", "onboarding.opt.mbti_none"],
+        required: true,
       },
-    ],
+      {
+        id: "mbtiS",
+        promptKey: "onboarding.q.mbtiS.prompt",
+        whyItMattersKey: "onboarding.q.mbtiS.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.mbti_s", "onboarding.opt.mbti_n", "onboarding.opt.mbti_none"],
+        required: true,
+      },
+      {
+        id: "mbtiT",
+        promptKey: "onboarding.q.mbtiT.prompt",
+        whyItMattersKey: "onboarding.q.mbtiT.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.mbti_t", "onboarding.opt.mbti_f", "onboarding.opt.mbti_none"],
+        required: true,
+      },
+      {
+        id: "mbtiJ",
+        promptKey: "onboarding.q.mbtiJ.prompt",
+        whyItMattersKey: "onboarding.q.mbtiJ.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.mbti_j", "onboarding.opt.mbti_p", "onboarding.opt.mbti_none"],
+        required: true,
+      }
+    ]
   },
   {
-    template: "onboarding_mind",
-    title: "Mind habits",
-    description: "How you think and consume — tools, taste, openness.",
+    template: "onboarding_preferences",
+    titleKey: "onboarding.groups.prefs.title",
+    descriptionKey: "onboarding.groups.prefs.desc",
     questions: [
       {
-        id: "devTools",
-        prompt: "Editors / tools you actually use (skip if you don't code)",
-        whyItMatters: "We're building extra goodies for CS folks; this also reveals work style.",
+        id: "targetGender",
+        promptKey: "onboarding.q.targetGender.prompt",
+        whyItMattersKey: "onboarding.q.targetGender.why",
         kind: "multi",
-        options: ["VSCode", "Cursor", "JetBrains", "Neovim", "Xcode", "Figma", "Notion", "Excel power user", "I don't code"],
+        optionsKeys: ["onboarding.opt.male", "onboarding.opt.female", "onboarding.opt.non_binary", "onboarding.opt.everyone"],
+        required: true,
       },
       {
-        id: "consumptionStyle",
-        prompt: "When you finish a great film/book, you usually...",
-        whyItMatters: "Solo absorbers and instant-sharers tend to want different conversation pace.",
+        id: "datingGoal",
+        promptKey: "onboarding.q.datingGoal.prompt",
+        whyItMattersKey: "onboarding.q.datingGoal.why",
         kind: "single",
-        options: ["sit with it alone", "immediately recommend it", "write or post about it", "discuss only when asked"],
+        optionsKeys: ["onboarding.opt.life_partner", "onboarding.opt.long_term", "onboarding.opt.casual", "onboarding.opt.friends", "onboarding.opt.unsure"],
+        required: true,
       },
       {
-        id: "recentMindChange",
-        prompt: "Tell us about a recent time you changed your mind about something",
-        whyItMatters: "Open-ended answers feed your persona summary — be honest, not polished.",
-        kind: "text",
+        id: "ageRange",
+        promptKey: "onboarding.q.ageRange.prompt",
+        whyItMattersKey: "onboarding.q.ageRange.why",
+        kind: "range",
+        min: 18,
+        max: 60,
+        required: true,
       },
       {
-        id: "mediaTaste",
-        prompt: "Pick the genres you actually enjoy",
-        whyItMatters: "Used as soft signal for shared talking points.",
+        id: "targetEthnicity",
+        promptKey: "onboarding.q.targetEthnicity.prompt",
+        whyItMattersKey: "onboarding.q.targetEthnicity.why",
         kind: "multi",
-        options: ["indie film", "blockbuster", "anime", "K-drama", "documentary", "non-fiction", "fiction", "fantasy/sci-fi", "philosophy", "manga", "podcasts"],
+        optionsKeys: ["onboarding.opt.no_pref", "onboarding.opt.eth_indian", "onboarding.opt.eth_black", "onboarding.opt.eth_east_asian", "onboarding.opt.eth_latinx", "onboarding.opt.eth_middle_eastern", "onboarding.opt.eth_pacific", "onboarding.opt.eth_south_asian", "onboarding.opt.eth_southeast_asian", "onboarding.opt.eth_white", "onboarding.opt.eth_other"],
+        defaultValue: ["onboarding.opt.no_pref"],
+        required: true,
       },
-    ],
+      {
+        id: "languagePref",
+        promptKey: "onboarding.q.languagePref.prompt",
+        whyItMattersKey: "onboarding.q.languagePref.why",
+        kind: "multi",
+        optionsKeys: ["onboarding.opt.lang_canto", "onboarding.opt.lang_mando", "onboarding.opt.lang_eng", "onboarding.opt.lang_mixed", "onboarding.opt.no_pref"],
+        required: true,
+      },
+      {
+        id: "matchMode",
+        promptKey: "onboarding.q.matchMode.prompt",
+        whyItMattersKey: "onboarding.q.matchMode.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.mode_fast", "onboarding.opt.mode_balanced", "onboarding.opt.mode_intentional", "onboarding.opt.mode_wait"],
+        required: true,
+      }
+    ]
   },
   {
-    template: "onboarding_social",
-    title: "Social signals",
-    description: "Optional public signals to help us understand your taste better.",
+    template: "onboarding_attraction",
+    titleKey: "onboarding.groups.attraction.title",
+    descriptionKey: "onboarding.groups.attraction.desc",
     questions: [
       {
-        id: "githubUrl",
-        prompt: "GitHub profile URL (optional)",
-        whyItMatters: "If you code, your GitHub gives us much richer signal than a resume.",
+        id: "hobbies",
+        promptKey: "onboarding.q.hobbies.prompt",
+        whyItMattersKey: "onboarding.q.hobbies.why",
+        placeholderKey: "onboarding.q.hobbies.placeholder",
         kind: "text",
+        required: false,
       },
       {
-        id: "socialNotes",
-        prompt: "Anything else you'd like us to know about your taste, friends, or scene?",
-        whyItMatters: "Free-text we feed into your persona with care.",
-        kind: "text",
-      },
-      {
-        id: "socialAffinity",
-        prompt: "Where do you mostly hang out online?",
-        whyItMatters: "Quick read on your social texture. We won't crawl, just note it.",
+        id: "hkWeekendVibe",
+        promptKey: "onboarding.q.hkWeekendVibe.prompt",
+        whyItMattersKey: "onboarding.q.hkWeekendVibe.why",
         kind: "single",
-        options: ["Instagram", "RedNote (Xiaohongshu)", "Twitter/X", "Discord", "Telegram", "Reddit", "I'm mostly offline"],
+        optionsKeys: ["onboarding.opt.vibe_cafe", "onboarding.opt.vibe_nature", "onboarding.opt.vibe_city", "onboarding.opt.vibe_dorm", "onboarding.opt.vibe_food"],
+        required: true,
       },
-    ],
+      {
+        id: "attractionHeightAndBuild",
+        promptKey: "onboarding.q.attractHeight.prompt",
+        whyItMattersKey: "onboarding.q.attractHeight.why",
+        placeholderKey: "onboarding.q.attractHeight.placeholder",
+        kind: "text",
+        required: false,
+      },
+      {
+        id: "attractionFacialFeatures",
+        promptKey: "onboarding.q.attractFace.prompt",
+        whyItMattersKey: "onboarding.q.attractFace.why",
+        placeholderKey: "onboarding.q.attractFace.placeholder",
+        kind: "text",
+        required: false,
+      },
+      {
+        id: "attractionEnergyAndVibe",
+        promptKey: "onboarding.q.attractEnergy.prompt",
+        whyItMattersKey: "onboarding.q.attractEnergy.why",
+        placeholderKey: "onboarding.q.attractEnergy.placeholder",
+        kind: "text",
+        required: false,
+      }
+    ]
   },
+  {
+    template: "onboarding_media",
+    titleKey: "onboarding.groups.media.title",
+    descriptionKey: "onboarding.groups.media.desc",
+    questions: [
+      {
+        id: "photoUrls",
+        promptKey: "onboarding.q.photos.prompt",
+        whyItMattersKey: "onboarding.q.photos.why",
+        kind: "photos",
+        min: 1,
+        max: 5,
+        required: true,
+      },
+      {
+        id: "mediaNotes",
+        promptKey: "onboarding.q.mediaNotes.prompt",
+        whyItMattersKey: "onboarding.q.mediaNotes.why",
+        placeholderKey: "onboarding.q.mediaNotes.placeholder",
+        kind: "text",
+        required: false,
+      }
+    ]
+  }
 ];
 
 export function findGroup(template: string): QuestionGroup | undefined {

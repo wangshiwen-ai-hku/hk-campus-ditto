@@ -69,6 +69,27 @@ npm run dev                      # http://localhost:8787
 
 ### 2. 端到端流程（curl）
 
+**本地前后端联调最快路径：直接拿用户 token**
+```bash
+export ADMIN_SECRET=dev-secret-change-me
+
+curl localhost:8787/api/dev/sessions \
+  -H "x-admin-secret: $ADMIN_SECRET"
+
+curl -X POST localhost:8787/api/dev/login-as \
+  -H "x-admin-secret: $ADMIN_SECRET" -H "Content-Type: application/json" \
+  -d '{"userId":"demo-hku-alyssa"}'
+# → { token, authorization, user }
+```
+
+前端开发模式可以先调用 `/api/dev/sessions` 做一个简易 admin/debug 入口：选一个 demo 用户，把返回的 `token` 放进本地 auth store，后续请求照常带 `Authorization: Bearer <token>`。如果要体验新用户问卷，从 basic 阶段创建一个测试号：
+
+```bash
+curl -X POST localhost:8787/api/dev/users \
+  -H "x-admin-secret: $ADMIN_SECRET" -H "Content-Type: application/json" \
+  -d '{"email":"local-test@connect.hku.hk","fullName":"Local Test","universityId":"hku","stage":"basic"}'
+```
+
 **a. 拿邀请码**（seed 自带 5 个）— `DITTO-HK-001` 到 `005`
 
 **b. 请求验证码 → 终端会打印码 + devCode 字段**
@@ -103,9 +124,9 @@ curl -X POST localhost:8787/api/onboarding/persona/regenerate \
 **e. 跑一轮匹配（管理员触发；需要至少 2 个 profileComplete 用户）**
 ```bash
 curl -X POST localhost:8787/api/matches/run \
-  -H "Content-Type: application/json" -d '{"useLlmJudge":true}'
+  -H "x-admin-secret: $ADMIN_SECRET" -H "Content-Type: application/json" -d '{"useLlmJudge":true}'
 # 看到 created / skipped / llmCalls 统计
-curl -X POST localhost:8787/api/workflow/drop          # 触发 match drop 通知
+curl -X POST localhost:8787/api/workflow/drop -H "x-admin-secret: $ADMIN_SECRET"  # 触发 match drop 通知
 curl -H "Authorization: Bearer $TOKEN" localhost:8787/api/matches/current
 ```
 
@@ -135,9 +156,12 @@ curl -H "Authorization: Bearer $TOKEN" localhost:8787/api/memory/surveys
 ### 3. 单服务自测捷径
 
 - 看 ranker 候选不写库：`GET /api/matches/preview?llm=1`（带 token）
-- 重置数据：`POST /api/dev/reset`
-- 管理员看板：`GET /api/admin/overview`
-- 生成更多邀请码：`POST /api/auth/invites/generate` body `{"adminSecret":"<JWT_SECRET>","count":20}`
+- 本地登录身份列表：`GET /api/dev/sessions`（`x-admin-secret`）
+- 本地以用户身份登录：`POST /api/dev/login-as` body `{"userId":"demo-hku-alyssa"}`（`x-admin-secret`）
+- 本地创建问卷测试用户：`POST /api/dev/users`（`x-admin-secret`）
+- 重置数据：`POST /api/dev/reset`（`x-admin-secret`）
+- 管理员看板：`GET /api/admin/overview`（`x-admin-secret`）
+- 生成更多邀请码：`POST /api/auth/invites/generate` body `{"count":20}`（`x-admin-secret`）
 
 ### 4. 注意事项
 

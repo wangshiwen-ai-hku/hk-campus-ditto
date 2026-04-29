@@ -66,3 +66,4 @@ logs
 .DS_Store
 tmp/
 *.crt
+*.pdf

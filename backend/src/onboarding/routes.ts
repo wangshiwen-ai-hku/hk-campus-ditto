@@ -29,6 +29,24 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
     crossUniOk: z.boolean().default(false),
     optedIn: z.boolean().default(true),
     availability: z.array(z.string()).default([]),
+    datingPreferences: z.object({
+      birthday: z.string().optional(),
+      ethnicity: z.string().optional(),
+      heightCm: z.number().optional(),
+      datingGoal: z.enum(["life_partner", "long_term", "casual", "friends", "unsure"]).optional(),
+      dateGenders: z.array(z.string()).optional(),
+      ageRange: z.object({ min: z.number(), max: z.number() }).optional(),
+      ethnicityPreferences: z.array(z.string()).optional(),
+      attractionSignals: z.object({
+        heightAndBuild: z.string().optional(),
+        facialFeatures: z.string().optional(),
+        energyAndVibe: z.string().optional(),
+        flexible: z.array(z.string()).optional(),
+      }).optional(),
+      matchMode: z.enum(["fast", "balanced", "intentional", "wait_for_the_one"]).optional(),
+      phoneNumber: z.string().optional(),
+      photoUrls: z.array(z.string()).optional(),
+    }).optional(),
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
@@ -47,7 +65,15 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
 // Submit one onboarding survey group (life / mind / social)
 onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   const schema = z.object({
-    template: z.enum(["onboarding_life", "onboarding_mind", "onboarding_social"]),
+    template: z.enum([
+      "onboarding_life",
+      "onboarding_mind",
+      "onboarding_social",
+      "onboarding_basics",
+      "onboarding_preferences",
+      "onboarding_attraction",
+      "onboarding_media",
+    ]),
     answers: z.record(z.string(), z.unknown()),
   });
   const parsed = schema.safeParse(req.body);
@@ -78,6 +104,10 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
     onboarding_life: "mind",
     onboarding_mind: "social",
     onboarding_social: "complete",
+    onboarding_basics: "mind",
+    onboarding_preferences: "social",
+    onboarding_attraction: "social",
+    onboarding_media: "complete",
   };
   const next = nextMap[parsed.data.template];
   if (next && order.indexOf(next) > cur) user.onboardingStage = next;

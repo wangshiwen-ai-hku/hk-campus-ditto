@@ -71,5 +71,9 @@ export const api = {
   runMatchmaking: (useLlmJudge = true) => request("/matches/run", { method: "POST", admin: true, body: JSON.stringify({ useLlmJudge }) }),
   getAdminOverview: () => request("/admin/overview", { admin: true }),
   resetDemo: () => request("/dev/reset", { method: "POST", admin: true }),
-  triggerDrop: () => request("/workflow/drop", { method: "POST", admin: true })
+  triggerDrop: () => request("/workflow/drop", { method: "POST", admin: true }),
+  createDevUser: (payload: { email: string; fullName: string; universityId?: string; stage?: "basic" | "life" | "mind" | "social" | "complete" }) =>
+    request<{ token: string; user: any }>("/dev/users", { method: "POST", admin: true, body: JSON.stringify(payload) }),
+  loginAsDevUser: (payload: { userId?: string; email?: string }) =>
+    request<{ token: string; user: any }>("/dev/login-as", { method: "POST", admin: true, body: JSON.stringify(payload) })
 };

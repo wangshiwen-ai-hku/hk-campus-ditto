@@ -9,6 +9,7 @@ import { matchingRouter } from "./matching/routes.js";
 import { workflowRouter } from "./workflow/routes.js";
 import { feedbackRouter } from "./feedback/routes.js";
 import { memoryRouter } from "./memory/routes.js";
+import { devRouter } from "./dev/routes.js";
 import { inviteStats } from "./auth/invite.js";
 
 const app = express();
@@ -77,6 +78,7 @@ app.use("/api/matches", matchingRouter);
 app.use("/api/workflow", workflowRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/memory", memoryRouter);
+app.use("/api/dev", devRouter);
 
 // Admin overview (kept for the existing demo dashboard)
 app.get("/api/admin/overview", requireAdmin, async (_req, res) => {

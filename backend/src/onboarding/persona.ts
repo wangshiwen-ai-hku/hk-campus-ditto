@@ -19,10 +19,65 @@ export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
 
 export function applyOnboardingAnswers(
   user: StudentProfile,
-  template: "onboarding_life" | "onboarding_mind" | "onboarding_social",
+  template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_media",
   answers: Record<string, unknown>
 ): void {
-  if (template === "onboarding_life") {
+  if (template === "onboarding_basics") {
+    user.gender = strOrUndef(answers.gender) ?? user.gender;
+    user.yearOfStudy = strOrUndef(answers.grade) ?? user.yearOfStudy;
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      birthday: strOrUndef(answers.birthday),
+      ethnicity: strOrUndef(answers.ethnicity),
+      heightCm: numOrUndef(answers.height),
+    };
+  } else if (template === "onboarding_preferences") {
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      dateGenders: arrOrUndef(answers.targetGender),
+      datingGoal: strOrUndef(answers.datingGoal) as any,
+      ageRange: ageRangeOrUndef(answers.ageRange),
+      ethnicityPreferences: arrOrUndef(answers.targetEthnicity),
+      matchMode: strOrUndef(answers.matchMode) as any,
+    };
+    const languagePref = arrOrUndef(answers.languagePref);
+    if (languagePref?.length) user.languages = languagePref;
+  } else if (template === "onboarding_attraction") {
+    const hobbies = strOrUndef(answers.hobbies);
+    if (hobbies) {
+      user.interests = Array.from(new Set([
+        ...user.interests,
+        ...hobbies.split(/[,，、\n]/).map((x) => x.trim()).filter(Boolean),
+      ])).slice(0, 12);
+    }
+    user.lifeSignals = {
+      ...(user.lifeSignals ?? {}),
+      weekendVibe: strOrUndef(answers.hkWeekendVibe),
+    };
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      attractionSignals: {
+        ...(user.datingPreferences?.attractionSignals ?? {}),
+        heightAndBuild: strOrUndef(answers.attractionHeightAndBuild),
+        facialFeatures: strOrUndef(answers.attractionFacialFeatures),
+        energyAndVibe: strOrUndef(answers.attractionEnergyAndVibe),
+      },
+    };
+  } else if (template === "onboarding_media") {
+    const photoUrls = arrOrUndef(answers.photoUrls);
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      photoUrls,
+    };
+    user.photoUrl = photoUrls?.[0] ?? user.photoUrl;
+    const mediaNotes = strOrUndef(answers.mediaNotes);
+    if (mediaNotes) {
+      user.socialSignals = {
+        ...(user.socialSignals ?? {}),
+        socialNotes: [user.socialSignals?.socialNotes, mediaNotes].filter(Boolean).join("\n"),
+      };
+    }
+  } else if (template === "onboarding_life") {
     user.lifeSignals = {
       ...(user.lifeSignals ?? {}),
       coffeeOrTea: arrOrUndef(answers.coffeeOrTea),
@@ -32,6 +87,11 @@ export function applyOnboardingAnswers(
       energyMode: strOrUndef(answers.energyMode) as any,
       firstDateLength: strOrUndef(answers.firstDateLength) as any,
     };
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      datingGoal: strOrUndef(answers.datingGoal) as any,
+      matchMode: strOrUndef(answers.matchMode) as any,
+    };
   } else if (template === "onboarding_mind") {
     user.mindSignals = {
       ...(user.mindSignals ?? {}),
@@ -40,12 +100,27 @@ export function applyOnboardingAnswers(
       recentMindChange: strOrUndef(answers.recentMindChange),
       mediaTaste: arrOrUndef(answers.mediaTaste),
     };
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      attractionSignals: {
+        ...(user.datingPreferences?.attractionSignals ?? {}),
+        heightAndBuild: strOrUndef(answers.attractionHeightAndBuild),
+        facialFeatures: strOrUndef(answers.attractionFacialFeatures),
+        energyAndVibe: strOrUndef(answers.attractionEnergyAndVibe),
+      },
+    };
   } else if (template === "onboarding_social") {
     user.socialSignals = {
       ...(user.socialSignals ?? {}),
       githubUrl: strOrUndef(answers.githubUrl),
       socialNotes: strOrUndef(answers.socialNotes),
       socialAffinity: strOrUndef(answers.socialAffinity),
+    };
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      dateGenders: arrOrUndef(answers.dateGenders),
+      ageRange: ageRangeOrUndef(answers.ageRange),
+      ethnicityPreferences: arrOrUndef(answers.ethnicityPreferences),
     };
   }
 }
@@ -57,11 +132,34 @@ function arrOrUndef(v: unknown): string[] | undefined {
   return Array.isArray(v) ? v.filter((x) => typeof x === "string") : undefined;
 }
 
+function numOrUndef(v: unknown): number | undefined {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function ageRangeOrUndef(v: unknown): { min: number; max: number } | undefined {
+  if (typeof v === "object" && v !== null && "min" in v && "max" in v) {
+    const min = Number((v as { min: unknown }).min);
+    const max = Number((v as { max: unknown }).max);
+    if (Number.isFinite(min) && Number.isFinite(max)) return { min, max };
+  }
+  if (typeof v !== "string") return undefined;
+  const match = v.match(/(\d{2})\D+(\d{2})/);
+  if (!match) return undefined;
+  const min = Number(match[1]);
+  const max = Number(match[2]);
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return undefined;
+  return { min, max };
+}
+
 export function recomputeProfileComplete(user: StudentProfile): boolean {
   const hasBasic = Boolean(
     user.fullName && user.major && user.yearOfStudy && user.bio &&
     user.languages.length && user.interests.length && user.vibeTags.length
   );
-  const hasLife = Boolean(user.lifeSignals?.weekendVibe && user.lifeSignals.energyMode);
-  return hasBasic && hasLife;
+  const hasOnboardingSignal = Boolean(
+    (user.lifeSignals?.weekendVibe && (user.lifeSignals.energyMode || user.datingPreferences?.datingGoal)) ||
+    (user.datingPreferences?.datingGoal && user.datingPreferences.matchMode)
+  );
+  return hasBasic && hasOnboardingSignal;
 }

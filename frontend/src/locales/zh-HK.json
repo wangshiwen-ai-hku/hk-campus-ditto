@@ -125,7 +125,125 @@
     "demoCodeMsg": "示範驗證碼：{{code}}",
     "verifiedMsg": "已驗證，繼續填寫。",
     "verifyFirstMsg": "請先驗證電郵。",
-    "savedMsg": "已儲存！即將跳轉到面板..."
+    "savedMsg": "已儲存！即將跳轉到面板...",
+    "dev": {
+      "eyebrow": "加入 Ditto",
+      "title": "真實加入流程",
+      "subtitle": "開發模式可以跳過驗證，但資料同問卷仍然會用真實後端 API。",
+      "studentDashboard": "學生控制面板",
+      "account": "帳號",
+      "profile": "資料",
+      "done": "完成",
+      "session": "Session",
+      "user": "用戶",
+      "email": "電郵",
+      "mode": "模式",
+      "notSignedIn": "未登入",
+      "devMode": "開發快捷入口已啟用",
+      "prodMode": "生產式驗證",
+      "createUser": "建立測試用戶並登入",
+      "openAdmin": "打開管理工具",
+      "accountDesc": "如果要模擬正式流程，可以拎驗證碼再驗證；日常聯調建議用左邊開發按鈕。",
+      "inviteCode": "邀請碼",
+      "verifyContinue": "驗證並繼續",
+      "profileBasics": "基本資料",
+      "profileDesc": "呢一步會真實儲存 profile，亦會影響用戶能否入匹配池。",
+      "year": "年級",
+      "vibeTags": "氛圍標籤",
+      "crossCampus": "容許跨校區候選人加入測試池",
+      "saveProfileContinue": "儲存資料並繼續",
+      "saveSection": "儲存{{section}}",
+      "completeTitle": "加入完成",
+      "completeDesc": "你已經完成真實資料同問卷流程。可以去 Admin 即刻生成配對並發布，再返學生頁睇結果。",
+      "runMatchAdmin": "去 Admin 生成配對",
+      "openStudent": "打開學生頁",
+      "userCreated": "測試用戶已建立並登入。繼續體驗真實加入流程。",
+      "codeSent": "驗證碼已傳送。",
+      "signedIn": "已登入，請繼續完善資料。",
+      "profileSaved": "資料已儲存。依家填真實問卷。",
+      "sectionSaved": "已儲存，繼續下一段。",
+      "completeMsg": "加入完成。你可以進入學生頁，或者去 Admin 生成配對。",
+      "back": "返回",
+      "uploadPhotos": "上載相片",
+      "uploadPhotosHint": "本地測試最多加入 {{count}} 張清晰相片。",
+      "remove": "移除"
+    },
+    "tags": {
+      "coffee": "探店打卡",
+      "cantopop": "廣東歌與獨立音樂",
+      "art": "睇展如M+",
+      "film": "菲林攝影",
+      "night": "夜遊與夜景",
+      "hiking": "行山與自然",
+      "citywalk": "城市漫步",
+      "supper": "宵夜糖水",
+      "tech": "科技與創業",
+      "thrifting": "古著與二手市場"
+    },
+    "vibes": {
+      "chill": "隨性佛系",
+      "curious": "充滿好奇",
+      "empathetic": "充滿同理心",
+      "playful": "幽默有趣",
+      "grounded": "踏實靠譜",
+      "creative": "天馬行空",
+      "ambitious": "有上進心",
+      "warm": "似小太陽"
+    },
+    "slots": {
+      "wed_eve": "星期三晚",
+      "thu_eve": "星期四晚",
+      "fri_aft": "星期五晏晝",
+      "fri_eve": "星期五晚",
+      "sat_aft": "星期六晏晝",
+      "sun_aft": "星期日晏晝"
+    },
+    "langs": {
+      "english": "英文",
+      "cantonese": "廣東話",
+      "mandarin": "普通話",
+      "japanese": "日文",
+      "korean": "韓文"
+    },
+    "placeholders": {
+      "fullName": "例如：張三",
+      "year": "例如：Year 3 / Master",
+      "major": "例如：Computer Science",
+      "bio": "例如：鍾意飲咖啡，校園漫步，以及隨性低壓嘅初次約會...",
+      "select": "請選擇..."
+    },
+    "degreeLevel": "學位 / 項目",
+    "grade": "就讀年級",
+    "faculty": "學院",
+    "department": "系 / 專業",
+    "errors": {
+      "required": "請填寫所有必填欄位以繼續。"
+    },
+    "degrees": {
+      "undergrad": "本科 (Undergraduate)",
+      "taught_master": "授課型碩士 (Taught Master)",
+      "mphil_phd": "研究型碩士/博士 (MPhil/PhD)",
+      "other": "其他 (Other)"
+    },
+    "grades": {
+      "y1": "Year 1 (大一/研一)",
+      "y2": "Year 2 (大二/研二)",
+      "y3": "Year 3 (大三/研三)",
+      "y4": "Year 4 (大四/研四)",
+      "y5_plus": "Year 5+ (五年級及以上)"
+    },
+    "faculties": {
+      "arts": "文學院 / 人文學科",
+      "business": "商學院 / 經濟學院",
+      "engineering": "工程學院",
+      "science": "理學院",
+      "social": "社會科學院",
+      "medicine": "醫學院 / 健康科學",
+      "law": "法學院",
+      "architecture": "建築 / 設計學院",
+      "education": "教育學院",
+      "other": "其他"
+    }
   },
   "student": {
     "title": "學生控制面板",
@@ -187,5 +305,180 @@
     "incomplete": "未完成",
     "view": "查看",
     "loading": "載入中…"
+  },
+  "onboarding": {
+    "groups": {
+      "basics": {
+        "title": "基本資料",
+        "desc": "讓我哋由你嘅基本資料開始。"
+      },
+      "prefs": {
+        "title": "約會偏好",
+        "desc": "你喺度搵緊咩人？"
+      },
+      "attraction": {
+        "title": "背景與吸引力",
+        "desc": "你嘅興趣係咩？咩特質吸引到你？"
+      },
+      "media": {
+        "title": "媒體資料",
+        "desc": "加入可以展示你樣貌、風格同日常氛圍嘅相片。"
+      }
+    },
+    "q": {
+      "gender": {
+        "prompt": "你嘅性別係？",
+        "why": "呢個幫我哋為你搵到合適嘅對象。"
+      },
+      "birthday": {
+        "prompt": "你嘅生日係幾時？",
+        "why": "我哋只會向其他人顯示你嘅年齡。"
+      },
+      "ethnicity": {
+        "prompt": "你嘅族裔係？",
+        "why": "可選資料，幫我哋更了解你嘅背景。"
+      },
+      "height": {
+        "prompt": "你身高係幾多？(cm)",
+        "why": "有啲人對身高有要求，呢個幫到配對更精準。"
+      },
+      "grade": {
+        "prompt": "你而家讀緊幾年級？",
+        "why": "幫你配對人生階段差唔多嘅人。"
+      },
+      "targetGender": {
+        "prompt": "你想同咩人約會？",
+        "why": "呢個係硬性要求，唔只係排序。"
+      },
+      "datingGoal": {
+        "prompt": "你而家嘅約會目標係？",
+        "why": "確保目標唔同嘅人唔會夾硬配埋一齊。"
+      },
+      "ageRange": {
+        "prompt": "你偏好嘅年齡範圍？",
+        "why": "用嚟劃定令你覺得舒服嘅界線。"
+      },
+      "targetEthnicity": {
+        "prompt": "你對咩族裔感興趣？(可選)",
+        "why": "可選偏好；如果冇所謂可以揀冇偏好。"
+      },
+      "matchMode": {
+        "prompt": "你希望配對有幾嚴格？",
+        "why": "決定我哋係優先考慮速度定係契合度。"
+      },
+      "hobbies": {
+        "prompt": "分享吓你嘅愛好同興趣",
+        "why": "開放式回答會令你嘅個人檔案更豐富。",
+        "placeholder": "例如：探店，攀岩，閱讀..."
+      },
+      "attractHeight": {
+        "prompt": "你通常會留意嘅外貌特徵：身高 / 身型",
+        "why": "具體少少嘅要求可以避免純粹憑感覺配對。",
+        "placeholder": "175cm，運動型，寬膊..."
+      },
+      "attractFace": {
+        "prompt": "你通常會留意嘅外貌特徵：樣貌 / 表情",
+        "why": "對於主觀嘅吸引力，寫出嚟好過死板板咁揀。",
+        "placeholder": "有神嘅眼睛，溫暖嘅笑容，乾淨無鬚..."
+      },
+      "attractEnergy": {
+        "prompt": "你通常會俾咩氣場吸引？",
+        "why": "將模糊嘅化學反應變成我哋可以對比嘅信號。",
+        "placeholder": "沉穩，文藝，自信..."
+      },
+      "hkMtrLocation": {
+        "prompt": "你平時主要喺邊條地鐵線/邊區活動？",
+        "why": "過海約會成本比較高，呢個幫到算法就近配對或者揀約會地點。"
+      },
+      "languagePref": {
+        "prompt": "約會時最習慣用邊種語言？",
+        "why": "香港係三語環境，啱channel好影響第一次約會嘅感覺。"
+      },
+      "hkWeekendVibe": {
+        "prompt": "喺香港，你最理想嘅週末約會安排係？",
+        "why": "用本地化嘅場景直接反映你嘅生活方式。"
+      },
+      "mbtiE": {
+        "prompt": "MBTI: 能量來源",
+        "why": "你通常點樣回復精力？"
+      },
+      "mbtiS": {
+        "prompt": "MBTI: 資訊感知",
+        "why": "你比較傾向點樣處理資訊？"
+      },
+      "mbtiT": {
+        "prompt": "MBTI: 決策方式",
+        "why": "你做決定嗰陣比較睇重啲咩？"
+      },
+      "mbtiJ": {
+        "prompt": "MBTI: 生活態度",
+        "why": "你傾向點樣安排生活？"
+      },
+      "photos": {
+        "prompt": "加入個人相片",
+        "why": "相片令配對更真實，亦方便測試之後嘅媒體資料展示。"
+      },
+      "mediaNotes": {
+        "prompt": "關於呢啲相，有咩想系統知道？",
+        "why": "可選說明，用嚟輔助理解你嘅媒體資料。",
+        "placeholder": "例如：第一張係日常樣，第二張係行山相"
+      }
+    },
+    "opt": {
+      "male": "男仔",
+      "female": "女仔",
+      "non_binary": "非二元性別",
+      "everyone": "任何人",
+      "eth_indian": "美洲印第安人",
+      "eth_black": "非裔/黑人",
+      "eth_east_asian": "東亞人",
+      "eth_latinx": "拉丁裔",
+      "eth_middle_eastern": "中東人",
+      "eth_pacific": "太平洋島民",
+      "eth_south_asian": "南亞人",
+      "eth_southeast_asian": "東南亞人",
+      "eth_white": "白人",
+      "eth_other": "其他",
+      "prefer_not_say": "唔想講",
+      "no_pref": "冇偏好",
+      "year1": "Year 1",
+      "year2": "Year 2",
+      "year3": "Year 3",
+      "year4": "Year 4",
+      "master": "Master",
+      "phd": "PhD",
+      "life_partner": "終身伴侶",
+      "long_term": "長期關係",
+      "casual": "輕鬆約會",
+      "friends": "識新朋友",
+      "unsure": "未決定",
+      "mode_fast": "快 (速度優先，唔求完美)",
+      "mode_balanced": "平衡 (覺得啱就得)",
+      "mode_intentional": "走心 (大部分要夾)",
+      "mode_wait": "寧缺勿濫 (要滿足所有要求)",
+      "mtr_island": "港島線 (例如 HKU)",
+      "mtr_east": "東鐵線 (例如 CUHK)",
+      "mtr_tsuen_wan_kwun_tong": "荃灣/觀塘線 (例如 PolyU, CityU)",
+      "mtr_tuen_ma": "屯馬線",
+      "mtr_other": "其他 / 到處去",
+      "lang_canto": "廣東話",
+      "lang_mando": "普通話",
+      "lang_eng": "英文",
+      "lang_mixed": "Mix (例如中英夾雜)",
+      "vibe_cafe": "中上環去Cafe打卡",
+      "vibe_nature": "西貢行山/去沙灘",
+      "vibe_city": "尖沙咀/銅鑼灣行街",
+      "vibe_dorm": "留喺宿舍/Hall chill吓",
+      "vibe_food": "食茶餐廳/大排檔",
+      "mbti_e": "E (外向 - 喺人群中獲取能量)",
+      "mbti_i": "I (內向 - 獨處時恢復能量)",
+      "mbti_s": "S (實感 - 關注事實同細節)",
+      "mbti_n": "N (直覺 - 關注想法同概念)",
+      "mbti_t": "T (理智 - 邏輯同客觀)",
+      "mbti_f": "F (情感 - 共情同和諧)",
+      "mbti_j": "J (計劃 - 鍾意有條理同計劃)",
+      "mbti_p": "P (隨性 - 靈活而且隨遇而安)",
+      "mbti_none": "唔清楚"
+    }
   }
 }

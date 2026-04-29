@@ -125,7 +125,125 @@
     "demoCodeMsg": "Demo code: {{code}}",
     "verifiedMsg": "Verified, proceed to fill info.",
     "verifyFirstMsg": "Verify email before saving.",
-    "savedMsg": "Saved! Redirecting to dashboard..."
+    "savedMsg": "Saved! Redirecting to dashboard...",
+    "dev": {
+      "eyebrow": "Join Ditto",
+      "title": "Real onboarding flow",
+      "subtitle": "Use dev mode to skip verification, then experience the same profile and questionnaire APIs a real user will use.",
+      "studentDashboard": "Student dashboard",
+      "account": "Account",
+      "profile": "Profile",
+      "done": "Done",
+      "session": "Session",
+      "user": "User",
+      "email": "Email",
+      "mode": "Mode",
+      "notSignedIn": "not signed in",
+      "devMode": "dev shortcuts enabled",
+      "prodMode": "production-style auth",
+      "createUser": "Create test user + sign in",
+      "openAdmin": "Open admin tools",
+      "accountDesc": "For production-style testing, request a code and verify. For day-to-day UI work, use the dev button on the left.",
+      "inviteCode": "Invite code",
+      "verifyContinue": "Verify + continue",
+      "profileBasics": "Profile basics",
+      "profileDesc": "This is the real profile save step. These values also make your user eligible for matching.",
+      "year": "Year",
+      "vibeTags": "Vibe tags",
+      "crossCampus": "Include cross-campus candidates in my test pool",
+      "saveProfileContinue": "Save profile + continue",
+      "saveSection": "Save {{section}}",
+      "completeTitle": "Onboarding complete",
+      "completeDesc": "You have now completed the real profile and questionnaire flow. Use Admin to run matchmaking and drop immediately, then return to Student dashboard.",
+      "runMatchAdmin": "Run match from Admin",
+      "openStudent": "Open Student",
+      "userCreated": "Dev user created and signed in. Continue through the real onboarding flow.",
+      "codeSent": "Verification code sent.",
+      "signedIn": "Signed in. Continue to profile.",
+      "profileSaved": "Profile saved. Now answer the real onboarding questions.",
+      "sectionSaved": "Saved. Continue to the next section.",
+      "completeMsg": "Onboarding complete. You can now enter the student dashboard or generate a match from Admin.",
+      "back": "Back",
+      "uploadPhotos": "Upload photos",
+      "uploadPhotosHint": "Add up to {{count}} clear photos for local testing.",
+      "remove": "Remove"
+    },
+    "tags": {
+      "coffee": "Coffee Hopping",
+      "cantopop": "Cantopop / Indie",
+      "art": "Art Exhibitions",
+      "film": "Film Photography",
+      "night": "Night Views",
+      "hiking": "Hiking / Nature",
+      "citywalk": "Citywalk",
+      "supper": "Late Night Supper",
+      "tech": "Tech / Startups",
+      "thrifting": "Thrifting"
+    },
+    "vibes": {
+      "chill": "Chill",
+      "curious": "Curious",
+      "empathetic": "Empathetic",
+      "playful": "Playful",
+      "grounded": "Grounded",
+      "creative": "Creative",
+      "ambitious": "Ambitious",
+      "warm": "Warm"
+    },
+    "slots": {
+      "wed_eve": "Wed Evening",
+      "thu_eve": "Thu Evening",
+      "fri_aft": "Fri Afternoon",
+      "fri_eve": "Fri Evening",
+      "sat_aft": "Sat Afternoon",
+      "sun_aft": "Sun Afternoon"
+    },
+    "langs": {
+      "english": "English",
+      "cantonese": "Cantonese",
+      "mandarin": "Mandarin",
+      "japanese": "Japanese",
+      "korean": "Korean"
+    },
+    "placeholders": {
+      "fullName": "e.g. Local Test",
+      "year": "e.g. Year 3",
+      "major": "e.g. Computer Science",
+      "bio": "e.g. I like coffee, campus walks, thoughtful conversations and low-pressure first dates.",
+      "select": "Select..."
+    },
+    "degreeLevel": "Degree / Program",
+    "grade": "Year of Study",
+    "faculty": "Faculty / School",
+    "department": "Department / Major",
+    "errors": {
+      "required": "Please fill in all required fields to continue."
+    },
+    "degrees": {
+      "undergrad": "Undergraduate",
+      "taught_master": "Taught Master",
+      "mphil_phd": "MPhil / PhD",
+      "other": "Other"
+    },
+    "grades": {
+      "y1": "Year 1",
+      "y2": "Year 2",
+      "y3": "Year 3",
+      "y4": "Year 4",
+      "y5_plus": "Year 5+"
+    },
+    "faculties": {
+      "arts": "Arts / Humanities",
+      "business": "Business / Economics",
+      "engineering": "Engineering",
+      "science": "Science",
+      "social": "Social Sciences",
+      "medicine": "Medicine / Health",
+      "law": "Law",
+      "architecture": "Architecture / Design",
+      "education": "Education",
+      "other": "Other"
+    }
   },
   "student": {
     "title": "Student Dashboard",
@@ -187,5 +305,180 @@
     "incomplete": "Incomplete",
     "view": "View",
     "loading": "Loading logs…"
+  },
+  "onboarding": {
+    "groups": {
+      "basics": {
+        "title": "Basic Information",
+        "desc": "Let's start with the essentials about you."
+      },
+      "prefs": {
+        "title": "Dating Preferences",
+        "desc": "Who are you looking for and what are your goals?"
+      },
+      "attraction": {
+        "title": "Background & Attraction",
+        "desc": "What makes you tick, and who catches your eye?"
+      },
+      "media": {
+        "title": "Media Profile",
+        "desc": "Add photos that help someone understand your face, style, and everyday vibe."
+      }
+    },
+    "q": {
+      "gender": {
+        "prompt": "What is your gender?",
+        "why": "Helps us find the right matches for you."
+      },
+      "birthday": {
+        "prompt": "When is your birthday?",
+        "why": "We only show your age to others."
+      },
+      "ethnicity": {
+        "prompt": "What is your ethnicity?",
+        "why": "Optional preference data to better understand your background."
+      },
+      "height": {
+        "prompt": "How tall are you? (cm)",
+        "why": "Some people have height preferences, we use this for better matching."
+      },
+      "grade": {
+        "prompt": "What year are you in?",
+        "why": "Helps match you with people in a similar life stage."
+      },
+      "targetGender": {
+        "prompt": "Who would you like to date?",
+        "why": "This is a hard preference, not just a ranking signal."
+      },
+      "datingGoal": {
+        "prompt": "What are your dating goals right now?",
+        "why": "This keeps casual, friendship, and serious-intent users from being forced into the same lane."
+      },
+      "ageRange": {
+        "prompt": "Preferred age range",
+        "why": "Useful for dating comfort boundaries."
+      },
+      "targetEthnicity": {
+        "prompt": "Ethnicity preferences (if any)",
+        "why": "Optional preference data; leave broad if you do not care."
+      },
+      "matchMode": {
+        "prompt": "How selective should we be?",
+        "why": "Controls whether we prioritize speed or stricter preference fit."
+      },
+      "hobbies": {
+        "prompt": "Share some of your hobbies and interests",
+        "why": "Open-ended answers feed your persona summary.",
+        "placeholder": "e.g. cafe hopping, bouldering, reading..."
+      },
+      "attractHeight": {
+        "prompt": "Physical traits you tend to notice: height / build",
+        "why": "Optional specificity helps avoid purely vibe-based matches.",
+        "placeholder": "5'in, athletic, broad shoulders..."
+      },
+      "attractFace": {
+        "prompt": "Physical traits you tend to notice: face / expression",
+        "why": "Open text is less brittle than forcing a checklist for subjective attraction.",
+        "placeholder": "expressive eyes, warm smiles, clean-shaven..."
+      },
+      "attractEnergy": {
+        "prompt": "Energy or style you are usually drawn to",
+        "why": "Turns vague chemistry preferences into a signal we can compare.",
+        "placeholder": "calm, artistic, confident..."
+      },
+      "hkMtrLocation": {
+        "prompt": "Which MTR line/area do you most frequently hang out around?",
+        "why": "Helps algorithm match you locally or plan the date location."
+      },
+      "languagePref": {
+        "prompt": "What's your most comfortable language for dating?",
+        "why": "Essential in HK's trilingual environment for a comfortable first date."
+      },
+      "hkWeekendVibe": {
+        "prompt": "What's your ideal weekend vibe in HK?",
+        "why": "Shows personality through local context."
+      },
+      "mbtiE": {
+        "prompt": "MBTI: Energy Source",
+        "why": "How do you recharge?"
+      },
+      "mbtiS": {
+        "prompt": "MBTI: Information Gathering",
+        "why": "How do you process information?"
+      },
+      "mbtiT": {
+        "prompt": "MBTI: Decision Making",
+        "why": "How do you make decisions?"
+      },
+      "mbtiJ": {
+        "prompt": "MBTI: Lifestyle",
+        "why": "How do you organize your life?"
+      },
+      "photos": {
+        "prompt": "Add profile photos",
+        "why": "Photos make the match feel real and help future UI test the media profile surface."
+      },
+      "mediaNotes": {
+        "prompt": "Anything the system should know about these photos?",
+        "why": "Optional notes for interpreting your media profile.",
+        "placeholder": "e.g. first photo is my usual look; second is from a hiking day"
+      }
+    },
+    "opt": {
+      "male": "Male",
+      "female": "Female",
+      "non_binary": "Non-binary",
+      "everyone": "Everyone",
+      "eth_indian": "American Indian",
+      "eth_black": "Black",
+      "eth_east_asian": "East Asian",
+      "eth_latinx": "Latinx",
+      "eth_middle_eastern": "Middle Eastern",
+      "eth_pacific": "Pacific Islander",
+      "eth_south_asian": "South Asian",
+      "eth_southeast_asian": "Southeast Asian",
+      "eth_white": "White",
+      "eth_other": "Other",
+      "prefer_not_say": "Prefer not to say",
+      "no_pref": "No preference",
+      "year1": "Year 1",
+      "year2": "Year 2",
+      "year3": "Year 3",
+      "year4": "Year 4",
+      "master": "Master",
+      "phd": "PhD",
+      "life_partner": "Life Partner",
+      "long_term": "Long-term relationship",
+      "casual": "Casual dating",
+      "friends": "Making new friends",
+      "unsure": "Still figuring it out",
+      "mode_fast": "Fast (Speed over perfection)",
+      "mode_balanced": "Balanced",
+      "mode_intentional": "Intentional (Strong preference fit)",
+      "mode_wait": "Wait for the one (Must meet all criteria)",
+      "mtr_island": "Island Line (e.g. HKU)",
+      "mtr_east": "East Rail Line (e.g. CUHK)",
+      "mtr_tsuen_wan_kwun_tong": "Tsuen Wan / Kwun Tong Line (e.g. PolyU, CityU)",
+      "mtr_tuen_ma": "Tuen Ma Line",
+      "mtr_other": "Other / Multiple",
+      "lang_canto": "Cantonese",
+      "lang_mando": "Mandarin",
+      "lang_eng": "English",
+      "lang_mixed": "Mixed (e.g. Canto+Eng)",
+      "vibe_cafe": "Cafe hopping in Central/Sheung Wan",
+      "vibe_nature": "Hiking/Beach in Sai Kung",
+      "vibe_city": "Shopping in TST/CWB",
+      "vibe_dorm": "Chilling in dorm/hall",
+      "vibe_food": "Local food (Cha Chaan Tengs/Dai Pai Dong)",
+      "mbti_e": "E (Extraversion - energized by people)",
+      "mbti_i": "I (Introversion - energized by alone time)",
+      "mbti_s": "S (Sensing - focus on facts/details)",
+      "mbti_n": "N (Intuition - focus on ideas/concepts)",
+      "mbti_t": "T (Thinking - logic/objective)",
+      "mbti_f": "F (Feeling - empathy/harmony)",
+      "mbti_j": "J (Judging - organized/planned)",
+      "mbti_p": "P (Perceiving - flexible/spontaneous)",
+      "mbti_none": "Not Sure"
+    }
   }
 }
