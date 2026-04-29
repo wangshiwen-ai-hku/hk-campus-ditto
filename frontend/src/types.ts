@@ -109,6 +109,7 @@ export interface Question {
   defaultValue?: unknown;
   min?: number;
   max?: number;
+  required?: boolean;
 }
 
 export interface QuestionGroup {
