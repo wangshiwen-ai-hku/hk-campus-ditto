@@ -49,14 +49,39 @@ function toggleAnswer(current: unknown, option: string) {
   return values.includes(option) ? values.filter((x) => x !== option) : [...values, option];
 }
 
+const MAX_PHOTO_EDGE = 1200;
+const PHOTO_JPEG_QUALITY = 0.78;
+
+async function fileToCompressedDataUrl(file: File): Promise<string> {
+  const source = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.decoding = "async";
+    const loaded = new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error("Unable to load image."));
+    });
+    image.src = source;
+    await loaded;
+
+    const scale = Math.min(1, MAX_PHOTO_EDGE / Math.max(image.naturalWidth, image.naturalHeight));
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Unable to compress image.");
+    ctx.drawImage(image, 0, 0, width, height);
+    return canvas.toDataURL("image/jpeg", PHOTO_JPEG_QUALITY);
+  } finally {
+    URL.revokeObjectURL(source);
+  }
+}
+
 async function filesToDataUrls(files: FileList, limit: number): Promise<string[]> {
   const selected = Array.from(files).filter((file) => file.type.startsWith("image/")).slice(0, limit);
-  return Promise.all(selected.map((file) => new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  })));
+  return Promise.all(selected.map(fileToCompressedDataUrl));
 }
 
 function QuestionField({
@@ -70,7 +95,12 @@ function QuestionField({
   onChange: (value: unknown) => void;
   t: (key: string, options?: Record<string, unknown>) => string;
 }) {
-  const prompt = question.promptKey ? t(question.promptKey) : question.prompt ?? question.id;
+  const prompt = (
+    <>
+      {question.promptKey ? t(question.promptKey) : question.prompt ?? question.id}
+      {question.required && <span className="ml-1 text-pink-400">*</span>}
+    </>
+  );
   const why = question.whyItMattersKey ? t(question.whyItMattersKey) : question.whyItMatters ?? "";
   const options = question.optionsKeys ?? question.options ?? [];
   const photos = Array.isArray(value) ? value.filter((x) => typeof x === "string") as string[] : [];
@@ -85,7 +115,7 @@ function QuestionField({
 
       {question.kind === "text" || question.kind === "date" ? (
         <textarea
-          className="mt-4 min-h-[92px] w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [\&>option]:bg-[#0f172a] outline-none transition-all focus:ring-2 focus:ring-aura/50"
+          className="mt-4 min-h-[92px] w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none transition-all focus:ring-2 focus:ring-aura/50"
           rows={question.kind === "date" ? 1 : 3}
           value={typeof value === "string" ? value : ""}
           placeholder={question.kind === "date" ? "YYYY-MM-DD" : (question.placeholderKey ? t(question.placeholderKey) : "")}
@@ -131,7 +161,7 @@ function QuestionField({
 
       {question.kind === "scale" || question.kind === "number" ? (
         <input
-          className="mt-4 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [\&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50"
+          className="mt-4 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50"
           type="number"
           min={question.min ?? 1}
           max={question.max ?? 10}
@@ -395,101 +425,86 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-12">
+    <main className="mx-auto max-w-4xl px-5 py-12">
       <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
           <div className="mb-2 text-xs font-black uppercase tracking-[0.4em] text-aura">{t("join.dev.eyebrow")}</div>
-          <h1 className="text-4xl font-black md:text-5xl">{t("join.dev.title")}</h1>
+          <h1 className="text-3xl font-black md:text-4xl">{t("join.dev.title")}</h1>
           <p className="mt-3 max-w-2xl text-white/50">{t("join.dev.subtitle")}</p>
         </div>
-        <Link to="/student" className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center font-bold text-white hover:bg-white/10">
+        <Link to="/student" className="shrink-0 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center font-bold text-white hover:bg-white/10">
           {t("join.dev.studentDashboard")}
         </Link>
       </div>
 
-      <div className="mb-8 grid gap-3 md:grid-cols-6">
-        {flowSteps(groups).map((item, index) => {
-          const group = groups.find((g) => g.template === item);
-          const label = item === "account"
-            ? t("join.dev.account")
-            : item === "profile"
-            ? t("join.dev.profile")
-            : item === "done"
-            ? t("join.dev.done")
-            : group?.titleKey
-            ? t(group.titleKey)
-            : group?.title ?? item;
-          const active = index === stepIndex(step, groups);
-          const complete = index < stepIndex(step, groups);
-          return (
-            <button
-              key={item}
-              type="button"
-              disabled={index > stepIndex(step, groups)}
-              onClick={() => goToStep(item)}
-              className={`rounded-2xl border px-4 py-3 text-left text-sm font-black transition-all disabled:cursor-not-allowed ${active ? "border-aura bg-aura/20 text-white" : complete ? "border-green-400/30 bg-green-400/10 text-green-300 hover:bg-green-400/15" : "border-white/10 bg-white/5 text-white/35"}`}
-            >
-              {label}
-            </button>
-          );
-        })}
+      <div className="mb-10 relative">
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x">
+          {flowSteps(groups).map((item, index) => {
+            const group = groups.find((g) => g.template === item);
+            const label = item === "account"
+              ? t("join.dev.account")
+              : item === "profile"
+              ? t("join.dev.profile")
+              : item === "done"
+              ? t("join.dev.done")
+              : group?.titleKey
+              ? t(group.titleKey)
+              : group?.title ?? item;
+            const active = index === stepIndex(step, groups);
+            const complete = index < stepIndex(step, groups);
+            return (
+              <div key={item} className="flex items-center gap-2 shrink-0 snap-start">
+                <button
+                  type="button"
+                  disabled={index > stepIndex(step, groups)}
+                  onClick={() => goToStep(item)}
+                  className={`relative flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 disabled:cursor-not-allowed ${
+                    active 
+                      ? "bg-aura text-white shadow-[0_0_15px_rgba(var(--color-aura),0.4)] border border-aura/50" 
+                      : complete 
+                      ? "bg-white/10 text-white hover:bg-white/20 border border-white/10" 
+                      : "bg-transparent text-white/30 border border-white/10"
+                  }`}
+                >
+                  {complete && !active && (
+                    <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                  {label}
+                </button>
+                {index < flowSteps(groups).length - 1 && (
+                  <div className={`h-px w-6 sm:w-10 transition-colors ${complete ? "bg-aura/50" : "bg-white/10"}`} />
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
-        <SectionCard className="h-fit">
-          <div className="text-xs font-black uppercase tracking-[0.25em] text-white/30">{t("join.dev.session")}</div>
-          <div className="mt-4 space-y-3 text-sm text-white/60">
-            <div>{t("join.dev.user")}: <span className="font-bold text-white">{profileId || t("join.dev.notSignedIn")}</span></div>
-            <div>{t("join.dev.email")}: <span className="font-bold text-white">{email}</span></div>
-            <div>{t("join.dev.mode")}: <span className="font-bold text-white">{DEV_ENABLED ? t("join.dev.devMode") : t("join.dev.prodMode")}</span></div>
-          </div>
-          {DEV_ENABLED ? (
-            <button
-              className="mt-6 w-full rounded-full bg-aura px-5 py-3 font-black text-white transition-all hover:scale-[1.02] disabled:opacity-50"
-              disabled={loading}
-              onClick={createDevUser}
-            >
-              {t("join.dev.createUser")}
-            </button>
-          ) : null}
-          <button
-            className="mt-3 w-full rounded-full border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition-all hover:bg-white/10"
-            onClick={() => navigate("/admin")}
-          >
-            {t("join.dev.openAdmin")}
-          </button>
-          {stepIndex(step, groups) > 0 ? (
-            <button
-              className="mt-3 w-full rounded-full border border-white/10 bg-transparent px-5 py-3 font-bold text-white/70 transition-all hover:bg-white/5 hover:text-white"
-              onClick={goBack}
-            >
-              {t("join.dev.back")}
-            </button>
-          ) : null}
-        </SectionCard>
-
-        <SectionCard>
+      <div className="flex flex-col gap-8">
+        <SectionCard className="w-full">
           {step === "account" ? (
             <div className="grid gap-6">
               <div>
-                <h2 className="text-3xl font-black">{t("join.dev.account")}</h2>
+                <h2 className="text-2xl font-black">{t("join.dev.account")}</h2>
                 <p className="mt-2 text-white/50">{t("join.dev.accountDesc")}</p>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.emailLabel")}
+                  <span>{t("join.emailLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.nameLabel")}
+                  <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.dev.inviteCode")}
+                  <span>{t("join.dev.inviteCode")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.verifyCodeLabel")}
+                  <span>{t("join.verifyCodeLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={code} onChange={(e) => setCode(e.target.value)} />
                 </label>
               </div>
@@ -506,16 +521,16 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           {step === "profile" ? (
             <div className="grid gap-7">
               <div>
-                <h2 className="text-3xl font-black">{t("join.dev.profileBasics")}</h2>
+                <h2 className="text-2xl font-black">{t("join.dev.profileBasics")}</h2>
                 <p className="mt-2 text-white/50">{t("join.dev.profileDesc")}</p>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="grid gap-2 text-sm font-bold text-white/50 md:col-span-2">
-                  {t("join.nameLabel")}
+                  <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t("join.placeholders.fullName")} />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.degreeLevel")}
+                  <span>{t("join.degreeLevel")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={degreeLevel} onChange={(e) => setDegreeLevel(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
                     <option value="Undergraduate">{t("join.degrees.undergrad")}</option>
@@ -525,7 +540,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.grade")}
+                  <span>{t("join.grade")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
                     <option value="Year 1">{t("join.grades.y1")}</option>
@@ -536,7 +551,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.faculty")}
+                  <span>{t("join.faculty")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={faculty} onChange={(e) => setFaculty(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
                     <option value="Arts / Humanities">{t("join.faculties.arts")}</option>
@@ -552,19 +567,19 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  {t("join.department")}
+                  <span>{t("join.department")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={department} onChange={(e) => setDepartment(e.target.value)} placeholder={t("join.placeholders.major")} />
                 </label>
               </div>
               <label className="grid gap-2 text-sm font-bold text-white/50">
-                {t("join.bioLabel")}
+                <span>{t("join.bioLabel")} <span className="text-pink-400">*</span></span>
                 <textarea className="min-h-[110px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50" value={bio} onChange={(e) => setBio(e.target.value)} placeholder={t("join.placeholders.bio")} />
               </label>
               <div className="space-y-7">
-                <TagSelector title={t("join.languages")} items={LANGUAGES} values={languages} setValues={setLanguages} renderLabel={(item) => t(`join.langs.${item}`)} />
-                <TagSelector title={t("join.interests")} items={TAGS} values={interests} setValues={setInterests} renderLabel={(item) => t(`join.tags.${item}`)} />
-                <TagSelector title={t("join.dev.vibeTags")} items={VIBES} values={vibeTags} setValues={setVibeTags} renderLabel={(item) => t(`join.vibes.${item}`)} />
-                <TagSelector title={t("join.availability")} items={SLOTS} values={availability} setValues={setAvailability} renderLabel={(item) => t(`join.slots.${item}`)} />
+                <TagSelector title={<span>{t("join.languages")} <span className="text-pink-400">*</span></span>} items={LANGUAGES} values={languages} setValues={setLanguages} renderLabel={(item) => t(`join.langs.${item}`)} />
+                <TagSelector title={<span>{t("join.interests")} <span className="text-pink-400">*</span></span>} items={TAGS} values={interests} setValues={setInterests} renderLabel={(item) => t(`join.tags.${item}`)} />
+                <TagSelector title={<span>{t("join.dev.vibeTags")} <span className="text-pink-400">*</span></span>} items={VIBES} values={vibeTags} setValues={setVibeTags} renderLabel={(item) => t(`join.vibes.${item}`)} />
+                <TagSelector title={<span>{t("join.availability")} <span className="text-pink-400">*</span></span>} items={SLOTS} values={availability} setValues={setAvailability} renderLabel={(item) => t(`join.slots.${item}`)} />
               </div>
               <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/70">
                 <input type="checkbox" checked={crossUniOk} onChange={(e) => setCrossUniOk(e.target.checked)} />
@@ -582,7 +597,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           {currentGroup ? (
             <div className="grid gap-6">
               <div>
-                <h2 className="text-3xl font-black">{currentGroup.titleKey ? t(currentGroup.titleKey) : currentGroup.title}</h2>
+                <h2 className="text-2xl font-black">{currentGroup.titleKey ? t(currentGroup.titleKey) : currentGroup.title}</h2>
                 <p className="mt-2 text-white/50">{currentGroup.descriptionKey ? t(currentGroup.descriptionKey) : currentGroup.description}</p>
               </div>
               <div className="grid gap-4">
@@ -609,7 +624,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
           {step === "done" ? (
             <div className="grid gap-5 text-center">
-              <h2 className="text-4xl font-black">{t("join.dev.completeTitle")}</h2>
+              <h2 className="text-3xl font-black">{t("join.dev.completeTitle")}</h2>
               <p className="mx-auto max-w-xl text-white/55">{t("join.dev.completeDesc")}</p>
               <div className="flex flex-wrap justify-center gap-3">
                 <Link className="rounded-full bg-aura px-8 py-4 font-black text-white" to="/admin">{t("join.dev.runMatchAdmin")}</Link>
@@ -624,6 +639,38 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
         </SectionCard>
+
+        {/* Development Session Info */}
+        <div className="w-full rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-md">
+          <div className="mb-4 flex items-center gap-2">
+            <svg className="h-5 w-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+            <div className="text-xs font-black uppercase tracking-[0.25em] text-white/30">{t("join.dev.session")}</div>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="space-y-3 text-sm text-white/60">
+              <div>{t("join.dev.user")}: <span className="font-bold text-white">{profileId || t("join.dev.notSignedIn")}</span></div>
+              <div>{t("join.dev.email")}: <span className="font-bold text-white break-all">{email}</span></div>
+              <div>{t("join.dev.mode")}: <span className="font-bold text-white">{DEV_ENABLED ? t("join.dev.devMode") : t("join.dev.prodMode")}</span></div>
+            </div>
+            <div className="flex flex-col gap-3 lg:col-span-2 sm:flex-row sm:items-start md:justify-end">
+              {DEV_ENABLED ? (
+                <button
+                  className="rounded-full bg-aura px-6 py-3 text-sm font-black text-white transition-all hover:scale-[1.02] disabled:opacity-50"
+                  disabled={loading}
+                  onClick={createDevUser}
+                >
+                  {t("join.dev.createUser")}
+                </button>
+              ) : null}
+              <button
+                className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-white/10"
+                onClick={() => navigate("/admin")}
+              >
+                {t("join.dev.openAdmin")}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

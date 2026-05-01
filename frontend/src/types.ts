@@ -9,6 +9,46 @@ export interface University {
   safeSpots: string[];
 }
 
+export interface LifeSignals {
+  coffeeOrTea?: string[];
+  weekendVibe?: string;
+  weekendVibes?: string[];
+  spendingTier?: "budget" | "moderate" | "splurge";
+  petAffinity?: "dog" | "cat" | "both" | "none";
+  energyMode?: "introvert" | "extrovert" | "ambivert";
+  firstDateLength?: "short" | "medium" | "long";
+}
+
+export interface DatingPreferences {
+  birthday?: string;
+  ethnicity?: string;
+  heightCm?: number;
+  datingGoal?: "life_partner" | "long_term" | "casual" | "friends" | "unsure";
+  datingGoals?: string[];
+  dateGenders?: string[];
+  ageRange?: {
+    min: number;
+    max: number;
+  };
+  ethnicityPreferences?: string[];
+  hkMtrLocations?: string[];
+  languagePreferences?: string[];
+  mbti?: {
+    energy?: string;
+    information?: string;
+    decision?: string;
+    lifestyle?: string;
+  };
+  attractionSignals?: {
+    heightAndBuild?: string;
+    facialFeatures?: string;
+    energyAndVibe?: string;
+    flexible?: string[];
+  };
+  matchMode?: "fast" | "balanced" | "intentional" | "wait_for_the_one";
+  photoUrls?: string[];
+}
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -33,6 +73,8 @@ export interface StudentProfile {
   proposedSlots?: string[];
   blockedUserIds?: string[];
   crossUniOk?: boolean;
+  lifeSignals?: LifeSignals;
+  datingPreferences?: DatingPreferences;
 }
 
 export type MatchStatus =

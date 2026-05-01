@@ -127,11 +127,11 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       <section className="mx-auto max-w-5xl px-5 pt-20 text-center">
         <div className="mb-10 space-y-0">
           <h2 className="animate-float text-3xl font-romantic italic text-white/90 drop-shadow-md">{t("home.hero.getADate")}</h2>
-          <h1 className="text-[15vw] md:text-[120px] font-black tracking-tighter leading-none text-white my-[-10px] text-neon font-romantic italic">
+          <h1 className="text-[12vw] md:text-[80px] font-black tracking-tighter leading-none text-white my-[-5px] text-neon font-romantic italic">
             {t("home.hero.wednesday")}
           </h1>
           <div className="relative inline-block mt-4">
-            <h3 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white opacity-90 drop-shadow-lg font-romantic">
+            <h3 className="text-3xl md:text-5xl font-black italic tracking-tighter text-white opacity-90 drop-shadow-lg font-romantic">
               {t("home.hero.atYourSchool")}
             </h3>
             <div className="absolute bottom-[-5px] left-0 right-0 h-1 bg-aura rounded-full opacity-50" />
@@ -150,7 +150,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
         </div>
 
         <div className="mb-12">
-          <div className="text-[12vw] md:text-[80px] font-black italic tabular-nums text-aura drop-shadow-[0_0_20px_rgba(255,0,102,0.4)] font-romantic">
+          <div className="text-[10vw] md:text-[64px] font-black italic tabular-nums text-aura drop-shadow-[0_0_20px_rgba(255,0,102,0.4)] font-romantic">
             {tick || "00:00:00:00"}
           </div>
           <div className="mt-2 space-y-1">
@@ -183,10 +183,10 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
         
         <div className="grid gap-20 md:grid-cols-2 items-center text-left">
           <div className="space-y-8">
-            <h2 className="text-5xl md:text-6xl font-black leading-tight font-romantic italic">
+            <h2 className="text-4xl md:text-5xl font-black leading-tight font-romantic italic">
               <span dangerouslySetInnerHTML={{ __html: t("home.why.title").replace("<1>", "<span class='text-aura'>").replace("</1>", "</span>") }} />
             </h2>
-            <p className="text-xl text-white/60 leading-relaxed">
+            <p className="text-lg text-white/60 leading-relaxed">
               {t("home.why.desc")}
             </p>
             <div className="space-y-4">
@@ -213,7 +213,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       <section className="mx-auto mt-40 max-w-6xl px-5">
         <div className="rounded-[48px] bg-white/5 border border-white/10 p-12 md:p-20 flex flex-col md:flex-row gap-12 items-center overflow-hidden">
             <div className="flex-1 space-y-8 text-left">
-                <h2 className="text-4xl md:text-5xl font-black font-romantic italic"><span dangerouslySetInnerHTML={{ __html: t("home.curated.title") }} /></h2>
+                <h2 className="text-3xl md:text-4xl font-black font-romantic italic"><span dangerouslySetInnerHTML={{ __html: t("home.curated.title") }} /></h2>
                 <p className="text-lg text-white/50">
                     {t("home.curated.desc")}
                 </p>
@@ -228,7 +228,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
       {/* Steps (Now with Modal) */}
       <section className="mx-auto mt-40 max-w-7xl px-5">
         <div className="mb-16 text-center">
-            <h2 className="text-4xl md:text-5xl font-romantic font-black mb-4 uppercase tracking-tighter italic">{t("home.stepsTitle")}</h2>
+            <h2 className="text-3xl md:text-4xl font-romantic font-black mb-4 uppercase tracking-tighter italic">{t("home.stepsTitle")}</h2>
             <div className="h-1 w-20 bg-aura mx-auto rounded-full" />
         </div>
         <div className="grid gap-6 md:grid-cols-4">
@@ -284,8 +284,8 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
 
       {/* Footer CTA */}
       <section className="mx-auto mt-40 max-w-4xl px-5 text-center">
-        <h2 className="text-5xl font-black mb-10 tracking-tighter font-romantic italic"><span dangerouslySetInnerHTML={{ __html: t("home.footerTitle") }} /></h2>
-        <Link to="/join" className="group relative inline-flex items-center gap-3 rounded-full bg-aura px-12 py-6 text-2xl font-black text-white shadow-[0_0_40px_rgba(255,0,102,0.3)] transition-all hover:scale-110 active:scale-95">
+        <h2 className="text-4xl font-black mb-10 tracking-tighter font-romantic italic"><span dangerouslySetInnerHTML={{ __html: t("home.footerTitle") }} /></h2>
+        <Link to="/join" className="group relative inline-flex items-center gap-3 rounded-full bg-aura px-10 py-5 text-xl font-black text-white shadow-[0_0_40px_rgba(255,0,102,0.3)] transition-all hover:scale-110 active:scale-95">
           {t("home.footerCta")}
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </Link>

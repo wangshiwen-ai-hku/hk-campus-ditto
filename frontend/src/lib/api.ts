@@ -75,5 +75,14 @@ export const api = {
   createDevUser: (payload: { email: string; fullName: string; universityId?: string; stage?: "basic" | "life" | "mind" | "social" | "complete" }) =>
     request<{ token: string; user: any }>("/dev/users", { method: "POST", admin: true, body: JSON.stringify(payload) }),
   loginAsDevUser: (payload: { userId?: string; email?: string }) =>
-    request<{ token: string; user: any }>("/dev/login-as", { method: "POST", admin: true, body: JSON.stringify(payload) })
+    request<{ token: string; user: any }>("/dev/login-as", { method: "POST", admin: true, body: JSON.stringify(payload) }),
+  seedMatchLab: (payload: { count: number; scenario: string; resetMatches: boolean }) =>
+    request<{ users: any[] }>("/dev/match-lab/seed", { method: "POST", admin: true, body: JSON.stringify(payload) }),
+  getMatchLabUsers: () => request<{ users: any[] }>("/dev/match-lab/users", { admin: true }),
+  updateMatchLabUser: (id: string, payload: unknown) =>
+    request<{ user: any }>(`/dev/match-lab/users/${id}`, { method: "PATCH", admin: true, body: JSON.stringify(payload) }),
+  previewMatchLab: (payload: { userId: string; useLlmJudge: boolean }) =>
+    request<{ user: any; candidates: any[] }>("/dev/match-lab/preview", { method: "POST", admin: true, body: JSON.stringify(payload) }),
+  simulateMatchLab: (payload: { useLlmJudge: boolean }) =>
+    request<{ users: number; pairs: any[]; skipped: any[]; rejectStats: Record<string, number>; scoreStats: any }>("/dev/match-lab/simulate", { method: "POST", admin: true, body: JSON.stringify(payload) })
 };

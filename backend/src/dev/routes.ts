@@ -5,8 +5,10 @@ import { ensureDb, saveDb } from "../db.js";
 import { requireAdmin } from "../core/auth-middleware.js";
 import { issueToken } from "../auth/jwt.js";
 import type { StudentProfile } from "../types.js";
+import { matchLabRouter } from "./match-lab.js";
 
 export const devRouter = Router();
+devRouter.use("/match-lab", matchLabRouter);
 
 function tokenFor(user: StudentProfile): string {
   return issueToken({ sub: user.id, email: user.email, uni: user.universityId });

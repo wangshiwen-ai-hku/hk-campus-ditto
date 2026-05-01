@@ -1,6 +1,6 @@
 import React from "react";
 
-export function TagSelector({ title, values, setValues, items, renderLabel }: { title: string; values: string[]; setValues: (v: string[]) => void; items: string[]; renderLabel?: (item: string) => string; }) {
+export function TagSelector({ title, values, setValues, items, renderLabel }: { title: React.ReactNode; values: string[]; setValues: (v: string[]) => void; items: string[]; renderLabel?: (item: string) => string; }) {
   function toggle(item: string) {
     setValues(values.includes(item) ? values.filter((v) => v !== item) : [...values, item]);
   }
