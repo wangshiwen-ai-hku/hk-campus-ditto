@@ -1,4 +1,5 @@
 import type { Database, MatchRecord, StudentProfile } from "../types.js";
+import { hardConstraints } from "./scorer.js";
 
 const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 
@@ -65,6 +66,8 @@ export function isEligiblePair(
   if (pairHasPassFeedback(ctx.matches, a.id, b.id)) return { ok: false, reason: "prior pass" };
   if (pairWasRecentlyMatched(ctx.matches, a.id, b.id)) return { ok: false, reason: "matched within 90d" };
   if (dealbreakerHit(a, b) || dealbreakerHit(b, a)) return { ok: false, reason: "dealbreaker" };
+  const constraints = hardConstraints(a, b);
+  if (!constraints.ok) return { ok: false, reason: constraints.reasons.join("; ") };
   return { ok: true };
 }
 

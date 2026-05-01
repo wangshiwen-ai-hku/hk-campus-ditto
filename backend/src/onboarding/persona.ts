@@ -30,17 +30,28 @@ export function applyOnboardingAnswers(
       birthday: strOrUndef(answers.birthday),
       ethnicity: strOrUndef(answers.ethnicity),
       heightCm: numOrUndef(answers.height),
+      hkMtrLocations: arrOrUndef(answers.hkMtrLocation),
+      mbti: {
+        ...(user.datingPreferences?.mbti ?? {}),
+        energy: strOrUndef(answers.mbtiE),
+        information: strOrUndef(answers.mbtiS),
+        decision: strOrUndef(answers.mbtiT),
+        lifestyle: strOrUndef(answers.mbtiJ),
+      },
     };
   } else if (template === "onboarding_preferences") {
+    const datingGoals = arrOrUndef(answers.datingGoal);
+    const languagePref = arrOrUndef(answers.languagePref);
     user.datingPreferences = {
       ...(user.datingPreferences ?? {}),
       dateGenders: arrOrUndef(answers.targetGender),
-      datingGoal: strOrUndef(answers.datingGoal) as any,
+      datingGoal: datingGoals?.[0] as any,
+      datingGoals,
       ageRange: ageRangeOrUndef(answers.ageRange),
       ethnicityPreferences: arrOrUndef(answers.targetEthnicity),
+      languagePreferences: languagePref,
       matchMode: strOrUndef(answers.matchMode) as any,
     };
-    const languagePref = arrOrUndef(answers.languagePref);
     if (languagePref?.length) user.languages = languagePref;
   } else if (template === "onboarding_attraction") {
     const hobbies = strOrUndef(answers.hobbies);
@@ -52,7 +63,8 @@ export function applyOnboardingAnswers(
     }
     user.lifeSignals = {
       ...(user.lifeSignals ?? {}),
-      weekendVibe: strOrUndef(answers.hkWeekendVibe),
+      weekendVibe: arrOrUndef(answers.hkWeekendVibe)?.[0] ?? strOrUndef(answers.hkWeekendVibe),
+      weekendVibes: arrOrUndef(answers.hkWeekendVibe),
     };
     user.datingPreferences = {
       ...(user.datingPreferences ?? {}),
@@ -159,7 +171,7 @@ export function recomputeProfileComplete(user: StudentProfile): boolean {
   );
   const hasOnboardingSignal = Boolean(
     (user.lifeSignals?.weekendVibe && (user.lifeSignals.energyMode || user.datingPreferences?.datingGoal)) ||
-    (user.datingPreferences?.datingGoal && user.datingPreferences.matchMode)
+    ((user.datingPreferences?.datingGoal || user.datingPreferences?.datingGoals?.length) && user.datingPreferences.matchMode)
   );
   return hasBasic && hasOnboardingSignal;
 }

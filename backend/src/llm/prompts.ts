@@ -63,6 +63,8 @@ function compactProfile(p: StudentProfile): string {
     `Dealbreakers: ${(p.dealBreakers ?? []).join(", ")}`,
     `Life: ${JSON.stringify(p.lifeSignals ?? {})}`,
     `Mind: ${JSON.stringify(p.mindSignals ?? {})}`,
+    `Dating preferences: ${JSON.stringify(p.datingPreferences ?? {})}`,
+    `Academic: ${p.major} / ${p.yearOfStudy}`,
   ].join("\n");
 }
 

@@ -47,6 +47,9 @@ matchingRouter.get("/preview", requireAuth, async (req, res) => {
     candidates: ranked.map((r) => ({
       candidate: { id: r.candidate.id, name: r.candidate.fullName, university: r.candidate.universityId },
       structuredScore: r.structured.total,
+      threshold: r.structured.threshold,
+      passedThreshold: r.structured.passedThreshold,
+      breakdown: r.structured,
       finalScore: r.finalScore,
       llm: r.llm,
     })),
@@ -58,7 +61,7 @@ matchingRouter.post("/run", requireAdmin, async (req, res) => {
   const schema = z.object({
     adminSecret: z.string().optional(),
     useLlmJudge: z.boolean().default(true),
-    minStructuredScore: z.number().default(55),
+    minStructuredScore: z.number().optional(),
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });

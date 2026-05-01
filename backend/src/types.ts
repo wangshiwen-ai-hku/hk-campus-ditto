@@ -13,6 +13,7 @@ export interface University {
 export interface LifeSignals {
   coffeeOrTea?: string[];
   weekendVibe?: string;
+  weekendVibes?: string[];
   spendingTier?: "budget" | "moderate" | "splurge";
   petAffinity?: "dog" | "cat" | "both" | "none";
   energyMode?: "introvert" | "extrovert" | "ambivert";
@@ -37,12 +38,21 @@ export interface DatingPreferences {
   ethnicity?: string;
   heightCm?: number;
   datingGoal?: "life_partner" | "long_term" | "casual" | "friends" | "unsure";
+  datingGoals?: string[];
   dateGenders?: string[];
   ageRange?: {
     min: number;
     max: number;
   };
   ethnicityPreferences?: string[];
+  hkMtrLocations?: string[];
+  languagePreferences?: string[];
+  mbti?: {
+    energy?: string;
+    information?: string;
+    decision?: string;
+    lifestyle?: string;
+  };
   attractionSignals?: {
     heightAndBuild?: string;
     facialFeatures?: string;
