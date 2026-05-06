@@ -92,7 +92,7 @@ curl -X POST localhost:8787/api/dev/users \
 
 **a. 拿邀请码**（seed 自带 5 个）— `DITTO-HK-001` 到 `005`
 
-**b. 请求验证码 → 终端会打印码 + devCode 字段**
+**b. 请求验证码 → 邮箱收到验证码**
 ```bash
 curl -X POST localhost:8787/api/auth/request-code \
   -H "Content-Type: application/json" \

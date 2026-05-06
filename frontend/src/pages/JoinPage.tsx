@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Heart } from "lucide-react";
 import { api } from "../lib/api";
 import { SectionCard } from "../components/SectionCard";
 import { TagSelector } from "../components/TagSelector";
 import { setStoredToken } from "../lib/session";
 import type { Question, QuestionGroup } from "../types";
-
-const DEV_ENABLED = import.meta.env.DEV && Boolean(import.meta.env.VITE_ADMIN_SECRET);
 
 const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"];
 const TAGS = ["coffee", "cantopop", "art", "film", "night", "hiking", "citywalk", "supper", "tech", "thrifting"];
@@ -124,7 +123,7 @@ function QuestionField({
       ) : null}
 
       {question.kind === "single" ? (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-3">
           {options.map((option) => {
             const active = value === option;
             return (
@@ -132,7 +131,7 @@ function QuestionField({
                 type="button"
                 key={option}
                 onClick={() => onChange(option)}
-                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${active ? "bg-aura text-white" : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10"}`}
+                className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${active ? "bg-aura/90 text-white shadow-lg shadow-aura/20" : "border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"}`}
               >
                 {question.optionsKeys ? t(option) : option}
               </button>
@@ -142,7 +141,7 @@ function QuestionField({
       ) : null}
 
       {question.kind === "multi" ? (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-3">
           {options.map((option) => {
             const active = Array.isArray(value) && value.includes(option);
             return (
@@ -150,7 +149,7 @@ function QuestionField({
                 type="button"
                 key={option}
                 onClick={() => onChange(toggleAnswer(value, option))}
-                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${active ? "bg-aura text-white" : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10"}`}
+                className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${active ? "bg-aura/90 text-white shadow-lg shadow-aura/20" : "border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"}`}
               >
                 {question.optionsKeys ? t(option) : option}
               </button>
@@ -239,14 +238,13 @@ function QuestionField({
 
 export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (id: string) => void; }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [step, setStep] = useState<Step>(userId ? "profile" : "account");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState(`local-${Date.now()}@connect.hku.hk`);
-  const [fullName, setFullName] = useState("Local Test");
-  const [inviteCode, setInviteCode] = useState("DITTO-HK-001");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
   const [code, setCode] = useState("");
   const [profileId, setProfileId] = useState(userId ?? "");
 
@@ -291,27 +289,12 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     if (data.user.email) setEmail(data.user.email);
   }
 
-  async function createDevUser() {
-    setLoading(true);
-    setMessage("");
-    try {
-      const data = await api.createDevUser({ email, fullName, universityId: "hku", stage: "basic" });
-      acceptSession(data);
-      setStep("profile");
-      setMessage(t("join.dev.userCreated"));
-    } catch (e: any) {
-      setMessage(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function requestCode() {
     setLoading(true);
     setMessage("");
     try {
-      const data = await api.requestCode(email) as { devCode?: string };
-      setMessage(data.devCode ? t("join.demoCodeMsg", { code: data.devCode }) : t("join.dev.codeSent"));
+      await api.requestCode(email);
+      setMessage(t("join.dev.codeSent"));
     } catch (e: any) {
       setMessage(e.message);
     } finally {
@@ -425,21 +408,79 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-5 py-12">
-      <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-        <div>
-          <div className="mb-2 text-xs font-black uppercase tracking-[0.4em] text-aura">{t("join.dev.eyebrow")}</div>
-          <h1 className="text-3xl font-black md:text-4xl">{t("join.dev.title")}</h1>
-          <p className="mt-3 max-w-2xl text-white/50">{t("join.dev.subtitle")}</p>
+    <div className="relative min-h-screen overflow-x-hidden bg-[#020617]">
+      {/* Refined Hero Section with Collage Background */}
+      <header className="relative pt-32 pb-24 px-5 border-b border-white/[0.05] overflow-hidden">
+        {/* Puzzle Collage Background - Clearer Visibility */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 grid grid-cols-4 grid-rows-2 gap-4 p-8 opacity-80 scale-110">
+            <div className="col-span-2 row-span-2 overflow-hidden rounded-[2rem] border border-white/20 shadow-2xl -rotate-2 transform hover:rotate-0 transition-transform duration-700">
+              <img src="/assets/hero1.png" className="h-full w-full object-cover brightness-110" alt="" />
+            </div>
+            <div className="col-span-2 row-span-1 overflow-hidden rounded-[2rem] border border-white/20 shadow-2xl rotate-1 transform hover:rotate-0 transition-transform duration-700">
+              <img src="/assets/hero2.png" className="h-full w-full object-cover brightness-110" alt="" />
+            </div>
+            <div className="col-span-1 row-span-1 overflow-hidden rounded-[2rem] border border-white/20 shadow-2xl -rotate-1 transform hover:rotate-0 transition-transform duration-700">
+              <img src="/assets/hero3.png" className="h-full w-full object-cover brightness-110" alt="" />
+            </div>
+            <div className="col-span-1 row-span-1 overflow-hidden rounded-[2rem] border border-white/20 shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-700">
+              <img src="/assets/hero4.png" className="h-full w-full object-cover brightness-110" alt="" />
+            </div>
+          </div>
+          
+          {/* Frosted Glass Overlay - Further Lightened */}
+          <div className="absolute inset-0 bg-[#020617]/30 backdrop-blur-md" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/30 to-[#020617]" />
         </div>
-        <Link to="/student" className="shrink-0 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center font-bold text-white hover:bg-white/10">
-          {t("join.dev.studentDashboard")}
-        </Link>
-      </div>
 
-      <div className="mb-10 relative">
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x">
-          {flowSteps(groups).map((item, index) => {
+        {/* Refined & Centered Typography Header */}
+        <div className="mx-auto max-w-4xl flex flex-col items-center text-center relative z-20">
+          {/* Subtle central glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-aura/20 blur-[150px] rounded-full pointer-events-none -z-10" />
+
+          <div className="mb-8 flex items-center justify-center gap-4">
+            <span className="h-px w-12 bg-gradient-to-r from-transparent via-aura/40 to-transparent" />
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-aura/90">
+              {t("join.dev.eyebrow")}
+            </span>
+            <span className="h-px w-12 bg-gradient-to-r from-transparent via-aura/40 to-transparent" />
+          </div>
+
+          <h1 className="text-5xl md:text-6xl lg:text-8xl tracking-tighter text-white mb-8 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+            <span className="font-romantic font-bold bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+              {t("join.dev.title").split(" ")[0]}
+            </span>{" "}
+            <span className="font-romantic italic bg-gradient-to-r from-aura via-pink-400 to-aura bg-clip-text text-transparent">
+              {t("join.dev.title").split(" ")[1] || "Ditto"}
+            </span>
+          </h1>
+
+          <p className="max-w-2xl text-lg md:text-xl font-medium leading-relaxed text-white/60 mb-12">
+            {t("join.dev.subtitle")}
+          </p>
+
+          <Link 
+            to="/student" 
+            className="group flex items-center gap-4 rounded-full border border-white/20 bg-white/10 px-8 py-4 transition-all duration-500 hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_40px_rgba(255,0,102,0.15)] active:scale-95 backdrop-blur-md"
+          >
+            <span className="text-sm font-black uppercase tracking-[0.2em] text-white transition-colors">
+              {t("join.dev.studentDashboard")}
+            </span>
+            <svg className="h-5 w-5 text-aura transition-all group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </Link>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-4xl px-5 py-12 relative z-10">
+
+        <div className="mb-16 relative">
+          {/* Romantic Background Decor for Stepper */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-aura/10 via-transparent to-harbour/10 blur-[100px] opacity-40" />
+          
+          <div className="flex items-center gap-2 overflow-x-auto pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x px-4">
+            {flowSteps(groups).map((item, index) => {
             const group = groups.find((g) => g.template === item);
             const label = item === "account"
               ? t("join.dev.account")
@@ -452,29 +493,48 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               : group?.title ?? item;
             const active = index === stepIndex(step, groups);
             const complete = index < stepIndex(step, groups);
+            
             return (
-              <div key={item} className="flex items-center gap-2 shrink-0 snap-start">
-                <button
-                  type="button"
-                  disabled={index > stepIndex(step, groups)}
-                  onClick={() => goToStep(item)}
-                  className={`relative flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 disabled:cursor-not-allowed ${
-                    active 
-                      ? "bg-aura text-white shadow-[0_0_15px_rgba(var(--color-aura),0.4)] border border-aura/50" 
-                      : complete 
-                      ? "bg-white/10 text-white hover:bg-white/20 border border-white/10" 
-                      : "bg-transparent text-white/30 border border-white/10"
-                  }`}
-                >
-                  {complete && !active && (
-                    <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
+              <div key={item} className="flex items-center gap-3 shrink-0 snap-start">
+                <div className="relative">
+                  {/* Floating Hearts for Active Step */}
+                  {active && (
+                    <div className="absolute inset-0 -top-8 pointer-events-none">
+                      <Heart size={12} className="absolute left-1/4 text-pink-400 animate-heart-float fill-pink-400/30" style={{ animationDelay: "0s" }} />
+                      <Heart size={16} className="absolute left-1/2 text-aura animate-heart-float fill-aura/40" style={{ animationDelay: "1.2s" }} />
+                      <Heart size={10} className="absolute left-3/4 text-pink-300 animate-heart-float fill-pink-300/20" style={{ animationDelay: "2.4s" }} />
+                    </div>
                   )}
-                  {label}
-                </button>
+                  
+                  <button
+                    type="button"
+                    disabled={index > stepIndex(step, groups)}
+                    onClick={() => goToStep(item)}
+                    className={`relative flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-bold transition-all duration-500 disabled:cursor-not-allowed group ${
+                      active 
+                        ? "bg-gradient-to-br from-aura to-pink-500 text-white shadow-[0_10px_25px_-5px_rgba(255,0,102,0.4)] border border-aura/50 scale-105" 
+                        : complete 
+                        ? "bg-aura/10 text-aura hover:bg-aura/20 border border-aura/20" 
+                        : "bg-white/5 text-white/30 border border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    {complete && !active && (
+                      <Heart size={14} className="mr-2 fill-aura text-aura animate-pulse" />
+                    )}
+                    {!complete && active && (
+                      <div className="mr-2 h-2 w-2 rounded-full bg-white animate-ping" />
+                    )}
+                    {label}
+                  </button>
+                </div>
+                
                 {index < flowSteps(groups).length - 1 && (
-                  <div className={`h-px w-6 sm:w-10 transition-colors ${complete ? "bg-aura/50" : "bg-white/10"}`} />
+                  <div className="flex items-center">
+                    <div className={`h-[2px] w-8 sm:w-12 rounded-full transition-all duration-700 ${
+                      complete ? "bg-gradient-to-r from-aura to-aura/20" : "bg-white/10"
+                    }`} />
+                    <Heart size={10} className={`ml-[-4px] transition-colors duration-700 ${complete ? "text-aura fill-aura/30" : "text-white/5"}`} />
+                  </div>
                 )}
               </div>
             );
@@ -510,10 +570,10 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               </div>
               <div className="flex flex-wrap gap-3">
                 {stepIndex(step, groups) > 0 ? (
-                  <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
+                  <button className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
                 ) : null}
-                <button className="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 disabled:opacity-50" disabled={loading} onClick={requestCode}>{t("join.sendCode")}</button>
-                <button className="rounded-full bg-white px-6 py-3 font-black text-black disabled:opacity-50" disabled={loading} onClick={verify}>{t("join.dev.verifyContinue")}</button>
+                <button className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-bold text-white hover:bg-white/10 disabled:opacity-50" disabled={loading} onClick={requestCode}>{t("join.sendCode")}</button>
+                <button className="rounded-2xl bg-white px-6 py-3 font-black text-black disabled:opacity-50" disabled={loading} onClick={verify}>{t("join.dev.verifyContinue")}</button>
               </div>
             </div>
           ) : null}
@@ -587,9 +647,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               </label>
               <div className="flex flex-wrap gap-3">
                 {stepIndex(step, groups) > 0 ? (
-                  <button className="rounded-full border border-white/10 bg-white/5 px-8 py-4 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
+                  <button className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
                 ) : null}
-                <button className="rounded-full bg-aura px-8 py-4 font-black text-white disabled:opacity-50" disabled={loading || !profileId} onClick={saveProfile}>{t("join.dev.saveProfileContinue")}</button>
+                <button className="rounded-2xl bg-aura px-8 py-4 font-black text-white disabled:opacity-50" disabled={loading || !profileId} onClick={saveProfile}>{t("join.dev.saveProfileContinue")}</button>
               </div>
             </div>
           ) : null}
@@ -613,9 +673,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               </div>
               <div className="flex flex-wrap gap-3">
                 {stepIndex(step, groups) > 0 ? (
-                  <button className="rounded-full border border-white/10 bg-white/5 px-8 py-4 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
+                  <button className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-bold text-white hover:bg-white/10" type="button" onClick={goBack}>{t("join.dev.back")}</button>
                 ) : null}
-                <button className="rounded-full bg-aura px-8 py-4 font-black text-white disabled:opacity-50" disabled={loading} onClick={submitCurrentSurvey}>
+                <button className="rounded-2xl bg-aura px-8 py-4 font-black text-white disabled:opacity-50" disabled={loading} onClick={submitCurrentSurvey}>
                   {t("join.dev.saveSection", { section: currentGroup.titleKey ? t(currentGroup.titleKey) : currentGroup.title })}
                 </button>
               </div>
@@ -627,8 +687,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               <h2 className="text-3xl font-black">{t("join.dev.completeTitle")}</h2>
               <p className="mx-auto max-w-xl text-white/55">{t("join.dev.completeDesc")}</p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Link className="rounded-full bg-aura px-8 py-4 font-black text-white" to="/admin">{t("join.dev.runMatchAdmin")}</Link>
-                <Link className="rounded-full border border-white/10 bg-white/5 px-8 py-4 font-bold text-white hover:bg-white/10" to="/student">{t("join.dev.openStudent")}</Link>
+                <Link className="rounded-2xl bg-aura px-8 py-4 font-black text-white" to="/student">{t("join.dev.openStudent")}</Link>
               </div>
             </div>
           ) : null}
@@ -640,38 +699,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           ) : null}
         </SectionCard>
 
-        {/* Development Session Info */}
-        <div className="w-full rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-md">
-          <div className="mb-4 flex items-center gap-2">
-            <svg className="h-5 w-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-            <div className="text-xs font-black uppercase tracking-[0.25em] text-white/30">{t("join.dev.session")}</div>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <div className="space-y-3 text-sm text-white/60">
-              <div>{t("join.dev.user")}: <span className="font-bold text-white">{profileId || t("join.dev.notSignedIn")}</span></div>
-              <div>{t("join.dev.email")}: <span className="font-bold text-white break-all">{email}</span></div>
-              <div>{t("join.dev.mode")}: <span className="font-bold text-white">{DEV_ENABLED ? t("join.dev.devMode") : t("join.dev.prodMode")}</span></div>
-            </div>
-            <div className="flex flex-col gap-3 lg:col-span-2 sm:flex-row sm:items-start md:justify-end">
-              {DEV_ENABLED ? (
-                <button
-                  className="rounded-full bg-aura px-6 py-3 text-sm font-black text-white transition-all hover:scale-[1.02] disabled:opacity-50"
-                  disabled={loading}
-                  onClick={createDevUser}
-                >
-                  {t("join.dev.createUser")}
-                </button>
-              ) : null}
-              <button
-                className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-white/10"
-                onClick={() => navigate("/admin")}
-              >
-                {t("join.dev.openAdmin")}
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
+    </div>
   );
 }

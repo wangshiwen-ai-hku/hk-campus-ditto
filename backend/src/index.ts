@@ -78,7 +78,9 @@ app.use("/api/matches", matchingRouter);
 app.use("/api/workflow", workflowRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/memory", memoryRouter);
-app.use("/api/dev", devRouter);
+if (env.nodeEnv !== "production") {
+  app.use("/api/dev", devRouter);
+}
 
 // Admin overview (kept for the existing demo dashboard)
 app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
@@ -109,10 +111,12 @@ app.get("/api/admin/overview", requireAdmin, async (_req, res) => {
   });
 });
 
-app.post("/api/dev/reset", requireAdmin, async (_req, res) => {
-  const db = await resetDb();
-  res.json({ ok: true, students: db.students.length });
-});
+if (env.nodeEnv !== "production") {
+  app.post("/api/dev/reset", requireAdmin, async (_req, res) => {
+    const db = await resetDb();
+    res.json({ ok: true, students: db.students.length });
+  });
+}
 
 app.listen(env.port, () => {
   console.log(`Aura HK API listening on http://localhost:${env.port}`);

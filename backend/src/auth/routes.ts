@@ -43,6 +43,16 @@ authRouter.post("/request-code", async (req, res) => {
   }
 
   const code = generateCode();
+  const emailResult = await sendEmail({
+    to: email,
+    subject: "Your Aura verification code",
+    text: `Your verification code is: ${code}\n\nIt expires in ${env.auth.codeTtlMin} minutes.\n\nIf you didn't request this, ignore the email.`,
+  });
+  if (!emailResult.ok) {
+    console.error(`Verification email failed for ${email}: ${emailResult.error ?? "unknown error"}`);
+    return res.status(502).json({ error: "Verification email could not be sent. Try again later." });
+  }
+
   const expiresAt = new Date(Date.now() + env.auth.codeTtlMin * 60 * 1000).toISOString();
   db.verificationCodes = db.verificationCodes.filter((c) => c.email !== email);
   db.verificationCodes.push({
@@ -54,15 +64,7 @@ authRouter.post("/request-code", async (req, res) => {
   });
   await saveDb(db);
 
-  const emailResult = await sendEmail({
-    to: email,
-    subject: "Your Aura verification code",
-    text: `Your verification code is: ${code}\n\nIt expires in ${env.auth.codeTtlMin} minutes.\n\nIf you didn't request this, ignore the email.`,
-  });
-
-  // expose devCode only when running with console email provider (local/dev)
-  const devCode = env.email.provider === "console" ? code : undefined;
-  res.json({ ok: true, university, emailDelivered: emailResult.ok, devCode });
+  res.json({ ok: true, university, emailDelivered: true });
 });
 
 authRouter.post("/verify-code", async (req, res) => {

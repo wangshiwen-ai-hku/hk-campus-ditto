@@ -96,3 +96,70 @@ button, input, textarea, select { font: inherit; }
   @apply fixed inset-0 -z-20 h-full w-full object-cover blur-[60px] brightness-[0.3] saturate-[1.4] scale-110;
 }
 
+@keyframes heart-float {
+  0% { transform: translateY(0) scale(1) rotate(0); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.4; }
+  100% { transform: translateY(-100px) scale(1.5) rotate(20deg); opacity: 0; }
+}
+
+.animate-heart-float {
+  animation: heart-float 4s ease-out infinite;
+}
+
+.romantic-gradient {
+  background: linear-gradient(135deg, rgba(255, 0, 102, 0.2) 0%, rgba(0, 153, 255, 0.1) 100%);
+}
+
+.romantic-glow {
+  box-shadow: 0 0 20px rgba(255, 0, 102, 0.3);
+}
+
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(215deg) translateX(-1000px); opacity: 0; }
+}
+
+.meteor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
+  animation: meteor 3s linear infinite;
+}
+
+.meteor::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, #fff, transparent);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px rgba(255,255,255,0.8); }
+}
+
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle infinite ease-in-out;
+}

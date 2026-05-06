@@ -43,17 +43,11 @@ async function request(path, options = {}) {
   return data;
 }
 
-async function login(email, fullName) {
-  const codeResult = await request("/auth/request-code", {
+async function login(email) {
+  return request("/dev/login-as", {
     method: "POST",
+    admin: true,
     body: JSON.stringify({ email }),
-  });
-  if (!codeResult.devCode) {
-    throw new Error("Smoke test needs EMAIL_PROVIDER=console so /auth/request-code returns devCode.");
-  }
-  return request("/auth/verify-code", {
-    method: "POST",
-    body: JSON.stringify({ email, fullName, code: codeResult.devCode }),
   });
 }
 
@@ -66,8 +60,8 @@ console.log(`Smoke test API: ${API_BASE}`);
 await request("/health");
 await request("/dev/reset", { method: "POST", admin: true });
 
-const zoe = await login("zoe@link.cuhk.edu.hk", "Zoe Lau");
-const ethan = await login("ethan@link.cuhk.edu.hk", "Ethan Ho");
+const zoe = await login("zoe@link.cuhk.edu.hk");
+const ethan = await login("ethan@link.cuhk.edu.hk");
 
 const run = await request("/matches/run", {
   method: "POST",

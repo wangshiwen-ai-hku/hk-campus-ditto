@@ -125,7 +125,6 @@ en = {
     "availability": "Availability",
     "saveBtn": "Save profile",
     "dashboardBtn": "Open dashboard",
-    "demoCodeMsg": "Demo verification code: {code}",
     "verifiedMsg": "Verified. Continue your profile.",
     "verifyFirstMsg": "Please verify your email first to save your profile.",
     "savedMsg": "Profile saved! Redirecting to your dashboard..."
@@ -311,7 +310,6 @@ zh_hk = {
     "availability": "得閒時間",
     "saveBtn": "儲存個人檔案",
     "dashboardBtn": "打開控制面板",
-    "demoCodeMsg": "示範驗證碼：{code}",
     "verifiedMsg": "已驗證，繼續填寫。",
     "verifyFirstMsg": "請先驗證電郵。",
     "savedMsg": "已儲存！即將跳轉到面板..."
@@ -497,7 +495,6 @@ zh_cn = {
     "availability": "空闲时间",
     "saveBtn": "保存主页",
     "dashboardBtn": "打开控制台",
-    "demoCodeMsg": "演示验证码：{code}",
     "verifiedMsg": "验证成功，请完善信息。",
     "verifyFirstMsg": "保存资料前，请先验证邮箱。",
     "savedMsg": "保存成功！即将跳转至仪表盘..."

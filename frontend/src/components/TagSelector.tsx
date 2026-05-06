@@ -7,7 +7,7 @@ export function TagSelector({ title, values, setValues, items, renderLabel }: { 
   return (
     <div>
       <div className="mb-3 text-xs font-black uppercase tracking-[0.2em] text-white/30">{title}</div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3">
         {items.map((item) => {
           const active = values.includes(item);
           return (
@@ -15,10 +15,10 @@ export function TagSelector({ title, values, setValues, items, renderLabel }: { 
               key={item}
               type="button"
               onClick={() => toggle(item)}
-              className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
+              className={`rounded-xl px-4 py-2 text-sm font-medium transition-all duration-300 ${
                 active 
-                  ? "bg-aura text-white shadow-lg shadow-[rgba(255,0,102,0.2)] scale-105" 
-                  : "border border-white/5 bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60"
+                  ? "bg-aura/90 text-white shadow-lg shadow-aura/20" 
+                  : "border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"
               }`}
             >
               {renderLabel ? renderLabel(item) : item}

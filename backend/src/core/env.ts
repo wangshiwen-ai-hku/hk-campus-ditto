@@ -20,9 +20,27 @@ function list(name: string, fallback: string[]): string[] {
 }
 
 const jwtSecret = str("JWT_SECRET", "dev-secret-change-me");
+const adminSecret = str("ADMIN_SECRET", jwtSecret);
+const nodeEnv = str("NODE_ENV", "development");
+const emailProvider = str("EMAIL_PROVIDER", "console") as "console" | "resend";
+
+if (nodeEnv === "production") {
+  if (emailProvider === "console") {
+    throw new Error("EMAIL_PROVIDER=console is not allowed in production. Use EMAIL_PROVIDER=resend.");
+  }
+  if (!str("RESEND_API_KEY", "")) {
+    throw new Error("RESEND_API_KEY is required in production.");
+  }
+  if (jwtSecret === "dev-secret-change-me") {
+    throw new Error("JWT_SECRET must be set to a non-default value in production.");
+  }
+  if (adminSecret === "dev-secret-change-me") {
+    throw new Error("ADMIN_SECRET must be set to a non-default value in production.");
+  }
+}
 
 export const env = {
-  nodeEnv: str("NODE_ENV", "development"),
+  nodeEnv,
   port: num("PORT", 8787),
   db: {
     provider: str("DB_PROVIDER", "file") as "file" | "postgres",
@@ -33,7 +51,7 @@ export const env = {
     ttlDays: num("JWT_TTL_DAYS", 14),
   },
   admin: {
-    secret: str("ADMIN_SECRET", jwtSecret),
+    secret: adminSecret,
   },
   cors: {
     origins: list("CORS_ORIGINS", ["http://localhost:5173", "http://127.0.0.1:5173"]),
@@ -46,7 +64,7 @@ export const env = {
     budgetPerRun: num("LLM_BUDGET_MAX_CALLS_PER_RUN", 200),
   },
   email: {
-    provider: str("EMAIL_PROVIDER", "console") as "console" | "resend",
+    provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
     from: str("EMAIL_FROM", "Aura HK <noreply@aura.hk>"),
   },
