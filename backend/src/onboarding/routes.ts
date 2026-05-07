@@ -5,8 +5,12 @@ import { ensureDb, saveDb } from "../db.js";
 import { requireAuth } from "../core/auth-middleware.js";
 import { onboardingGroups, findGroup } from "./questions.js";
 import { applyOnboardingAnswers, buildPersonaSummary, recomputeProfileComplete } from "./persona.js";
+import { chatRouter } from "./chat.js";
+import { StudentProfile } from "../types.js";
 
 export const onboardingRouter = Router();
+
+onboardingRouter.use("/chat", chatRouter);
 
 // Public: question bank for client to render forms
 onboardingRouter.get("/questions", (_req, res) => {
@@ -55,8 +59,32 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
   const user = db.students.find((s) => s.id === req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
 
-  Object.assign(user, parsed.data);
-  user.onboardingStage = "life";
+  const { datingPreferences, ...rest } = parsed.data;
+  Object.assign(user, rest);
+  
+  if (datingPreferences) {
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      ...datingPreferences,
+      attractionSignals: {
+        ...(user.datingPreferences?.attractionSignals ?? {}),
+        ...(datingPreferences.attractionSignals ?? {}),
+      },
+      mbti: {
+        ...(user.datingPreferences?.mbti ?? {}),
+        ...(datingPreferences.mbti ?? {}),
+      }
+    };
+  }
+
+  // advance stage to 'life' if it's currently 'auth' or 'basic'
+  const order: Array<StudentProfile["onboardingStage"]> = ["auth", "basic", "life", "mind", "social", "complete"];
+  const curIdx = order.indexOf(user.onboardingStage ?? "basic");
+  const targetIdx = order.indexOf("life");
+  if (targetIdx > curIdx) {
+    user.onboardingStage = "life";
+  }
+
   user.profileComplete = recomputeProfileComplete(user);
   await saveDb(db);
   res.json({ ok: true, user });
@@ -72,12 +100,13 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
       "onboarding_basics",
       "onboarding_preferences",
       "onboarding_attraction",
+      "onboarding_ldfr",
       "onboarding_media",
     ]),
     answers: z.record(z.string(), z.unknown()),
   });
   const parsed = schema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
 
   const group = findGroup(parsed.data.template);
   if (!group) return res.status(400).json({ error: "Unknown survey template." });
@@ -107,6 +136,7 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
     onboarding_basics: "mind",
     onboarding_preferences: "social",
     onboarding_attraction: "social",
+    onboarding_ldfr: "social",
     onboarding_media: "complete",
   };
   const next = nextMap[parsed.data.template];

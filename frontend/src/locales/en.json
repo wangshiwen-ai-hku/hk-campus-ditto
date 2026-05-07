@@ -311,6 +311,10 @@
       "media": {
         "title": "Media Profile",
         "desc": "Add photos that help someone understand your face, style, and everyday vibe."
+      },
+      "ldfr": {
+        "title": "Emotional Persona (LDFR)",
+        "desc": "A short, optional check to discover your unique Aura Persona."
       }
     },
     "q": {
@@ -410,6 +414,54 @@
         "prompt": "Anything the system should know about these photos?",
         "why": "Optional notes for interpreting your media profile.",
         "placeholder": "e.g. first photo is my usual look; second is from a hiking day"
+      },
+      "ldfr_q1": {
+        "prompt": "Friday night 9 PM, your ideal state is:",
+        "why": "Tests your social battery."
+      },
+      "ldfr_q4": {
+        "prompt": "How do you heal after a setback?",
+        "why": "How you recover energy."
+      },
+      "ldfr_q5": {
+        "prompt": "What kind of chatting satisfies you the most?",
+        "why": "Your preferred depth of communication."
+      },
+      "ldfr_q7": {
+        "prompt": "How would you want your partner to describe you to others?",
+        "why": "Your self-identity in love."
+      },
+      "ldfr_q8": {
+        "prompt": "Who are you most likely to fall in love with at first sight?",
+        "why": "Are you drawn to potential or reality?"
+      },
+      "ldfr_q9": {
+        "prompt": "First date, which sentence makes your heart skip a beat?",
+        "why": "Your emotional reception channel."
+      },
+      "ldfr_q10": {
+        "prompt": "Your ideal lover is closer to:",
+        "why": "Story vs Stability."
+      },
+      "ldfr_q14": {
+        "prompt": "What is a 'soulmate' to you?",
+        "why": "Metaphor vs Long-term companionship."
+      },
+      "ldfr_q15": {
+        "prompt": "Month 2 of dating, they ask 'What are we?'. Your reaction:",
+        "why": "Acceptance of early commitment."
+      },
+      "ldfr_q16": {
+        "prompt": "Your feeling about 'commitment':",
+        "why": "Source of pressure vs security."
+      },
+      "ldfr_q18": {
+        "prompt": "Your ideal relationship state is:",
+        "why": "Independent space vs Building a routine."
+      },
+      "ldfr_q19": {
+        "prompt": "They suddenly ask 'Can I move in with you for a week?' Your reaction:",
+        "why": "Adaptability to sudden intimacy."
       }
     },
     "opt": {
@@ -466,7 +518,55 @@
       "mbti_f": "F (Feeling - empathy/harmony)",
       "mbti_j": "J (Judging - organized/planned)",
       "mbti_p": "P (Perceiving - flexible/spontaneous)",
-      "mbti_none": "Not Sure"
+      "mbti_none": "Not Sure",
+      "ldfr_q1_a": "Already at a party/bar, meeting new people",
+      "ldfr_q1_b": "Chilling at home, Netflix on",
+      "ldfr_q1_c": "Having late night supper with close friends",
+      "ldfr_q1_d": "Just got off work, only want to sleep",
+      "ldfr_q4_a": "Go out, meet friends, pack my schedule",
+      "ldfr_q4_b": "Go to a cafe alone, write, space out",
+      "ldfr_q4_c": "Throw myself into work/projects",
+      "ldfr_q4_d": "Eat a big meal and sleep for 12 hours",
+      "ldfr_q5_a": "Group chat with everyone talking",
+      "ldfr_q5_b": "2 AM, just the two of us talking about deep stuff",
+      "ldfr_q5_c": "Watching a show together and commenting occasionally",
+      "ldfr_q5_d": "Casual chat while eating",
+      "ldfr_q7_a": "'When they enter, the whole room lights up'",
+      "ldfr_q7_b": "'They are quiet, but everything they say has depth'",
+      "ldfr_q7_c": "'They are very sincere'",
+      "ldfr_q7_d": "'They are really capable'",
+      "ldfr_q8_a": "Someone whose 'world feels so unique' after a short chat",
+      "ldfr_q8_b": "Someone with a warm smile who is very genuine",
+      "ldfr_q8_c": "Someone who is exactly my physical type",
+      "ldfr_q8_d": "Someone we have mutual friends with",
+      "ldfr_q9_a": "'I often wonder, if I could restart life...'",
+      "ldfr_q9_b": "'I noticed your eyes look so gentle when talking about family'",
+      "ldfr_q9_c": "'You have a cute smile'",
+      "ldfr_q9_d": "'Tonight was really fun'",
+      "ldfr_q10_a": "A soul with a story, dreams, and a bit of mystery",
+      "ldfr_q10_b": "Someone stable, reliable, with a good life rhythm",
+      "ldfr_q10_c": "Good looking and funny",
+      "ldfr_q10_d": "Someone whose vibe matches mine",
+      "ldfr_q14_a": "Someone who understands your dreams and metaphors",
+      "ldfr_q14_b": "Someone who still says good morning to you 7 years later",
+      "ldfr_q14_c": "Someone who makes you laugh",
+      "ldfr_q14_d": "Someone who won't leave",
+      "ldfr_q15_a": "(Tenses up) Can we not label it so early?",
+      "ldfr_q15_b": "Finally! I've been waiting for this.",
+      "ldfr_q15_c": "Depends on their tone.",
+      "ldfr_q15_d": "Ask them what they want.",
+      "ldfr_q16_a": "A bit of pressure, like a piece of freedom is cut off",
+      "ldfr_q16_b": "Security, it's the sexiest thing in a relationship",
+      "ldfr_q16_c": "Neutral, depends on the context",
+      "ldfr_q16_d": "I believe in it but don't say it out loud",
+      "ldfr_q18_a": "Like two cats, own space, cuddle when happy",
+      "ldfr_q18_b": "Building a home together, having routine and a future",
+      "ldfr_q18_c": "Clingy type, together almost every day",
+      "ldfr_q18_d": "Long distance is fine as long as they are the one",
+      "ldfr_q19_a": "Too sudden... I need personal space",
+      "ldfr_q19_b": "Nervous but excited, packing immediately",
+      "ldfr_q19_c": "Let's talk about why first",
+      "ldfr_q19_d": "Feels a bit weird"
     }
   }
 }

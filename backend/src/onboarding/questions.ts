@@ -22,12 +22,13 @@ export interface Question {
 
 export interface QuestionGroup {
   template:
-    | "onboarding_basics"
-    | "onboarding_preferences"
-    | "onboarding_attraction"
-    | "onboarding_media"
-    | "post_date_2h"
-    | "post_date_24h";
+  | "onboarding_basics"
+  | "onboarding_preferences"
+  | "onboarding_attraction"
+  | "onboarding_ldfr"
+  | "onboarding_media"
+  | "post_date_2h"
+  | "post_date_24h";
   title?: string;
   titleKey?: string;
   description?: string;
@@ -215,6 +216,109 @@ export const onboardingGroups: QuestionGroup[] = [
         placeholderKey: "onboarding.q.attractEnergy.placeholder",
         kind: "text",
         required: false,
+      }
+    ]
+  },
+  {
+    template: "onboarding_ldfr",
+    titleKey: "onboarding.groups.ldfr.title",
+    descriptionKey: "onboarding.groups.ldfr.desc",
+    questions: [
+      {
+        id: "ldfr_q1",
+        promptKey: "onboarding.q.ldfr_q1.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q1.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q1_a", "onboarding.opt.ldfr_q1_b", "onboarding.opt.ldfr_q1_c", "onboarding.opt.ldfr_q1_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q4",
+        promptKey: "onboarding.q.ldfr_q4.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q4.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q4_a", "onboarding.opt.ldfr_q4_b", "onboarding.opt.ldfr_q4_c", "onboarding.opt.ldfr_q4_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q5",
+        promptKey: "onboarding.q.ldfr_q5.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q5.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q5_a", "onboarding.opt.ldfr_q5_b", "onboarding.opt.ldfr_q5_c", "onboarding.opt.ldfr_q5_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q7",
+        promptKey: "onboarding.q.ldfr_q7.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q7.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q7_a", "onboarding.opt.ldfr_q7_b", "onboarding.opt.ldfr_q7_c", "onboarding.opt.ldfr_q7_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q8",
+        promptKey: "onboarding.q.ldfr_q8.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q8.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q8_a", "onboarding.opt.ldfr_q8_b", "onboarding.opt.ldfr_q8_c", "onboarding.opt.ldfr_q8_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q9",
+        promptKey: "onboarding.q.ldfr_q9.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q9.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q9_a", "onboarding.opt.ldfr_q9_b", "onboarding.opt.ldfr_q9_c", "onboarding.opt.ldfr_q9_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q10",
+        promptKey: "onboarding.q.ldfr_q10.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q10.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q10_a", "onboarding.opt.ldfr_q10_b", "onboarding.opt.ldfr_q10_c", "onboarding.opt.ldfr_q10_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q14",
+        promptKey: "onboarding.q.ldfr_q14.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q14.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q14_a", "onboarding.opt.ldfr_q14_b", "onboarding.opt.ldfr_q14_c", "onboarding.opt.ldfr_q14_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q15",
+        promptKey: "onboarding.q.ldfr_q15.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q15.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q15_a", "onboarding.opt.ldfr_q15_b", "onboarding.opt.ldfr_q15_c", "onboarding.opt.ldfr_q15_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q16",
+        promptKey: "onboarding.q.ldfr_q16.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q16.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q16_a", "onboarding.opt.ldfr_q16_b", "onboarding.opt.ldfr_q16_c", "onboarding.opt.ldfr_q16_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q18",
+        promptKey: "onboarding.q.ldfr_q18.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q18.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q18_a", "onboarding.opt.ldfr_q18_b", "onboarding.opt.ldfr_q18_c", "onboarding.opt.ldfr_q18_d"],
+        required: true,
+      },
+      {
+        id: "ldfr_q19",
+        promptKey: "onboarding.q.ldfr_q19.prompt",
+        whyItMattersKey: "onboarding.q.ldfr_q19.why",
+        kind: "single",
+        optionsKeys: ["onboarding.opt.ldfr_q19_a", "onboarding.opt.ldfr_q19_b", "onboarding.opt.ldfr_q19_c", "onboarding.opt.ldfr_q19_d"],
+        required: true,
       }
     ]
   },

@@ -19,9 +19,13 @@ export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
 
 export function applyOnboardingAnswers(
   user: StudentProfile,
-  template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_media",
+  template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_ldfr" | "onboarding_media",
   answers: Record<string, unknown>
 ): void {
+  if (template === "onboarding_ldfr") {
+    // LDFR results are currently stored in survey history; can be extracted to specific persona signals here if needed.
+    return;
+  }
   if (template === "onboarding_basics") {
     user.gender = strOrUndef(answers.gender) ?? user.gender;
     user.yearOfStudy = strOrUndef(answers.grade) ?? user.yearOfStudy;

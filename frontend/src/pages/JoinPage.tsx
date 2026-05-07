@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Heart } from "lucide-react";
+import { Heart, MessageSquare, X } from "lucide-react";
 import { api } from "../lib/api";
 import { SectionCard } from "../components/SectionCard";
 import { TagSelector } from "../components/TagSelector";
 import { setStoredToken } from "../lib/session";
+import { AiChatSidebar } from "../components/AiChatSidebar";
 import type { Question, QuestionGroup } from "../types";
 
 const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"];
@@ -237,10 +238,13 @@ function QuestionField({
 }
 
 export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (id: string) => void; }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState<Step>(userId ? "profile" : "account");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [floatingEmojis, setFloatingEmojis] = useState<{ id: string; emoji: string; x: number; y: number }[]>([]);
+  const [ldfrCard, setLdfrCard] = useState<any>(null);
 
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
@@ -375,6 +379,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     setMessage("");
     try {
       await api.submitSurvey(currentGroup.template, cleanAnswers(currentGroup, answers[currentGroup.template] ?? {}));
+      
+      if (currentGroup.template === "onboarding_ldfr") {
+        api.ldfrAnalyze(answers[currentGroup.template], i18n.language).then(card => setLdfrCard(card)).catch(() => {});
+      }
+
       const next = nextStep(step, groups);
       setStep(next);
       setMessage(next === "done" ? t("join.dev.completeMsg") : t("join.dev.sectionSaved"));
@@ -393,6 +402,13 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         [questionId]: value,
       },
     }));
+    const emojis = ["🫧", "✨"];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    const id = Date.now().toString() + Math.random();
+    setFloatingEmojis(prev => [...prev, { id, emoji, x: 10 + Math.random() * 80, y: 10 }]);
+    setTimeout(() => {
+      setFloatingEmojis(prev => prev.filter(e => e.id !== id));
+    }, 2000);
   }
 
   function goToStep(target: Step) {
@@ -409,8 +425,26 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#020617]">
-      {/* Refined Hero Section with Collage Background */}
-      <header className="relative pt-32 pb-24 px-5 border-b border-white/[0.05] overflow-hidden">
+      <style>{`
+        @keyframes floatUpAndFade {
+          0% { transform: translateY(0) scale(0.8); opacity: 0; }
+          20% { transform: translateY(-20px) scale(1.1); opacity: 0.6; }
+          50% { transform: translateY(-60px) scale(0.9); opacity: 0.8; }
+          100% { transform: translateY(-120px) scale(1); opacity: 0; }
+        }
+        .animate-float-up {
+          animation: floatUpAndFade 2s ease-out forwards;
+        }
+      `}</style>
+      {floatingEmojis.map(e => (
+        <div key={e.id} className="fixed z-50 animate-float-up pointer-events-none text-4xl font-bold drop-shadow-lg" style={{ left: `${e.x}%`, bottom: `${e.y}%` }}>
+          {e.emoji}
+        </div>
+      ))}
+      {/* Main Content Wrapper */}
+      <div className={`transition-all duration-500 ease-in-out ${isChatOpen ? "md:pr-[400px]" : ""}`}>
+        {/* Refined Hero Section with Collage Background */}
+        <header className="relative pt-32 pb-24 px-5 border-b border-white/[0.05] overflow-hidden">
         {/* Puzzle Collage Background - Clearer Visibility */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div className="absolute inset-0 grid grid-cols-4 grid-rows-2 gap-4 p-8 opacity-80 scale-110">
@@ -701,6 +735,59 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
       </div>
     </main>
+    </div>
+
+    {/* AI Chat Sidebar */}
+    <AiChatSidebar 
+      isOpen={isChatOpen} 
+      onClose={() => setIsChatOpen(false)} 
+      currentGroup={currentGroup} 
+      answers={currentGroup ? (answers[currentGroup.template] as Record<string, unknown> ?? {}) : {}}
+      onAnswer={(qid, val) => currentGroup && setQuestionAnswer(currentGroup, qid, val)}
+      language={i18n.language}
+    />
+
+    {/* Floating Chat Button */}
+    {!isChatOpen && step !== "account" && step !== "done" && (
+      <button 
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-8 right-8 z-40 p-4 rounded-full bg-gradient-to-tr from-aura to-pink-500 text-white shadow-[0_0_20px_rgba(255,0,102,0.4)] hover:scale-110 active:scale-95 transition-all animate-bounce hover:animate-none"
+      >
+        <MessageSquare className="w-6 h-6" />
+        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+        </span>
+      </button>
+    )}
+
+    {/* LDFR Card Modal */}
+    {ldfrCard && (
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div className="relative w-full max-w-md rounded-[2rem] bg-[#0f172a]/95 border border-white/20 p-8 shadow-2xl overflow-hidden backdrop-blur-xl text-center">
+          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-aura/20 to-transparent blur-[50px]"></div>
+          
+          <button onClick={() => setLdfrCard(null)} className="absolute top-4 right-4 text-white/50 hover:text-white"><X /></button>
+          
+          <img src={`https://api.dicebear.com/9.x/notionists/svg?seed=${ldfrCard.code}&backgroundColor=020617`} alt="Avatar" className="w-32 h-32 mx-auto rounded-full border-4 border-aura/30 shadow-[0_0_20px_rgba(255,0,102,0.3)] mb-6" />
+          
+          <div className="inline-block px-3 py-1 bg-aura/20 border border-aura/50 rounded-full text-aura font-bold tracking-widest text-xs mb-2">{ldfrCard.code}</div>
+          <h3 className="text-2xl font-black text-white mb-2">{ldfrCard.title}</h3>
+          <p className="text-white/70 text-sm italic mb-6">"{ldfrCard.vibe}"</p>
+          
+          <div className="text-sm text-left text-white/80 space-y-4 mb-8 bg-white/5 p-4 rounded-xl border border-white/10">
+            <p>{ldfrCard.analysis}</p>
+            <div><strong className="text-aura">✨ Strengths:</strong> {ldfrCard.strengths?.join(", ")}</div>
+            <div><strong className="text-pink-400">⚠️ Traps:</strong> {ldfrCard.traps?.join(", ")}</div>
+            <div><strong className="text-green-400">☕ Ideal Date:</strong> {ldfrCard.idealDate}</div>
+          </div>
+          
+          <button onClick={() => setLdfrCard(null)} className="w-full py-4 rounded-2xl bg-gradient-to-r from-aura to-pink-500 font-bold text-white shadow-lg hover:opacity-90 active:scale-95 transition-all text-lg">
+            {t("join.dev.continue", "Continue")}
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 }

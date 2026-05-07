@@ -49,6 +49,8 @@ export const api = {
   saveProfile: (payload: unknown) => request("/onboarding/profile", { method: "POST", body: JSON.stringify(payload) }),
   submitSurvey: (template: string, answers: unknown) => request("/onboarding/survey", { method: "POST", body: JSON.stringify({ template, answers }) }),
   regeneratePersona: () => request("/onboarding/persona/regenerate", { method: "POST" }),
+  chatExtract: (question: unknown, userMessage: string, language: string, translatedOptions?: any) => request<{ extractedValue: any; replyMessage: string }>("/onboarding/chat/extract", { method: "POST", body: JSON.stringify({ question, userMessage, language, translatedOptions }) }),
+  ldfrAnalyze: (answers: unknown, language: string) => request<{ code: string; title: string; vibe: string; analysis: string; strengths: string[]; traps: string[]; idealDate: string }>("/onboarding/chat/ldfr-analyze", { method: "POST", body: JSON.stringify({ answers, language }) }),
 
   // Matches & Workflow
   saveAvailability: (availability: string[]) => request("/workflow/availability", { method: "POST", body: JSON.stringify({ availability }) }),
