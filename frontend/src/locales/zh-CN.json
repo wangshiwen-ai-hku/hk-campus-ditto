@@ -154,7 +154,12 @@
       "back": "返回",
       "uploadPhotos": "上传照片",
       "uploadPhotosHint": "最多添加 {{count}} 张清晰照片。",
-      "remove": "移除"
+      "remove": "移除",
+      "chatWelcome": "你好，我是 Aura-HK。我会帮你完成资料填写；如果卡住了，也可以直接问我。",
+      "chatGroupDone": "这一部分已经完成。你可以先检查答案，然后点击左侧的「保存并继续」。",
+      "chatFormFallback": "我会保持专注，帮你完成资料流程。请继续填写当前表单，进入问卷后我会更智能地协助你。",
+      "chatPlaceholder": "输入你的回答...",
+      "chatTooltip": "表单填写助手"
     },
     "tags": {
       "coffee": "探店打卡",

@@ -236,6 +236,22 @@ export function StudentPage({ userId }: { userId: string | null; }) {
                     </div>
                 </div>
 
+                {profile.profileAnalysis ? (
+                    <div className="rounded-3xl bg-white/[0.03] p-5 border border-white/5">
+                        <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 mb-3">Aura Profile</div>
+                        <p className="text-xs leading-relaxed text-white/65 font-medium">{profile.profileAnalysis.summary}</p>
+                        {profile.profileAnalysis.matchSignals.length ? (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {profile.profileAnalysis.matchSignals.slice(0, 5).map((signal) => (
+                                    <span key={signal} className="rounded-xl border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-bold text-white/55">
+                                        {signal}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : null}
+                    </div>
+                ) : null}
+
                 <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
                     <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Status</span>
                     <span className="flex items-center gap-2 text-green-400 text-xs font-bold bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20">

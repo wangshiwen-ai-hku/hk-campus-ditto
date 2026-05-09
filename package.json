@@ -7,6 +7,7 @@
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "seed": "npm --prefix backend run seed",
     "invites:generate": "node scripts/generate-invites.mjs",
+    "invites:db": "npm --prefix backend run invites --",
     "test:backend": "npm --prefix backend run build && node scripts/backend-logic-tests.mjs",
     "smoke:backend": "node scripts/backend-smoke.mjs"
   },

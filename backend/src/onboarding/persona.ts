@@ -1,6 +1,6 @@
-import type { StudentProfile } from "../types.js";
+import type { ProfileAnalysis, StudentProfile, Survey } from "../types.js";
 import { llmCall } from "../llm/client.js";
-import { personaSummaryPrompt } from "../llm/prompts.js";
+import { personaSummaryPrompt, profileAnalysisPrompt } from "../llm/prompts.js";
 
 export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
   const { system, prompt } = personaSummaryPrompt(p);
@@ -17,11 +17,42 @@ export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
   return parts.join(" ");
 }
 
+export async function buildProfileAnalysis(
+  p: StudentProfile,
+  surveys: Survey[],
+  language = "en"
+): Promise<ProfileAnalysis> {
+  const relevantSurveys = surveys
+    .filter((s) => s.userId === p.id && s.template.startsWith("onboarding_"))
+    .slice(-12);
+  const { system, prompt } = profileAnalysisPrompt(p, relevantSurveys, language);
+  const out = await llmCall<Omit<ProfileAnalysis, "generatedAt" | "sourceTemplates">>({
+    system,
+    prompt,
+    responseJson: true,
+    tag: "profile-analysis",
+    maxOutputTokens: 1300,
+    temperature: 0.45,
+  });
+
+  const sourceTemplates = Array.from(new Set(relevantSurveys.map((s) => s.template)));
+  if (out.json && !out.usedFallback) {
+    return normalizeProfileAnalysis(out.json, sourceTemplates);
+  }
+
+  return fallbackProfileAnalysis(p, sourceTemplates);
+}
+
 export function applyOnboardingAnswers(
   user: StudentProfile,
   template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_ldfr" | "onboarding_media",
   answers: Record<string, unknown>
 ): void {
+  user.onboardingAnswers = {
+    ...(user.onboardingAnswers ?? {}),
+    [template]: answers,
+  };
+
   if (template === "onboarding_ldfr") {
     // LDFR results are currently stored in survey history; can be extracted to specific persona signals here if needed.
     return;
@@ -139,6 +170,65 @@ export function applyOnboardingAnswers(
       ethnicityPreferences: arrOrUndef(answers.ethnicityPreferences),
     };
   }
+}
+
+function normalizeProfileAnalysis(
+  input: Partial<ProfileAnalysis>,
+  sourceTemplates: string[]
+): ProfileAnalysis {
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: str(input.summary, "A concise profile summary will become more specific as more answers are collected."),
+    romanticStyle: str(input.romanticStyle, "Still emerging"),
+    emotionalTone: str(input.emotionalTone, "Still emerging"),
+    datingIntent: str(input.datingIntent, "Still emerging"),
+    strengths: strArray(input.strengths).slice(0, 4),
+    growthEdges: strArray(input.growthEdges).slice(0, 3),
+    idealMatch: str(input.idealMatch, "Someone whose pace and expectations fit their stated preferences."),
+    matchSignals: strArray(input.matchSignals).slice(0, 8),
+    conversationHooks: strArray(input.conversationHooks).slice(0, 5),
+    firstDateSuggestions: strArray(input.firstDateSuggestions).slice(0, 4),
+    profileCompletenessNotes: strArray(input.profileCompletenessNotes).slice(0, 3),
+    sourceTemplates,
+  };
+}
+
+function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[]): ProfileAnalysis {
+  const matchSignals = Array.from(new Set([
+    ...p.vibeTags,
+    ...p.interests.slice(0, 4),
+    p.lifeSignals?.energyMode,
+    p.datingPreferences?.datingGoal,
+    p.datingPreferences?.matchMode,
+  ].filter((x): x is string => typeof x === "string" && x.length > 0))).slice(0, 8);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: [
+      `${p.fullName || "This student"} is studying ${p.major || "their field"} and seems to connect through ${p.interests.slice(0, 3).join(", ") || "shared everyday interests"}.`,
+      p.bio ? `Their bio says: ${p.bio}` : "",
+      p.lifeSignals?.weekendVibe ? `Their preferred weekend rhythm points toward ${p.lifeSignals.weekendVibe}.` : "",
+    ].filter(Boolean).join(" "),
+    romanticStyle: p.datingPreferences?.matchMode ?? p.lifeSignals?.energyMode ?? "Still emerging",
+    emotionalTone: p.vibeTags.slice(0, 3).join(", ") || "Still emerging",
+    datingIntent: p.datingPreferences?.datingGoal ?? p.seeking ?? "Still emerging",
+    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3) : ["Clearer once more form answers are available"],
+    growthEdges: ["May need a few more specific answers before matching can be highly personalized"],
+    idealMatch: p.seeking || "Someone aligned with their stated preferences and pace",
+    matchSignals,
+    conversationHooks: p.interests.slice(0, 5),
+    firstDateSuggestions: ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
+    profileCompletenessNotes: sourceTemplates.length ? [] : ["No onboarding survey answers have been saved yet"],
+    sourceTemplates,
+  };
+}
+
+function str(v: unknown, fallback: string): string {
+  return typeof v === "string" && v.trim() ? v.trim() : fallback;
+}
+
+function strArray(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((x) => x.trim()) : [];
 }
 
 function strOrUndef(v: unknown): string | undefined {

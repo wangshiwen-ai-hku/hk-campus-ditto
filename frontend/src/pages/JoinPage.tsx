@@ -89,11 +89,13 @@ function QuestionField({
   value,
   onChange,
   t,
+  isChatExpanded
 }: {
   question: Question;
   value: unknown;
   onChange: (value: unknown) => void;
   t: (key: string, options?: Record<string, unknown>) => string;
+  isChatExpanded?: boolean;
 }) {
   const prompt = (
     <>
@@ -171,7 +173,7 @@ function QuestionField({
       ) : null}
 
       {question.kind === "range" ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className={`mt-4 grid gap-3 ${isChatExpanded ? "grid-cols-1" : "sm:grid-cols-2"}`}>
           <label className="grid gap-2 text-sm font-bold text-white/50">
             Min
             <input
@@ -216,7 +218,7 @@ function QuestionField({
             <span className="mt-2 text-sm text-white/45">{t("join.dev.uploadPhotosHint", { count: question.max ?? 5 })}</span>
           </label>
           {photos.length ? (
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <div className={`grid gap-3 ${isChatExpanded ? "grid-cols-2" : "sm:grid-cols-3 lg:grid-cols-5"}`}>
               {photos.map((photo, index) => (
                 <div key={`${photo.slice(0, 32)}-${index}`} className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-white/5">
                   <img className="h-full w-full object-cover" src={photo} alt="" />
@@ -243,6 +245,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
   const [floatingEmojis, setFloatingEmojis] = useState<{ id: string; emoji: string; x: number; y: number }[]>([]);
   const [ldfrCard, setLdfrCard] = useState<any>(null);
 
@@ -257,10 +260,10 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [bio, setBio] = useState("");
-  const [languages, setLanguages] = useState<string[]>(["english", "cantonese"]);
-  const [interests, setInterests] = useState<string[]>(["coffee", "hiking", "citywalk"]);
-  const [vibeTags, setVibeTags] = useState<string[]>(["chill", "empathetic", "grounded"]);
-  const [availability, setAvailability] = useState<string[]>(["fri_eve", "sat_aft"]);
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [interests, setInterests] = useState<string[]>([]);
+  const [vibeTags, setVibeTags] = useState<string[]>([]);
+  const [availability, setAvailability] = useState<string[]>([]);
   const [crossUniOk, setCrossUniOk] = useState(true);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
@@ -273,7 +276,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         setGroups(loaded);
         setAnswers(Object.fromEntries(loaded.map((group) => [
           group.template,
-          Object.fromEntries(group.questions.map((q) => [q.id, defaultAnswer(q)])),
+          {},
         ])));
         setStep((prev) => flowSteps(loaded).includes(prev) ? prev : loaded[0]?.template ?? "profile");
       })
@@ -378,7 +381,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     setLoading(true);
     setMessage("");
     try {
-      await api.submitSurvey(currentGroup.template, cleanAnswers(currentGroup, answers[currentGroup.template] ?? {}));
+      await api.submitSurvey(currentGroup.template, cleanAnswers(currentGroup, answers[currentGroup.template] ?? {}), i18n.language);
       
       if (currentGroup.template === "onboarding_ldfr") {
         api.ldfrAnalyze(answers[currentGroup.template], i18n.language).then(card => setLdfrCard(card)).catch(() => {});
@@ -442,7 +445,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         </div>
       ))}
       {/* Main Content Wrapper */}
-      <div className={`transition-all duration-500 ease-in-out ${isChatOpen ? "md:pr-[400px]" : ""}`}>
+      <div className={`transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isChatOpen ? (isChatExpanded ? "md:pr-[75vw]" : "md:pr-[400px]") : ""}`}>
         {/* Refined Hero Section with Collage Background */}
         <header className="relative pt-32 pb-24 px-5 border-b border-white/[0.05] overflow-hidden">
         {/* Puzzle Collage Background - Clearer Visibility */}
@@ -507,7 +510,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-5 py-12 relative z-10">
+      <main className={`mx-auto px-5 py-12 relative z-10 transition-all duration-700 ${isChatExpanded ? "max-w-full" : "max-w-4xl"}`}>
 
         <div className="mb-16 relative">
           {/* Romantic Background Decor for Stepper */}
@@ -584,7 +587,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                 <h2 className="text-2xl font-black">{t("join.dev.account")}</h2>
                 <p className="mt-2 text-white/50">{t("join.dev.accountDesc")}</p>
               </div>
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className={`grid gap-4 ${isChatExpanded ? "grid-cols-1" : "md:grid-cols-2"}`}>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.emailLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -618,8 +621,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                 <h2 className="text-2xl font-black">{t("join.dev.profileBasics")}</h2>
                 <p className="mt-2 text-white/50">{t("join.dev.profileDesc")}</p>
               </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <label className="grid gap-2 text-sm font-bold text-white/50 md:col-span-2">
+              <div className={`flex flex-col gap-6 ${isChatExpanded ? "" : "md:grid md:grid-cols-2 md:gap-4"}`}>
+                <label className={`grid gap-2 text-sm font-bold text-white/50 ${isChatExpanded ? "" : "md:col-span-2"}`}>
                   <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t("join.placeholders.fullName")} />
                 </label>
@@ -702,6 +705,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                     value={answers[currentGroup.template]?.[question.id] ?? defaultAnswer(question)}
                     onChange={(value) => setQuestionAnswer(currentGroup, question.id, value)}
                     t={t}
+                    isChatExpanded={isChatExpanded}
                   />
                 ))}
               </div>
@@ -741,7 +745,10 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     <AiChatSidebar 
       isOpen={isChatOpen} 
       onClose={() => setIsChatOpen(false)} 
+      isExpanded={isChatExpanded}
+      onToggleExpand={() => setIsChatExpanded(!isChatExpanded)}
       currentGroup={currentGroup} 
+      currentSectionLabel={currentGroup ? t(currentGroup.titleKey || currentGroup.title || currentGroup.template) : t(`join.dev.${step}`, { defaultValue: String(step) })}
       answers={currentGroup ? (answers[currentGroup.template] as Record<string, unknown> ?? {}) : {}}
       onAnswer={(qid, val) => currentGroup && setQuestionAnswer(currentGroup, qid, val)}
       language={i18n.language}
@@ -751,13 +758,51 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     {!isChatOpen && step !== "account" && step !== "done" && (
       <button 
         onClick={() => setIsChatOpen(true)}
-        className="fixed bottom-8 right-8 z-40 p-4 rounded-full bg-gradient-to-tr from-aura to-pink-500 text-white shadow-[0_0_20px_rgba(255,0,102,0.4)] hover:scale-110 active:scale-95 transition-all animate-bounce hover:animate-none"
+        className="group fixed bottom-10 right-10 z-50 flex items-center justify-center w-16 h-16 rounded-full transition-all duration-500 hover:scale-110 active:scale-95"
       >
-        <MessageSquare className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-        </span>
+        {/* Outer Glow & Pulsing Ring */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-aura to-pink-600 opacity-40 blur-md group-hover:opacity-60 group-hover:blur-xl transition-all duration-500 animate-pulse"></div>
+        <div className="absolute inset-0 rounded-full border border-white/20 bg-[#020617]/80 backdrop-blur-xl shadow-2xl overflow-hidden">
+          {/* Internal moving gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-aura/10 via-transparent to-harbour/20 group-hover:rotate-180 transition-transform duration-1000"></div>
+        </div>
+        
+        {/* The "A" Icon Branding */}
+        <div className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/20 shadow-xl">
+          <span className="text-2xl font-black text-white tracking-tighter drop-shadow-lg">A</span>
+          {/* Subtle gloss line */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none"></div>
+        </div>
+
+        {/* Status indicator (Online) */}
+        <div className="absolute bottom-3 right-3 w-4 h-4 bg-[#020617] rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+          <div className="w-2.5 h-2.5 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+        </div>
+
+        {/* Improved Notification Dot */}
+        <div className="absolute -top-1 -right-1 flex h-4 w-4">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura opacity-40"></span>
+          <span className="relative inline-flex rounded-full h-4 w-4 bg-aura border border-white/40 shadow-lg"></span>
+        </div>
+
+        {/* Tooltip Bubble - Premium Glass Message */}
+        <div className="absolute right-full mr-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none -translate-x-4 group-hover:translate-x-0">
+          <div className="relative px-6 py-3.5 rounded-[1.75rem] bg-[#020617]/80 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center gap-3">
+              <div className="flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-aura opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-aura"></span>
+              </div>
+              <span className="text-sm font-black text-white tracking-widest uppercase whitespace-nowrap">
+                {t("join.dev.chatTooltip")}
+              </span>
+            </div>
+            {/* Elegant glass arrow */}
+            <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 overflow-hidden">
+              <div className="w-4 h-4 bg-[#020617]/80 backdrop-blur-2xl border border-white/10 rotate-45 -translate-x-3"></div>
+            </div>
+          </div>
+        </div>
       </button>
     )}
 

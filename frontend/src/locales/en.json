@@ -154,7 +154,12 @@
       "back": "Back",
       "uploadPhotos": "Upload photos",
       "uploadPhotosHint": "Add up to {{count}} clear photos.",
-      "remove": "Remove"
+      "remove": "Remove",
+      "chatWelcome": "Hi! I'm Aura-HK. I'm here to help you complete your profile. You can fill out the form, or ask me when you get stuck.",
+      "chatGroupDone": "This section is complete. Review your answers, then click “Save & Continue” on the left.",
+      "chatFormFallback": "I'll keep this focused so we can finish your profile. Continue with the current form, then I'll help with the questionnaire.",
+      "chatPlaceholder": "Type your answer...",
+      "chatTooltip": "Form Filling Assistant"
     },
     "tags": {
       "coffee": "Coffee Hopping",
@@ -194,7 +199,7 @@
       "korean": "Korean"
     },
     "placeholders": {
-      "fullName": "e.g. Local Test",
+      "fullName": "e.g. San Zhang",
       "year": "e.g. Year 3",
       "major": "e.g. Computer Science",
       "bio": "e.g. I like coffee, campus walks, thoughtful conversations and low-pressure first dates.",

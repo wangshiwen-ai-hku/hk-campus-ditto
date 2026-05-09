@@ -47,9 +47,27 @@ export const api = {
   // Onboarding
   getQuestions: () => request("/onboarding/questions"),
   saveProfile: (payload: unknown) => request("/onboarding/profile", { method: "POST", body: JSON.stringify(payload) }),
-  submitSurvey: (template: string, answers: unknown) => request("/onboarding/survey", { method: "POST", body: JSON.stringify({ template, answers }) }),
+  submitSurvey: (template: string, answers: unknown, language?: string) => request("/onboarding/survey", { method: "POST", body: JSON.stringify({ template, answers, language }) }),
   regeneratePersona: () => request("/onboarding/persona/regenerate", { method: "POST" }),
-  chatExtract: (question: unknown, userMessage: string, language: string, translatedOptions?: any) => request<{ extractedValue: any; replyMessage: string }>("/onboarding/chat/extract", { method: "POST", body: JSON.stringify({ question, userMessage, language, translatedOptions }) }),
+  chatExtract: (
+    question: unknown,
+    userMessage: string,
+    language: string,
+    translatedOptions?: any,
+    currentAnswers?: Record<string, unknown>,
+    recentMessages?: Array<{ role: "ai" | "user"; text: string }>
+  ) => request<{
+    intent: "answer_current_question" | "form_help" | "small_talk" | "unclear";
+    shouldUpdateAnswer: boolean;
+    extractedValue: any;
+    replyMessage: string;
+  }>("/onboarding/chat/extract", { method: "POST", body: JSON.stringify({ question, userMessage, language, translatedOptions, currentAnswers, recentMessages }) }),
+  chatNudge: (
+    userMessage: string,
+    language: string,
+    sectionLabel: string,
+    recentMessages?: Array<{ role: "ai" | "user"; text: string }>
+  ) => request<{ replyMessage: string }>("/onboarding/chat/nudge", { method: "POST", body: JSON.stringify({ userMessage, language, sectionLabel, recentMessages }) }),
   ldfrAnalyze: (answers: unknown, language: string) => request<{ code: string; title: string; vibe: string; analysis: string; strengths: string[]; traps: string[]; idealDate: string }>("/onboarding/chat/ldfr-analyze", { method: "POST", body: JSON.stringify({ answers, language }) }),
 
   // Matches & Workflow

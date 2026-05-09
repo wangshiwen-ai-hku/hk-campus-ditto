@@ -1,4 +1,4 @@
-import type { StudentProfile, MatchRecord } from "../types.js";
+import type { StudentProfile, MatchRecord, Survey } from "../types.js";
 
 export function personaSummaryPrompt(p: StudentProfile): { system: string; prompt: string } {
   const system =
@@ -21,6 +21,52 @@ Constraints:
 - 60-90 words, single paragraph, no bullet points
 - Reference 2-3 concrete signals (interest, vibe, signal value), not generic adjectives
 - End with one short clause about what kind of date they would enjoy.`;
+  return { system, prompt };
+}
+
+export function profileAnalysisPrompt(
+  p: StudentProfile,
+  surveys: Survey[],
+  language = "en"
+): { system: string; prompt: string } {
+  const system =
+    "You build structured user profile analysis for a Hong Kong campus matchmaking app. Be warm but concrete, do not over-flatter, and never invent facts beyond the supplied profile and survey answers. Return strict JSON only.";
+  const surveyPayload = surveys.map((s) => ({
+    template: s.template,
+    answers: s.answers,
+    at: s.at,
+  }));
+  const prompt = `Create a complete matchmaking profile analysis in ${language}.
+
+Student profile:
+${compactProfile(p)}
+
+Stored onboarding answer snapshot:
+${JSON.stringify(p.onboardingAnswers ?? {}, null, 2)}
+
+Survey history:
+${JSON.stringify(surveyPayload, null, 2)}
+
+Return strict JSON with this shape:
+{
+  "summary": "<80-120 words, second person, specific to their answers>",
+  "romanticStyle": "<one clear phrase/sentence>",
+  "emotionalTone": "<how they tend to connect emotionally>",
+  "datingIntent": "<what they appear to want, with uncertainty if unclear>",
+  "strengths": ["<2-4 concrete strengths>"],
+  "growthEdges": ["<1-3 gentle blind spots or risks>"],
+  "idealMatch": "<what kind of person may fit them>",
+  "matchSignals": ["<4-8 short tags useful for matching/ranking>"],
+  "conversationHooks": ["<3-5 first-chat topics based only on real answers>"],
+  "firstDateSuggestions": ["<2-4 specific HK/campus-friendly date styles>"],
+  "profileCompletenessNotes": ["<0-3 missing or weak areas to ask later>"]
+}
+
+Rules:
+- Use only supplied answers and profile fields.
+- Prefer concrete answer references over generic personality labels.
+- Keep emotional support tasteful: validating, not therapeutic.
+- If evidence is thin, say so in profileCompletenessNotes instead of guessing.`;
   return { system, prompt };
 }
 
@@ -63,7 +109,15 @@ function compactProfile(p: StudentProfile): string {
     `Dealbreakers: ${(p.dealBreakers ?? []).join(", ")}`,
     `Life: ${JSON.stringify(p.lifeSignals ?? {})}`,
     `Mind: ${JSON.stringify(p.mindSignals ?? {})}`,
+    `Social: ${JSON.stringify(p.socialSignals ?? {})}`,
     `Dating preferences: ${JSON.stringify(p.datingPreferences ?? {})}`,
+    `Profile analysis: ${p.profileAnalysis ? JSON.stringify({
+      romanticStyle: p.profileAnalysis.romanticStyle,
+      emotionalTone: p.profileAnalysis.emotionalTone,
+      datingIntent: p.profileAnalysis.datingIntent,
+      matchSignals: p.profileAnalysis.matchSignals,
+      idealMatch: p.profileAnalysis.idealMatch,
+    }) : "{}"}`,
     `Academic: ${p.major} / ${p.yearOfStudy}`,
   ].join("\n");
 }

@@ -154,7 +154,12 @@
       "back": "返回",
       "uploadPhotos": "上載相片",
       "uploadPhotosHint": "最多加入 {{count}} 張清晰相片。",
-      "remove": "移除"
+      "remove": "移除",
+      "chatWelcome": "你好，我係 Aura-HK。我會幫你完成資料填寫；如果卡住咗，都可以直接問我。",
+      "chatGroupDone": "呢一部分已經完成。你可以先檢查答案，然後撳左邊嘅「儲存並繼續」。",
+      "chatFormFallback": "我會保持專注，幫你完成資料流程。請繼續填寫而家嘅表單，入到問卷後我會更智能咁協助你。",
+      "chatPlaceholder": "輸入你嘅回答...",
+      "chatTooltip": "表單填寫助手"
     },
     "tags": {
       "coffee": "探店打卡",

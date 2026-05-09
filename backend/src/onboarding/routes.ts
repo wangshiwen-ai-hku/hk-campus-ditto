@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { ensureDb, saveDb } from "../db.js";
 import { requireAuth } from "../core/auth-middleware.js";
 import { onboardingGroups, findGroup } from "./questions.js";
-import { applyOnboardingAnswers, buildPersonaSummary, recomputeProfileComplete } from "./persona.js";
+import { applyOnboardingAnswers, buildPersonaSummary, buildProfileAnalysis, recomputeProfileComplete } from "./persona.js";
 import { chatRouter } from "./chat.js";
 import { StudentProfile } from "../types.js";
 
@@ -41,6 +41,12 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
       dateGenders: z.array(z.string()).optional(),
       ageRange: z.object({ min: z.number(), max: z.number() }).optional(),
       ethnicityPreferences: z.array(z.string()).optional(),
+      mbti: z.object({
+        energy: z.string().optional(),
+        information: z.string().optional(),
+        decision: z.string().optional(),
+        lifestyle: z.string().optional(),
+      }).optional(),
       attractionSignals: z.object({
         heightAndBuild: z.string().optional(),
         facialFeatures: z.string().optional(),
@@ -104,6 +110,7 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
       "onboarding_media",
     ]),
     answers: z.record(z.string(), z.unknown()),
+    language: z.string().optional(),
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
@@ -143,6 +150,10 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   if (next && order.indexOf(next) > cur) user.onboardingStage = next;
 
   user.profileComplete = recomputeProfileComplete(user);
+  if (next === "complete") {
+    user.personaSummary = await buildPersonaSummary(user);
+    user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, parsed.data.language ?? "en");
+  }
   await saveDb(db);
   res.json({ ok: true, user });
 });
@@ -153,6 +164,7 @@ onboardingRouter.post("/persona/regenerate", requireAuth, async (req, res) => {
   const user = db.students.find((s) => s.id === req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
   user.personaSummary = await buildPersonaSummary(user);
+  user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, req.body?.language ?? "en");
   await saveDb(db);
-  res.json({ ok: true, personaSummary: user.personaSummary });
+  res.json({ ok: true, personaSummary: user.personaSummary, profileAnalysis: user.profileAnalysis });
 });

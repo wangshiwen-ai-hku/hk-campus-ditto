@@ -7,7 +7,7 @@ import type { StudentProfile } from "../types.js";
 import { env } from "../core/env.js";
 import { requireAdmin } from "../core/auth-middleware.js";
 import { sendEmail } from "./email.js";
-import { findInvite, isInviteUsable, consumeInvite, generateInvites, inviteStats } from "./invite.js";
+import { findInvite, isInviteUsable, isInviteValidForUniversity, consumeInvite, generateInvites, inviteStats } from "./invite.js";
 import { issueToken } from "./jwt.js";
 
 export const authRouter = Router();
@@ -110,6 +110,9 @@ authRouter.post("/verify-code", async (req, res) => {
       const invite = findInvite(db, parsed.data.inviteCode);
       if (!isInviteUsable(invite)) {
         return res.status(400).json({ error: "Invite code is invalid or already used." });
+      }
+      if (!isInviteValidForUniversity(invite, university.id)) {
+        return res.status(400).json({ error: "Invite code is not valid for your university email." });
       }
     }
 

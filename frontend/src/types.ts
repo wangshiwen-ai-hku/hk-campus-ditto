@@ -49,6 +49,22 @@ export interface DatingPreferences {
   photoUrls?: string[];
 }
 
+export interface ProfileAnalysis {
+  generatedAt: string;
+  summary: string;
+  romanticStyle: string;
+  emotionalTone: string;
+  datingIntent: string;
+  strengths: string[];
+  growthEdges: string[];
+  idealMatch: string;
+  matchSignals: string[];
+  conversationHooks: string[];
+  firstDateSuggestions: string[];
+  profileCompletenessNotes: string[];
+  sourceTemplates: string[];
+}
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -70,6 +86,8 @@ export interface StudentProfile {
   availability: string[];
   profileComplete: boolean;
   personaSummary?: string;
+  profileAnalysis?: ProfileAnalysis;
+  onboardingAnswers?: Record<string, Record<string, unknown>>;
   proposedSlots?: string[];
   blockedUserIds?: string[];
   crossUniOk?: boolean;

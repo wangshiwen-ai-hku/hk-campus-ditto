@@ -64,6 +64,22 @@ export interface DatingPreferences {
   photoUrls?: string[];
 }
 
+export interface ProfileAnalysis {
+  generatedAt: string;
+  summary: string;
+  romanticStyle: string;
+  emotionalTone: string;
+  datingIntent: string;
+  strengths: string[];
+  growthEdges: string[];
+  idealMatch: string;
+  matchSignals: string[];
+  conversationHooks: string[];
+  firstDateSuggestions: string[];
+  profileCompletenessNotes: string[];
+  sourceTemplates: string[];
+}
+
 export interface StudentProfile {
   id: string;
   fullName: string;
@@ -92,6 +108,8 @@ export interface StudentProfile {
   socialSignals?: SocialSignals;
   datingPreferences?: DatingPreferences;
   personaSummary?: string;
+  profileAnalysis?: ProfileAnalysis;
+  onboardingAnswers?: Record<string, Record<string, unknown>>;
   vibeWeights?: Record<string, number>;
   onboardingStage?: "auth" | "basic" | "life" | "mind" | "social" | "complete";
 }
@@ -194,6 +212,7 @@ export type SurveyTemplate =
   | "onboarding_basics"
   | "onboarding_preferences"
   | "onboarding_attraction"
+  | "onboarding_ldfr"
   | "onboarding_media"
   | "post_date_2h"
   | "post_date_24h";

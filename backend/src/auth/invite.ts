@@ -8,6 +8,11 @@ export function isInviteUsable(invite: InviteCode | undefined): boolean {
   return Boolean(invite && !invite.usedBy);
 }
 
+export function isInviteValidForUniversity(invite: InviteCode | undefined, universityId: string): boolean {
+  if (!invite) return false;
+  return !invite.universityId || invite.universityId === universityId;
+}
+
 export function consumeInvite(db: Database, code: string, userId: string): boolean {
   const invite = findInvite(db, code);
   if (!invite || invite.usedBy) return false;

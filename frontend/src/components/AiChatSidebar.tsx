@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Send, Sparkles, Heart } from "lucide-react";
+import { MessageSquare, X, Send, Sparkles, Heart, Maximize2, Minimize2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
 import type { QuestionGroup, Question } from "../types";
@@ -16,13 +16,64 @@ interface Message {
 interface AiChatSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
   currentGroup?: QuestionGroup;
+  currentSectionLabel?: string;
   answers: Record<string, unknown>;
   onAnswer: (questionId: string, value: unknown) => void;
   language: string;
 }
 
-export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer, language }: AiChatSidebarProps) {
+function normalizeExtractedValue(question: Question, extractedValue: unknown, userText: string): unknown {
+  if (question.kind === "range") {
+    const fromObject = rangeFromObject(extractedValue);
+    if (fromObject) return clampRange(fromObject, question);
+
+    const source = typeof extractedValue === "string" ? extractedValue : userText;
+    const fromText = rangeFromText(source);
+    if (fromText) return clampRange(fromText, question);
+  }
+
+  if (question.kind === "number") {
+    if (typeof extractedValue === "number" && Number.isFinite(extractedValue)) return extractedValue;
+    const source = typeof extractedValue === "string" ? extractedValue : userText;
+    const match = source.match(/\d+(?:\.\d+)?/);
+    if (match) return Number(match[0]);
+  }
+
+  return extractedValue;
+}
+
+function rangeFromObject(value: unknown): { min: number; max: number } | null {
+  if (typeof value !== "object" || value === null || !("min" in value) || !("max" in value)) return null;
+  const min = Number((value as { min: unknown }).min);
+  const max = Number((value as { max: unknown }).max);
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return null;
+  return min <= max ? { min, max } : { min: max, max: min };
+}
+
+function rangeFromText(text: string): { min: number; max: number } | null {
+  const nums = Array.from(text.matchAll(/\d+/g)).map((match) => Number(match[0])).filter(Number.isFinite);
+  if (nums.length >= 2) {
+    const [a, b] = nums;
+    return a <= b ? { min: a, max: b } : { min: b, max: a };
+  }
+  if (nums.length === 1) {
+    return { min: nums[0], max: nums[0] };
+  }
+  return null;
+}
+
+function clampRange(range: { min: number; max: number }, question: Question): { min: number; max: number } {
+  const lower = question.min ?? Number.NEGATIVE_INFINITY;
+  const upper = question.max ?? Number.POSITIVE_INFINITY;
+  const min = Math.min(Math.max(range.min, lower), upper);
+  const max = Math.min(Math.max(range.max, lower), upper);
+  return min <= max ? { min, max } : { min: max, max: min };
+}
+
+export function AiChatSidebar({ isOpen, onClose, isExpanded, onToggleExpand, currentGroup, currentSectionLabel, answers, onAnswer, language }: AiChatSidebarProps) {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -111,10 +162,22 @@ export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer
 
     const activeQ = currentGroup?.questions.find(q => q.id === activeQuestionId);
     if (!activeQ) {
-      setMessages(prev => [
-        ...prev,
-        { id: `ai-${msgId}`, role: "ai", text: t("join.dev.chatFormFallback", "I'll guide you through the questions when we get to the survey sections. For now, please use the form!") }
-      ]);
+      setLoading(true);
+      try {
+        const recentMessages = messages.slice(-6).map(({ role, text }) => ({ role, text }));
+        const data = await api.chatNudge(userText, language, currentSectionLabel || "profile form", recentMessages);
+        setMessages(prev => [
+          ...prev,
+          { id: `ai-${msgId}`, role: "ai", text: data.replyMessage || t("join.dev.chatFormFallback", "I'll keep this focused so we can finish your profile. Start with the current form, then I'll help with the questionnaire.") }
+        ]);
+      } catch {
+        setMessages(prev => [
+          ...prev,
+          { id: `ai-${msgId}`, role: "ai", text: t("join.dev.chatFormFallback", "I'll keep this focused so we can finish your profile. Start with the current form, then I'll help with the questionnaire.") }
+        ]);
+      } finally {
+        setLoading(false);
+      }
       return;
     }
 
@@ -124,13 +187,13 @@ export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer
         key: opt,
         label: t(opt) || opt
       }));
-      // Ask API to extract the value
-      const data = await api.chatExtract(activeQ, userText, language, translatedOptions);
+      const recentMessages = messages.slice(-6).map(({ role, text }) => ({ role, text }));
+      const data = await api.chatExtract(activeQ, userText, language, translatedOptions, answers, recentMessages);
       
-      if (data.extractedValue !== null && data.extractedValue !== undefined) {
+      if (data.shouldUpdateAnswer && data.extractedValue !== null && data.extractedValue !== undefined) {
         // Only update if it's not a generic fallback
         // Handle array toggling for multi-select
-        let finalValue = data.extractedValue;
+        let finalValue = normalizeExtractedValue(activeQ, data.extractedValue, userText);
         if (activeQ.kind === "multi") {
           const currentArr = Array.isArray(answers[activeQ.id]) ? answers[activeQ.id] as string[] : [];
           if (Array.isArray(finalValue)) {
@@ -161,25 +224,32 @@ export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer
 
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-full md:w-[400px] z-50 transform transition-transform duration-500 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+      className={`fixed top-0 right-0 h-full ${isExpanded ? "w-full md:w-[75vw]" : "w-full md:w-[400px]"} z-50 transform transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
-      <div className="absolute inset-0 bg-[#020617]/80 backdrop-blur-3xl border-l border-white/10 flex flex-col shadow-2xl shadow-aura/20">
-
+      <div className={`absolute inset-0 bg-[#020617]/90 backdrop-blur-3xl flex flex-col shadow-2xl transition-all duration-700 ${isOpen ? "border-l border-white/10 rounded-l-[2rem]" : "border-l border-white/5"}`}>
+        
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
           <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-aura to-pink-500 shadow-[0_0_15px_rgba(255,0,102,0.5)]">
-              <Sparkles className="w-5 h-5 text-white" />
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-[#020617] rounded-full"></div>
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-black border border-white/20 shadow-lg">
+              <span className="text-xl font-black text-white leading-none">A</span>
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500/80 border-2 border-[#020617] rounded-full shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
             </div>
             <div>
               <h3 className="font-bold text-white tracking-wide">Aura-HK</h3>
-              <p className="text-xs text-aura/80 font-medium tracking-widest uppercase">AI Assistant</p>
+              <p className="text-xs text-white/40 font-medium tracking-widest uppercase">Assistant</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white">
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onToggleExpand && (
+              <button onClick={onToggleExpand} className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-white/70 hover:text-white border border-white/10 active:scale-90">
+                {isExpanded ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+              </button>
+            )}
+            <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Chat Area */}
@@ -190,8 +260,8 @@ export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer
               <div key={msg.id} className={`flex flex-col ${isAI ? "items-start" : "items-end"}`}>
                 <div
                   className={`relative max-w-[85%] px-5 py-3 rounded-2xl text-sm leading-relaxed ${isAI
-                      ? "bg-white/10 border border-white/10 text-white rounded-tl-sm backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
-                      : "bg-gradient-to-br from-aura to-pink-600 text-white rounded-tr-sm shadow-[0_4px_20px_rgba(255,0,102,0.3)]"
+                      ? "bg-white/5 border border-white/5 text-white/90 rounded-tl-sm backdrop-blur-sm"
+                      : "bg-white/15 border border-white/10 text-white rounded-tr-sm"
                     }`}
                 >
                   {msg.text}
@@ -203,7 +273,15 @@ export function AiChatSidebar({ isOpen, onClose, currentGroup, answers, onAnswer
                     {(msg.optionsKeys || msg.options || []).map((opt) => (
                       <button
                         key={opt}
-                        onClick={() => handleSend("", opt)}
+                        onClick={() => {
+                          const activeQ = currentGroup?.questions.find(q => q.id === activeQuestionId);
+                          if (activeQ?.kind === 'multi') {
+                            const optText = msg.optionsKeys ? t(opt) : opt;
+                            setInput(prev => prev ? `${prev}, ${optText}` : optText);
+                          } else {
+                            handleSend("", opt);
+                          }
+                        }}
                         className="px-3 py-1.5 text-xs font-medium bg-white/5 hover:bg-aura/20 border border-white/10 hover:border-aura/50 rounded-full text-white/80 transition-all active:scale-95"
                       >
                         {msg.optionsKeys ? t(opt) : opt}

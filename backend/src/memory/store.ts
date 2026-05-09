@@ -4,6 +4,8 @@ export interface UserMemoryView {
   userId: string;
   fullName: string;
   personaSummary?: string;
+  profileAnalysis?: StudentProfile["profileAnalysis"];
+  onboardingAnswers?: StudentProfile["onboardingAnswers"];
   hardPreferences: {
     universityId: string;
     crossUniOk: boolean;
@@ -28,6 +30,8 @@ export function buildUserMemory(db: Database, userId: string): UserMemoryView | 
     userId: u.id,
     fullName: u.fullName,
     personaSummary: u.personaSummary,
+    profileAnalysis: u.profileAnalysis,
+    onboardingAnswers: u.onboardingAnswers,
     hardPreferences: {
       universityId: u.universityId,
       crossUniOk: !!u.crossUniOk,
