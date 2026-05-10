@@ -34,6 +34,22 @@ matchingRouter.get("/current", requireAuth, async (req, res) => {
   res.json({ matchView: { match, partner, university } });
 });
 
+// All matches for the authenticated user (active + history), with partner profiles
+matchingRouter.get("/all", requireAuth, async (req, res) => {
+  const db = await ensureDb();
+  const userId = req.auth!.sub;
+  const matches = db.matches
+    .filter((m) => m.userAId === userId || m.userBId === userId)
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  const items = matches.map((match) => {
+    const partnerId = match.userAId === userId ? match.userBId : match.userAId;
+    const partner = db.students.find((s) => s.id === partnerId);
+    const university = partner ? db.universities.find((u) => u.id === partner.universityId) : undefined;
+    return { match, partner: partner ?? null, university: university ?? null };
+  });
+  res.json({ matches: items });
+});
+
 // Preview top candidates for the authenticated user (for tuning, no DB writes)
 matchingRouter.get("/preview", requireAuth, async (req, res) => {
   const db = await ensureDb();

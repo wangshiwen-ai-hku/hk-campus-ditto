@@ -27,6 +27,7 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
     seeking: z.string(),
     bio: z.string(),
     languages: z.array(z.string()),
+    preferredLocale: z.enum(["en", "zh-HK", "zh-CN"]).optional(),
     interests: z.array(z.string()),
     vibeTags: z.array(z.string()),
     dealBreakers: z.array(z.string()).default([]),
@@ -35,12 +36,10 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
     availability: z.array(z.string()).default([]),
     datingPreferences: z.object({
       birthday: z.string().optional(),
-      ethnicity: z.string().optional(),
       heightCm: z.number().optional(),
       datingGoal: z.enum(["life_partner", "long_term", "casual", "friends", "unsure"]).optional(),
       dateGenders: z.array(z.string()).optional(),
       ageRange: z.object({ min: z.number(), max: z.number() }).optional(),
-      ethnicityPreferences: z.array(z.string()).optional(),
       mbti: z.object({
         energy: z.string().optional(),
         information: z.string().optional(),
@@ -56,6 +55,10 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
       matchMode: z.enum(["fast", "balanced", "intentional", "wait_for_the_one"]).optional(),
       phoneNumber: z.string().optional(),
       photoUrls: z.array(z.string()).optional(),
+      mediaCards: z.array(z.object({
+        photoUrl: z.string().optional(),
+        caption: z.string().optional(),
+      })).optional(),
     }).optional(),
   });
   const parsed = schema.safeParse(req.body);

@@ -2,7 +2,7 @@
 // Designed as 3 thematic groups.
 // Each question carries a `whyItMatters` so the UI can show transparency.
 
-export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos";
+export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos" | "mediaCards";
 
 export interface Question {
   id: string;
@@ -54,15 +54,6 @@ export const onboardingGroups: QuestionGroup[] = [
         promptKey: "onboarding.q.birthday.prompt",
         whyItMattersKey: "onboarding.q.birthday.why",
         kind: "date",
-      },
-      {
-        id: "ethnicity",
-        promptKey: "onboarding.q.ethnicity.prompt",
-        whyItMattersKey: "onboarding.q.ethnicity.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.prefer_not_say", "onboarding.opt.eth_indian", "onboarding.opt.eth_black", "onboarding.opt.eth_east_asian", "onboarding.opt.eth_latinx", "onboarding.opt.eth_middle_eastern", "onboarding.opt.eth_pacific", "onboarding.opt.eth_south_asian", "onboarding.opt.eth_southeast_asian", "onboarding.opt.eth_white", "onboarding.opt.eth_other"],
-        defaultValue: "onboarding.opt.prefer_not_say",
-        required: true,
       },
       {
         id: "height",
@@ -146,23 +137,6 @@ export const onboardingGroups: QuestionGroup[] = [
         required: true,
       },
       {
-        id: "targetEthnicity",
-        promptKey: "onboarding.q.targetEthnicity.prompt",
-        whyItMattersKey: "onboarding.q.targetEthnicity.why",
-        kind: "multi",
-        optionsKeys: ["onboarding.opt.no_pref", "onboarding.opt.eth_indian", "onboarding.opt.eth_black", "onboarding.opt.eth_east_asian", "onboarding.opt.eth_latinx", "onboarding.opt.eth_middle_eastern", "onboarding.opt.eth_pacific", "onboarding.opt.eth_south_asian", "onboarding.opt.eth_southeast_asian", "onboarding.opt.eth_white", "onboarding.opt.eth_other"],
-        defaultValue: ["onboarding.opt.no_pref"],
-        required: true,
-      },
-      {
-        id: "languagePref",
-        promptKey: "onboarding.q.languagePref.prompt",
-        whyItMattersKey: "onboarding.q.languagePref.why",
-        kind: "multi",
-        optionsKeys: ["onboarding.opt.lang_canto", "onboarding.opt.lang_mando", "onboarding.opt.lang_eng", "onboarding.opt.lang_mixed", "onboarding.opt.no_pref"],
-        required: true,
-      },
-      {
         id: "matchMode",
         promptKey: "onboarding.q.matchMode.prompt",
         whyItMattersKey: "onboarding.q.matchMode.why",
@@ -198,14 +172,6 @@ export const onboardingGroups: QuestionGroup[] = [
         promptKey: "onboarding.q.attractHeight.prompt",
         whyItMattersKey: "onboarding.q.attractHeight.why",
         placeholderKey: "onboarding.q.attractHeight.placeholder",
-        kind: "text",
-        required: false,
-      },
-      {
-        id: "attractionFacialFeatures",
-        promptKey: "onboarding.q.attractFace.prompt",
-        whyItMattersKey: "onboarding.q.attractFace.why",
-        placeholderKey: "onboarding.q.attractFace.placeholder",
         kind: "text",
         required: false,
       },
@@ -328,21 +294,14 @@ export const onboardingGroups: QuestionGroup[] = [
     descriptionKey: "onboarding.groups.media.desc",
     questions: [
       {
-        id: "photoUrls",
+        id: "mediaCards",
         promptKey: "onboarding.q.photos.prompt",
         whyItMattersKey: "onboarding.q.photos.why",
-        kind: "photos",
-        min: 1,
-        max: 5,
-        required: true,
-      },
-      {
-        id: "mediaNotes",
-        promptKey: "onboarding.q.mediaNotes.prompt",
-        whyItMattersKey: "onboarding.q.mediaNotes.why",
         placeholderKey: "onboarding.q.mediaNotes.placeholder",
-        kind: "text",
-        required: false,
+        kind: "mediaCards",
+        min: 1,
+        max: 3,
+        required: true,
       }
     ]
   }

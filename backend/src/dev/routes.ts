@@ -61,6 +61,41 @@ devRouter.post("/login-as", requireAdmin, async (req, res) => {
   res.json({ ok: true, user, token, authorization: `Bearer ${token}` });
 });
 
+devRouter.post("/create-match", requireAdmin, async (req, res) => {
+  const schema = z.object({
+    userAId: z.string(),
+    userBId: z.string(),
+    score: z.number().default(85),
+    status: z.string().default("notified"),
+  });
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
+  const db = await ensureDb();
+  const a = db.students.find((s) => s.id === parsed.data.userAId);
+  const b = db.students.find((s) => s.id === parsed.data.userBId);
+  if (!a || !b) return res.status(404).json({ error: "User(s) not found." });
+  const match = {
+    id: uuid(),
+    createdAt: new Date().toISOString(),
+    dropDate: new Date().toISOString().slice(0, 10),
+    userAId: a.id,
+    userBId: b.id,
+    score: parsed.data.score,
+    status: parsed.data.status as any,
+    reasonsForA: ["Great vibe match", "Shared interests"],
+    reasonsForB: ["Compatible personality", "Similar values"],
+    posterHeadline: `${a.fullName} x ${b.fullName}`,
+    curatedDateTitle: "Coffee & Campus Walk",
+    curatedDateSpot: "Main Library Cafe",
+    curatedDateTips: ["Be yourself", "Ask open questions"],
+    overlapSlots: a.availability.filter((s) => b.availability.includes(s)),
+    feedback: [],
+  };
+  db.matches.push(match);
+  await saveDb(db);
+  res.json({ ok: true, match });
+});
+
 devRouter.post("/users", requireAdmin, async (req, res) => {
   const schema = z.object({
     email: z.string().email(),

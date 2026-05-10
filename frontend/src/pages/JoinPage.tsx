@@ -13,6 +13,7 @@ const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"]
 const TAGS = ["coffee", "cantopop", "art", "film", "night", "hiking", "citywalk", "supper", "tech", "thrifting"];
 const VIBES = ["chill", "curious", "empathetic", "playful", "grounded", "creative", "ambitious", "warm"];
 const LANGUAGES = ["english", "cantonese", "mandarin", "japanese", "korean"];
+const PREFERRED_LOCALES = ["en", "zh-HK", "zh-CN"];
 
 type Step = "account" | "profile" | string | "done";
 
@@ -32,6 +33,7 @@ function nextStep(step: Step, groups: QuestionGroup[]): Step {
 
 function defaultAnswer(q: Question): unknown {
   if (q.defaultValue !== undefined) return q.defaultValue;
+  if (q.kind === "mediaCards") return Array.from({ length: q.max ?? 3 }, () => ({ photoUrl: "", caption: "" }));
   if (q.kind === "multi" || q.kind === "photos") return [];
   if (q.kind === "scale" || q.kind === "number") return q.min ?? 5;
   if (q.kind === "range") return { min: q.min ?? 18, max: Math.min(q.max ?? 60, 28) };
@@ -47,6 +49,11 @@ function cleanAnswers(group: QuestionGroup, answers: Record<string, unknown>) {
 function toggleAnswer(current: unknown, option: string) {
   const values = Array.isArray(current) ? current.filter((x) => typeof x === "string") as string[] : [];
   return values.includes(option) ? values.filter((x) => x !== option) : [...values, option];
+}
+
+function mergeOther(values: string[], other: string) {
+  const trimmed = other.trim();
+  return Array.from(new Set(trimmed ? [...values, trimmed] : values));
 }
 
 const MAX_PHOTO_EDGE = 1200;
@@ -106,6 +113,10 @@ function QuestionField({
   const why = question.whyItMattersKey ? t(question.whyItMattersKey) : question.whyItMatters ?? "";
   const options = question.optionsKeys ?? question.options ?? [];
   const photos = Array.isArray(value) ? value.filter((x) => typeof x === "string") as string[] : [];
+  const mediaCards = Array.from({ length: question.max ?? 3 }, (_, index) => {
+    const raw = Array.isArray(value) ? value[index] : undefined;
+    return typeof raw === "object" && raw !== null ? raw as { photoUrl?: string; caption?: string } : {};
+  });
   const rangeValue = typeof value === "object" && value !== null && "min" in value && "max" in value
     ? value as { min: number; max: number }
     : { min: question.min ?? 18, max: Math.min(question.max ?? 60, 28) };
@@ -235,6 +246,46 @@ function QuestionField({
           ) : null}
         </div>
       ) : null}
+
+      {question.kind === "mediaCards" ? (
+        <div className={`mt-4 grid gap-4 ${isChatExpanded ? "grid-cols-1" : "md:grid-cols-3"}`}>
+          {mediaCards.map((card, index) => (
+            <div key={index} className="grid gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <label className="flex aspect-[4/5] cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed border-white/20 bg-white/[0.03] text-center transition-all hover:bg-white/[0.06]">
+                <input
+                  className="sr-only"
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file || !file.type.startsWith("image/")) return;
+                    const photoUrl = await fileToCompressedDataUrl(file);
+                    const next = [...mediaCards];
+                    next[index] = { ...next[index], photoUrl };
+                    onChange(next);
+                    e.target.value = "";
+                  }}
+                />
+                {card.photoUrl ? (
+                  <img className="h-full w-full object-cover" src={card.photoUrl} alt="" />
+                ) : (
+                  <span className="px-4 text-sm font-black text-white/60">{t("join.dev.uploadOnePhoto")}</span>
+                )}
+              </label>
+              <textarea
+                className="min-h-[92px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all hover:bg-white/10 focus:ring-2 focus:ring-aura/50"
+                value={card.caption ?? ""}
+                placeholder={question.placeholderKey ? t(question.placeholderKey) : ""}
+                onChange={(e) => {
+                  const next = [...mediaCards];
+                  next[index] = { ...next[index], caption: e.target.value };
+                  onChange(next);
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -244,8 +295,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [step, setStep] = useState<Step>(userId ? "profile" : "account");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isChatExpanded, setIsChatExpanded] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(true);
+  const [isChatExpanded, setIsChatExpanded] = useState(true);
   const [floatingEmojis, setFloatingEmojis] = useState<{ id: string; emoji: string; x: number; y: number }[]>([]);
   const [ldfrCard, setLdfrCard] = useState<any>(null);
 
@@ -255,6 +306,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [code, setCode] = useState("");
   const [profileId, setProfileId] = useState(userId ?? "");
 
+  const [preferredLocale, setPreferredLocale] = useState(i18n.language);
+  const [profileType, setProfileType] = useState("");
   const [degreeLevel, setDegreeLevel] = useState("");
   const [grade, setGrade] = useState("");
   const [faculty, setFaculty] = useState("");
@@ -262,8 +315,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [bio, setBio] = useState("");
   const [languages, setLanguages] = useState<string[]>([]);
   const [interests, setInterests] = useState<string[]>([]);
+  const [interestOther, setInterestOther] = useState("");
   const [vibeTags, setVibeTags] = useState<string[]>([]);
+  const [vibeOther, setVibeOther] = useState("");
   const [availability, setAvailability] = useState<string[]>([]);
+  const [availabilityOther, setAvailabilityOther] = useState("");
   const [crossUniOk, setCrossUniOk] = useState(true);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
@@ -282,6 +338,48 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       })
       .catch((e) => setMessage(e.message));
   }, []);
+
+  // Pre-populate form fields with existing profile data
+  useEffect(() => {
+    if (!userId) return;
+    api.getProfile(userId).then((data: any) => {
+      if (!data) return;
+      if (data.fullName) setFullName(data.fullName);
+      if (data.email) setEmail(data.email);
+      if (data.bio) setBio(data.bio);
+      if (data.preferredLocale) setPreferredLocale(data.preferredLocale);
+      if (data.languages?.length) setLanguages(data.languages);
+      if (data.interests?.length) setInterests(data.interests);
+      if (data.vibeTags?.length) setVibeTags(data.vibeTags);
+      if (data.availability?.length) setAvailability(data.availability);
+      if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
+      // Parse "degreeLevel - grade" from yearOfStudy
+      if (data.yearOfStudy) {
+        const parts = data.yearOfStudy.split(" - ");
+        if (parts.length >= 3) {
+          setProfileType(parts[0].trim());
+          setDegreeLevel(parts[1].trim());
+          setGrade(parts.slice(2).join(" - ").trim());
+        } else if (parts.length >= 2) {
+          setProfileType("Current Student");
+          setDegreeLevel(parts[0].trim());
+          setGrade(parts.slice(1).join(" - ").trim());
+        } else {
+          setProfileType(data.yearOfStudy);
+        }
+      }
+      // Parse "faculty - department" from major
+      if (data.major) {
+        const parts = data.major.split(" - ");
+        if (parts.length >= 2) {
+          setFaculty(parts[0].trim());
+          setDepartment(parts.slice(1).join(" - ").trim());
+        } else {
+          setFaculty(data.major);
+        }
+      }
+    }).catch(() => {});
+  }, [userId]);
 
   const currentGroup = useMemo(
     () => groups.find((group) => group.template === step),
@@ -329,7 +427,10 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       setMessage("Create or verify a user first.");
       return;
     }
-    if (!fullName || !degreeLevel || !grade || !faculty || !bio || languages.length === 0 || interests.length === 0 || vibeTags.length === 0 || availability.length === 0) {
+    const finalInterests = mergeOther(interests, interestOther);
+    const finalVibeTags = mergeOther(vibeTags, vibeOther);
+    const finalAvailability = mergeOther(availability, availabilityOther);
+    if (!fullName || !preferredLocale || !profileType || !degreeLevel || !grade || !faculty || !bio || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
       alert(t("join.errors.required"));
       return;
     }
@@ -338,18 +439,19 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     try {
       await api.saveProfile({
         fullName,
-        yearOfStudy: `${degreeLevel} - ${grade}`,
+        preferredLocale,
+        yearOfStudy: `${profileType} - ${degreeLevel} - ${grade}`,
         major: department ? `${faculty} - ${department}` : faculty,
         gender: "Prefer not to say",
         seeking: "Meaningful connection",
         bio,
         languages,
-        interests,
-        vibeTags,
+        interests: finalInterests,
+        vibeTags: finalVibeTags,
         dealBreakers: [],
         optedIn: true,
         crossUniOk,
-        availability,
+        availability: finalAvailability,
       });
       setStep(groups[0]?.template ?? "done");
       setMessage(t("join.dev.profileSaved"));
@@ -369,6 +471,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         const val = (answers[currentGroup.template] ?? {})[q.id];
         if (val === undefined || val === null || val === "") return true;
         if (Array.isArray(val) && val.length === 0) return true;
+        if (q.kind === "mediaCards" && Array.isArray(val)) {
+          return !val.some((item) => typeof item === "object" && item !== null && "photoUrl" in item && typeof item.photoUrl === "string" && item.photoUrl.length > 0);
+        }
       }
       return false;
     });
@@ -626,26 +731,58 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t("join.placeholders.fullName")} />
                 </label>
+                <div className={`grid gap-3 text-sm font-bold text-white/50 ${isChatExpanded ? "" : "md:col-span-2"}`}>
+                  <span>{t("join.preferredLocale")} <span className="text-pink-400">*</span></span>
+                  <div className="flex flex-wrap gap-3">
+                    {PREFERRED_LOCALES.map((locale) => {
+                      const active = preferredLocale === locale;
+                      return (
+                        <button
+                          type="button"
+                          key={locale}
+                          onClick={() => setPreferredLocale(locale)}
+                          className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${active ? "bg-aura/90 text-white shadow-lg shadow-aura/20" : "border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"}`}
+                        >
+                          {t(`join.preferredLocales.${locale}`)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <label className="grid gap-2 text-sm font-bold text-white/50">
+                  <span>{t("join.profileType")} <span className="text-pink-400">*</span></span>
+                  <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={profileType} onChange={(e) => setProfileType(e.target.value)}>
+                    <option value="" disabled>{t("join.placeholders.select")}</option>
+                    <option value="Current Student">{t("join.profileTypes.current")}</option>
+                    <option value="Alumni">{t("join.profileTypes.alumni")}</option>
+                  </select>
+                </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.degreeLevel")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={degreeLevel} onChange={(e) => setDegreeLevel(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
                     <option value="Undergraduate">{t("join.degrees.undergrad")}</option>
                     <option value="Taught Master">{t("join.degrees.taught_master")}</option>
-                    <option value="MPhil / PhD">{t("join.degrees.mphil_phd")}</option>
+                    <option value="MPhil">{t("join.degrees.mphil")}</option>
+                    <option value="PhD">{t("join.degrees.phd")}</option>
+                    <option value="Exchange">{t("join.degrees.exchange")}</option>
                     <option value="Other">{t("join.degrees.other")}</option>
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.grade")} <span className="text-pink-400">*</span></span>
-                  <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)}>
-                    <option value="" disabled>{t("join.placeholders.select")}</option>
-                    <option value="Year 1">{t("join.grades.y1")}</option>
-                    <option value="Year 2">{t("join.grades.y2")}</option>
-                    <option value="Year 3">{t("join.grades.y3")}</option>
-                    <option value="Year 4">{t("join.grades.y4")}</option>
-                    <option value="Year 5+">{t("join.grades.y5_plus")}</option>
-                  </select>
+                  {profileType === "Alumni" ? (
+                    <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder={t("join.placeholders.alumniYear")} />
+                  ) : (
+                    <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)}>
+                      <option value="" disabled>{t("join.placeholders.select")}</option>
+                      <option value="Year 1">{t("join.grades.y1")}</option>
+                      <option value="Year 2">{t("join.grades.y2")}</option>
+                      <option value="Year 3">{t("join.grades.y3")}</option>
+                      <option value="Year 4">{t("join.grades.y4")}</option>
+                      <option value="Year 5+">{t("join.grades.y5_plus")}</option>
+                    </select>
+                  )}
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.faculty")} <span className="text-pink-400">*</span></span>
@@ -675,8 +812,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               <div className="space-y-7">
                 <TagSelector title={<span>{t("join.languages")} <span className="text-pink-400">*</span></span>} items={LANGUAGES} values={languages} setValues={setLanguages} renderLabel={(item) => t(`join.langs.${item}`)} />
                 <TagSelector title={<span>{t("join.interests")} <span className="text-pink-400">*</span></span>} items={TAGS} values={interests} setValues={setInterests} renderLabel={(item) => t(`join.tags.${item}`)} />
+                <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={interestOther} onChange={(e) => setInterestOther(e.target.value)} placeholder={t("join.other.interests")} />
                 <TagSelector title={<span>{t("join.dev.vibeTags")} <span className="text-pink-400">*</span></span>} items={VIBES} values={vibeTags} setValues={setVibeTags} renderLabel={(item) => t(`join.vibes.${item}`)} />
+                <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={vibeOther} onChange={(e) => setVibeOther(e.target.value)} placeholder={t("join.other.vibes")} />
                 <TagSelector title={<span>{t("join.availability")} <span className="text-pink-400">*</span></span>} items={SLOTS} values={availability} setValues={setAvailability} renderLabel={(item) => t(`join.slots.${item}`)} />
+                <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={availabilityOther} onChange={(e) => setAvailabilityOther(e.target.value)} placeholder={t("join.other.availability")} />
               </div>
               <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/70">
                 <input type="checkbox" checked={crossUniOk} onChange={(e) => setCrossUniOk(e.target.checked)} />

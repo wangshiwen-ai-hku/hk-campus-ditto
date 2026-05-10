@@ -48,7 +48,7 @@ export const api = {
   getQuestions: () => request("/onboarding/questions"),
   saveProfile: (payload: unknown) => request("/onboarding/profile", { method: "POST", body: JSON.stringify(payload) }),
   submitSurvey: (template: string, answers: unknown, language?: string) => request("/onboarding/survey", { method: "POST", body: JSON.stringify({ template, answers, language }) }),
-  regeneratePersona: () => request("/onboarding/persona/regenerate", { method: "POST" }),
+  regeneratePersona: (language?: string) => request("/onboarding/persona/regenerate", { method: "POST", body: JSON.stringify({ language }) }),
   chatExtract: (
     question: unknown,
     userMessage: string,
@@ -73,10 +73,12 @@ export const api = {
   // Matches & Workflow
   saveAvailability: (availability: string[]) => request("/workflow/availability", { method: "POST", body: JSON.stringify({ availability }) }),
   getCurrentMatch: () => request("/matches/current"),
+  getAllMatches: () => request<{ matches: Array<{ match: any; partner: any; university: any }> }>("/matches/all"),
   respondToMatch: (matchId: string, choice: "yes" | "no") => request(`/workflow/${matchId}/respond`, { method: "POST", body: JSON.stringify({ choice }) }),
   confirmSlot: (matchId: string, slot: string) => request(`/workflow/${matchId}/confirm-slot`, { method: "POST", body: JSON.stringify({ slot }) }),
   pickPlace: (matchId: string) => request(`/workflow/${matchId}/pick-place`, { method: "POST" }),
   markHappened: (matchId: string) => request(`/workflow/${matchId}/mark-happened`, { method: "POST" }),
+  getIcebreaker: (matchId: string, language?: string) => request<{ ok: boolean; icebreaker: { introForA: string; introForB: string; conversationStarters: string[]; dateVibe: string } }>(`/workflow/${matchId}/icebreaker`, { method: "POST", body: JSON.stringify({ language }) }),
 
   // Feedback
   submitFeedback: (matchId: string, template: string, answers: unknown, sentiment?: "love" | "pass" | "rematch") => 

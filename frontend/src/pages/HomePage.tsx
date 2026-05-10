@@ -204,7 +204,7 @@ export function HomePage({ onUser }: { onUser: (id: string) => void; }) {
           </div>
           <div className="relative group">
             <div className="absolute -inset-4 bg-aura/20 blur-xl rounded-[40px] transition-all group-hover:bg-aura/30" />
-            <img src={galleryImg} className="relative rounded-[40px] shadow-2xl border border-white/10" alt="HK Students Gallery" />
+            <img src={galleryImg} className="relative rounded-[40px] shadow-2xl border border-white/10" alt="HK Personal Gallery" />
           </div>
         </div>
       </section>

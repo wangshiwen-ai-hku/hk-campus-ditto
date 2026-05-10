@@ -47,6 +47,10 @@ export interface DatingPreferences {
   };
   matchMode?: "fast" | "balanced" | "intentional" | "wait_for_the_one";
   photoUrls?: string[];
+  mediaCards?: Array<{
+    photoUrl?: string;
+    caption?: string;
+  }>;
 }
 
 export interface ProfileAnalysis {
@@ -76,6 +80,7 @@ export interface StudentProfile {
   seeking: string;
   bio: string;
   languages: string[];
+  preferredLocale?: Locale;
   interests: string[];
   vibeTags: string[];
   dealBreakers: string[];
@@ -90,6 +95,15 @@ export interface StudentProfile {
   onboardingAnswers?: Record<string, Record<string, unknown>>;
   proposedSlots?: string[];
   blockedUserIds?: string[];
+  ldfrResult?: {
+    code: string;
+    title: string;
+    vibe: string;
+    analysis: string;
+    strengths: string[];
+    traps: string[];
+    idealDate: string;
+  };
   crossUniOk?: boolean;
   lifeSignals?: LifeSignals;
   datingPreferences?: DatingPreferences;
@@ -139,6 +153,13 @@ export interface MatchRecord {
     choice: "yes" | "no" | "skip";
     at: string;
   }>;
+  dateConfirmations?: Array<{
+    userId: string;
+    slot: string;
+    place?: string;
+    at: string;
+  }>;
+  icebreaker?: string;
   feedback: Array<{
     userId: string;
     sentiment: "love" | "pass" | "rematch";
@@ -154,7 +175,7 @@ export interface MetaResponse {
   demoAccounts: Array<{ id: string; fullName: string; email: string; universityId: string; }>;
 }
 
-export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos";
+export type QuestionKind = "single" | "multi" | "text" | "scale" | "range" | "date" | "number" | "photos" | "mediaCards";
 
 export interface Question {
   id: string;

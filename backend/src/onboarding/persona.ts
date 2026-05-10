@@ -1,4 +1,4 @@
-import type { ProfileAnalysis, StudentProfile, Survey } from "../types.js";
+import type { StudentProfile, Survey, ProfileAnalysis } from "../types.js";
 import { llmCall } from "../llm/client.js";
 import { personaSummaryPrompt, profileAnalysisPrompt } from "../llm/prompts.js";
 
@@ -40,19 +40,13 @@ export async function buildProfileAnalysis(
     return normalizeProfileAnalysis(out.json, sourceTemplates);
   }
 
-  return fallbackProfileAnalysis(p, sourceTemplates);
+  return fallbackProfileAnalysis(p, sourceTemplates, language);
 }
-
 export function applyOnboardingAnswers(
   user: StudentProfile,
   template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_ldfr" | "onboarding_media",
   answers: Record<string, unknown>
 ): void {
-  user.onboardingAnswers = {
-    ...(user.onboardingAnswers ?? {}),
-    [template]: answers,
-  };
-
   if (template === "onboarding_ldfr") {
     // LDFR results are currently stored in survey history; can be extracted to specific persona signals here if needed.
     return;
@@ -63,7 +57,6 @@ export function applyOnboardingAnswers(
     user.datingPreferences = {
       ...(user.datingPreferences ?? {}),
       birthday: strOrUndef(answers.birthday),
-      ethnicity: strOrUndef(answers.ethnicity),
       heightCm: numOrUndef(answers.height),
       hkMtrLocations: arrOrUndef(answers.hkMtrLocation),
       mbti: {
@@ -83,7 +76,6 @@ export function applyOnboardingAnswers(
       datingGoal: datingGoals?.[0] as any,
       datingGoals,
       ageRange: ageRangeOrUndef(answers.ageRange),
-      ethnicityPreferences: arrOrUndef(answers.targetEthnicity),
       languagePreferences: languagePref,
       matchMode: strOrUndef(answers.matchMode) as any,
     };
@@ -106,18 +98,19 @@ export function applyOnboardingAnswers(
       attractionSignals: {
         ...(user.datingPreferences?.attractionSignals ?? {}),
         heightAndBuild: strOrUndef(answers.attractionHeightAndBuild),
-        facialFeatures: strOrUndef(answers.attractionFacialFeatures),
         energyAndVibe: strOrUndef(answers.attractionEnergyAndVibe),
       },
     };
   } else if (template === "onboarding_media") {
-    const photoUrls = arrOrUndef(answers.photoUrls);
+    const mediaCards = mediaCardsOrUndef(answers.mediaCards);
+    const photoUrls = mediaCards?.map((card) => card.photoUrl).filter((x): x is string => Boolean(x)) ?? arrOrUndef(answers.photoUrls);
     user.datingPreferences = {
       ...(user.datingPreferences ?? {}),
       photoUrls,
+      mediaCards,
     };
     user.photoUrl = photoUrls?.[0] ?? user.photoUrl;
-    const mediaNotes = strOrUndef(answers.mediaNotes);
+    const mediaNotes = mediaCards?.map((card) => card.caption).filter(Boolean).join("\n") || strOrUndef(answers.mediaNotes);
     if (mediaNotes) {
       user.socialSignals = {
         ...(user.socialSignals ?? {}),
@@ -152,7 +145,6 @@ export function applyOnboardingAnswers(
       attractionSignals: {
         ...(user.datingPreferences?.attractionSignals ?? {}),
         heightAndBuild: strOrUndef(answers.attractionHeightAndBuild),
-        facialFeatures: strOrUndef(answers.attractionFacialFeatures),
         energyAndVibe: strOrUndef(answers.attractionEnergyAndVibe),
       },
     };
@@ -167,7 +159,6 @@ export function applyOnboardingAnswers(
       ...(user.datingPreferences ?? {}),
       dateGenders: arrOrUndef(answers.dateGenders),
       ageRange: ageRangeOrUndef(answers.ageRange),
-      ethnicityPreferences: arrOrUndef(answers.ethnicityPreferences),
     };
   }
 }
@@ -193,32 +184,49 @@ function normalizeProfileAnalysis(
   };
 }
 
-function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[]): ProfileAnalysis {
+/** Strip i18n key prefixes so raw keys don't leak into UI text */
+function stripKey(val?: string): string | undefined {
+  if (!val) return undefined;
+  if (val.includes(".")) {
+    const last = val.split(".").pop() ?? val;
+    return last.replace(/_/g, " ");
+  }
+  return val;
+}
+
+function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[], language = "en"): ProfileAnalysis {
   const matchSignals = Array.from(new Set([
-    ...p.vibeTags,
+    ...p.vibeTags.map((v) => stripKey(v) ?? v),
     ...p.interests.slice(0, 4),
-    p.lifeSignals?.energyMode,
-    p.datingPreferences?.datingGoal,
-    p.datingPreferences?.matchMode,
+    stripKey(p.lifeSignals?.energyMode),
+    stripKey(p.datingPreferences?.datingGoal),
+    stripKey(p.datingPreferences?.matchMode),
   ].filter((x): x is string => typeof x === "string" && x.length > 0))).slice(0, 8);
+
+  const isZh = language.startsWith("zh");
+  const interests = p.interests.slice(0, 3).join(", ");
 
   return {
     generatedAt: new Date().toISOString(),
-    summary: [
-      `${p.fullName || "This student"} is studying ${p.major || "their field"} and seems to connect through ${p.interests.slice(0, 3).join(", ") || "shared everyday interests"}.`,
-      p.bio ? `Their bio says: ${p.bio}` : "",
-      p.lifeSignals?.weekendVibe ? `Their preferred weekend rhythm points toward ${p.lifeSignals.weekendVibe}.` : "",
-    ].filter(Boolean).join(" "),
-    romanticStyle: p.datingPreferences?.matchMode ?? p.lifeSignals?.energyMode ?? "Still emerging",
-    emotionalTone: p.vibeTags.slice(0, 3).join(", ") || "Still emerging",
-    datingIntent: p.datingPreferences?.datingGoal ?? p.seeking ?? "Still emerging",
-    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3) : ["Clearer once more form answers are available"],
-    growthEdges: ["May need a few more specific answers before matching can be highly personalized"],
-    idealMatch: p.seeking || "Someone aligned with their stated preferences and pace",
+    summary: isZh
+      ? [
+          `${p.fullName || "这位同学"}正在就读${p.major || ""}专业，兴趣包括${interests || "日常生活中的共同爱好"}。`,
+          p.bio ? `个人简介：${p.bio}` : "",
+        ].filter(Boolean).join(" ")
+      : [
+          `${p.fullName || "This student"} is studying ${p.major || "their field"} and seems to connect through ${interests || "shared everyday interests"}.`,
+          p.bio ? `Their bio says: ${p.bio}` : "",
+        ].filter(Boolean).join(" "),
+    romanticStyle: stripKey(p.datingPreferences?.matchMode) ?? stripKey(p.lifeSignals?.energyMode) ?? (isZh ? "尚待探索" : "Still emerging"),
+    emotionalTone: p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v).join(", ") || (isZh ? "尚待探索" : "Still emerging"),
+    datingIntent: stripKey(p.datingPreferences?.datingGoal) ?? stripKey(p.seeking) ?? (isZh ? "尚待探索" : "Still emerging"),
+    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v) : [isZh ? "填写更多问卷后将更清晰" : "Clearer once more form answers are available"],
+    growthEdges: [isZh ? "填写更多具体回答后匹配将更加精准" : "May need a few more specific answers before matching can be highly personalized"],
+    idealMatch: stripKey(p.seeking) || (isZh ? "与TA的偏好和节奏一致的人" : "Someone aligned with their stated preferences and pace"),
     matchSignals,
     conversationHooks: p.interests.slice(0, 5),
-    firstDateSuggestions: ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
-    profileCompletenessNotes: sourceTemplates.length ? [] : ["No onboarding survey answers have been saved yet"],
+    firstDateSuggestions: isZh ? ["校园附近轻松咖啡", "一起散步聊天"] : ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
+    profileCompletenessNotes: sourceTemplates.length ? [] : [isZh ? "暂无问卷答案" : "No onboarding survey answers have been saved yet"],
     sourceTemplates,
   };
 }
@@ -230,12 +238,23 @@ function str(v: unknown, fallback: string): string {
 function strArray(v: unknown): string[] {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((x) => x.trim()) : [];
 }
-
 function strOrUndef(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 }
 function arrOrUndef(v: unknown): string[] | undefined {
   return Array.isArray(v) ? v.filter((x) => typeof x === "string") : undefined;
+}
+
+function mediaCardsOrUndef(v: unknown): Array<{ photoUrl?: string; caption?: string }> | undefined {
+  if (!Array.isArray(v)) return undefined;
+  return v
+    .filter((x): x is Record<string, unknown> => typeof x === "object" && x !== null)
+    .map((x) => ({
+      photoUrl: strOrUndef(x.photoUrl),
+      caption: strOrUndef(x.caption),
+    }))
+    .filter((x) => x.photoUrl || x.caption)
+    .slice(0, 3);
 }
 
 function numOrUndef(v: unknown): number | undefined {

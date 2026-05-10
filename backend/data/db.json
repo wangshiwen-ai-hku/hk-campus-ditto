@@ -174,7 +174,23 @@
       "id": "demo-hku-alyssa",
       "fullName": "Alyssa Chan",
       "email": "alyssa@connect.hku.hk",
-      "universityId": "hku"
+      "universityId": "hku",
+      "onboardingAnswers": {
+        "onboarding_ldfr": {
+          "ldfr_q1": "onboarding.opt.ldfr_q1_c",
+          "ldfr_q4": "onboarding.opt.ldfr_q4_b",
+          "ldfr_q5": "onboarding.opt.ldfr_q5_b",
+          "ldfr_q7": "onboarding.opt.ldfr_q7_b",
+          "ldfr_q8": "onboarding.opt.ldfr_q8_a",
+          "ldfr_q9": "onboarding.opt.ldfr_q9_a",
+          "ldfr_q10": "onboarding.opt.ldfr_q10_a",
+          "ldfr_q14": "onboarding.opt.ldfr_q14_a",
+          "ldfr_q15": "onboarding.opt.ldfr_q15_c",
+          "ldfr_q16": "onboarding.opt.ldfr_q16_c",
+          "ldfr_q18": "onboarding.opt.ldfr_q18_a",
+          "ldfr_q19": "onboarding.opt.ldfr_q19_c"
+        }
+      }
     },
     {
       "crossUniOk": false,

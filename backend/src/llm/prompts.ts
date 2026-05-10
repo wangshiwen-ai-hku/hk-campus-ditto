@@ -29,8 +29,9 @@ export function profileAnalysisPrompt(
   surveys: Survey[],
   language = "en"
 ): { system: string; prompt: string } {
+  const langInstruction = language.startsWith("zh") ? "You MUST write ALL content in Chinese (简体中文)." : "Write all content in English.";
   const system =
-    "You build structured user profile analysis for a Hong Kong campus matchmaking app. Be warm but concrete, do not over-flatter, and never invent facts beyond the supplied profile and survey answers. Return strict JSON only.";
+    `You build structured user profile analysis for a Hong Kong campus matchmaking app. Be warm but concrete, do not over-flatter, and never invent facts beyond the supplied profile and survey answers. ${langInstruction} Return strict JSON only.`;
   const surveyPayload = surveys.map((s) => ({
     template: s.template,
     answers: s.answers,
@@ -69,7 +70,6 @@ Rules:
 - If evidence is thin, say so in profileCompletenessNotes instead of guessing.`;
   return { system, prompt };
 }
-
 export function matchJudgePrompt(a: StudentProfile, b: StudentProfile): { system: string; prompt: string } {
   const system =
     "You are a sober matchmaking judge for a Hong Kong university campus app. You score compatibility between two students on a 0-100 scale, then return strict JSON. You never invent shared interests.";
@@ -109,15 +109,7 @@ function compactProfile(p: StudentProfile): string {
     `Dealbreakers: ${(p.dealBreakers ?? []).join(", ")}`,
     `Life: ${JSON.stringify(p.lifeSignals ?? {})}`,
     `Mind: ${JSON.stringify(p.mindSignals ?? {})}`,
-    `Social: ${JSON.stringify(p.socialSignals ?? {})}`,
     `Dating preferences: ${JSON.stringify(p.datingPreferences ?? {})}`,
-    `Profile analysis: ${p.profileAnalysis ? JSON.stringify({
-      romanticStyle: p.profileAnalysis.romanticStyle,
-      emotionalTone: p.profileAnalysis.emotionalTone,
-      datingIntent: p.profileAnalysis.datingIntent,
-      matchSignals: p.profileAnalysis.matchSignals,
-      idealMatch: p.profileAnalysis.idealMatch,
-    }) : "{}"}`,
     `Academic: ${p.major} / ${p.yearOfStudy}`,
   ].join("\n");
 }
@@ -139,6 +131,45 @@ ${candidates.map((c, i) => `${i + 1}. ${c}`).join("\n")}
 
 Return strict JSON:
 { "name": "<one of the candidates verbatim>", "reason": "<<=140 chars why this fits both>>" }`;
+  return { system, prompt };
+}
+
+export function icebreakerPrompt(
+  a: StudentProfile,
+  b: StudentProfile,
+  match: MatchRecord,
+  language = "en"
+): { system: string; prompt: string } {
+  const langInstruction = language.startsWith("zh")
+    ? "You MUST write ALL content in Chinese (简体中文). Use a warm, slightly playful tone."
+    : "Write all content in English. Use a warm, slightly playful tone.";
+  const system = `You are an AI matchmaker for a Hong Kong campus dating app. Your job is to introduce two matched students to each other, highlight their strengths, and help them break the ice before their first meeting. ${langInstruction}`;
+  const prompt = `Create an icebreaker introduction for these two matched students who are about to meet.
+
+Person A (${a.fullName}):
+${compactProfile(a)}
+
+Person B (${b.fullName}):
+${compactProfile(b)}
+
+Match details:
+- Compatibility score: ${match.score}%
+- Date time: ${match.confirmedSlot ?? "TBD"}
+- Date spot: ${match.curatedDateSpot ?? match.proposedPlace?.name ?? "TBD"}
+- Reasons matched: ${[...match.reasonsForA, ...match.reasonsForB].join("; ")}
+
+Return strict JSON:
+{
+  "introForA": "<60-80 words introducing B to A — highlight B's charm points, shared interests, what A might enjoy about B>",
+  "introForB": "<60-80 words introducing A to B — highlight A's charm points, shared interests, what B might enjoy about A>",
+  "conversationStarters": ["<3-4 specific, fun conversation topics based on their real shared interests or complementary traits>"],
+  "dateVibe": "<one sentence describing the expected vibe of this date>"
+}
+
+Rules:
+- Only reference real profile data, never invent interests or traits.
+- Be encouraging but honest. Don't over-promise chemistry.
+- Conversation starters should be specific (not generic like "talk about hobbies").`;
   return { system, prompt };
 }
 

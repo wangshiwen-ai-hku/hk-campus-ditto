@@ -15,15 +15,15 @@
       "nextDrop": "Next drop: Wednesday 7PM",
       "joinDrop": "Join next drop →"
     },
-    "stats": "{{students}} students joined • 100% verified • {{dates}} dates scheduled •",
+    "stats": "{{people}} people joined • 100% verified • {{dates}} dates scheduled •",
     "why": {
       "badge": "No more mindless swiping",
       "title": "One intentional<br/> <1>date</1> every Wednesday",
-      "desc": "Tired of endless swiping and dead-end 'Hi's? We send you one quality match every Wednesday. No games, just real university students.",
+      "desc": "Tired of endless swiping and dead-end 'Hi's? We send you one quality match every Wednesday. No games, just real university people.",
       "noSwiping": "Zero Swiping",
       "noSwipingDesc": "Our algorithm handles everything for you.",
       "campusSafe": "Campus Safe",
-      "campusSafeDesc": "Exclusive to students with verified .edu.hk emails.",
+      "campusSafeDesc": "Exclusive to people with verified .edu.hk emails.",
       "personalized": "Personalized Matches",
       "personalizedDesc": "We match based on values, vibe, and availability."
     },
@@ -48,7 +48,7 @@
       "step2": {
         "title": "Wednesday Drop",
         "desc": "Receive your match at 7 PM.",
-        "example": "Match with an HKU student",
+        "example": "Match with an HKU person",
         "detailQuote": "\"Every Wednesday at 7 PM, the magic happens. No choices, just the one.\" ✉️",
         "algoFocus": "Algorithm Focus",
         "algoFocusDesc": "\"High Signal, Low Noise\"",
@@ -83,7 +83,7 @@
       },
       {
         "q": "Is it only for .edu.hk emails?",
-        "a": "Yes. To keep the community safe and relevant, we only support students from verified Hong Kong university institutions."
+        "a": "Yes. To keep the community safe and relevant, we only support people from verified Hong Kong university institutions."
       },
       {
         "q": "Why only one match a week?",
@@ -100,11 +100,11 @@
     ],
     "footerTitle": "Ready to meet the next<br/>person on campus?",
     "footerCta": "Get Started →",
-    "footerDesc": "Over 147k+ HK students joined"
+    "footerDesc": "Over 147k+ HK people joined"
   },
   "join": {
     "title": "Join next Wednesday Drop",
-    "pageTitle": "Student Intake",
+    "pageTitle": "Personal Intake",
     "subtitle": "Use your university email, enter your invite code, and join the next Wednesday drop.",
     "emailLabel": "University Email",
     "emailPlaceholder": "name@connect.hku.hk",
@@ -129,7 +129,7 @@
       "eyebrow": "Join Ditto",
       "title": "Join Ditto",
       "subtitle": "Verify with your university email, complete your profile, and enter the next matching round.",
-      "studentDashboard": "Student dashboard",
+      "studentDashboard": "Personal dashboard",
       "account": "Account",
       "profile": "Profile",
       "done": "Done",
@@ -144,13 +144,13 @@
       "saveProfileContinue": "Save profile + continue",
       "saveSection": "Save {{section}}",
       "completeTitle": "Onboarding complete",
-      "completeDesc": "Your profile and questionnaire are complete. When matches are released, you can view them from the student page.",
-      "openStudent": "Open Student",
+      "completeDesc": "Your profile and questionnaire are complete. When matches are released, you can view them from the personal page.",
+      "openStudent": "Open Personal Page",
       "codeSent": "Verification code sent.",
       "signedIn": "Signed in. Continue to profile.",
       "profileSaved": "Profile saved. Now answer the real onboarding questions.",
       "sectionSaved": "Saved. Continue to the next section.",
-      "completeMsg": "Onboarding complete. You can now view your status from the student page.",
+      "completeMsg": "Onboarding complete. You can now view your status from the person page.",
       "back": "Back",
       "uploadPhotos": "Upload photos",
       "uploadPhotosHint": "Add up to {{count}} clear photos.",
@@ -159,7 +159,8 @@
       "chatGroupDone": "This section is complete. Review your answers, then click “Save & Continue” on the left.",
       "chatFormFallback": "I'll keep this focused so we can finish your profile. Continue with the current form, then I'll help with the questionnaire.",
       "chatPlaceholder": "Type your answer...",
-      "chatTooltip": "Form Filling Assistant"
+      "chatTooltip": "Form Filling Assistant",
+      "uploadOnePhoto": "Upload one photo"
     },
     "tags": {
       "coffee": "Coffee Hopping",
@@ -203,7 +204,8 @@
       "year": "e.g. Year 3",
       "major": "e.g. Computer Science",
       "bio": "e.g. I like coffee, campus walks, thoughtful conversations and low-pressure first dates.",
-      "select": "Select..."
+      "select": "Select...",
+      "alumniYear": "e.g. Class of 2024"
     },
     "degreeLevel": "Degree / Program",
     "grade": "Year of Study",
@@ -216,7 +218,10 @@
       "undergrad": "Undergraduate",
       "taught_master": "Taught Master",
       "mphil_phd": "MPhil / PhD",
-      "other": "Other"
+      "other": "Other",
+      "mphil": "MPhil",
+      "phd": "PhD",
+      "exchange": "Exchange"
     },
     "grades": {
       "y1": "Year 1",
@@ -236,10 +241,26 @@
       "architecture": "Architecture / Design",
       "education": "Education",
       "other": "Other"
+    },
+    "preferredLocale": "Preferred language for app and emails",
+    "preferredLocales": {
+      "en": "English",
+      "zh-HK": "繁體中文",
+      "zh-CN": "简体中文"
+    },
+    "profileType": "Role",
+    "profileTypes": {
+      "current": "Current student",
+      "alumni": "Alumni"
+    },
+    "other": {
+      "interests": "Other interests",
+      "vibes": "Other vibe tags",
+      "availability": "Other available times"
     }
   },
   "student": {
-    "title": "Student Dashboard",
+    "title": "Personal Dashboard",
     "signInPrompt": "Please sign in to view your dashboard.",
     "loading": "Loading profile…",
     "hi": "Hi, {{name}}!",
@@ -272,10 +293,101 @@
       "desc": "Aura believes in quality over quantity. No more swiping. Every Wednesday at 7:00 PM you get one **intentional match**.",
       "countdownTitle": "Countdown to Next Drop",
       "checkBack": "See you Wednesday!",
-      "verified": "Verified Students Only",
-      "verifiedDesc": "We ensure every person is a real student from your school.",
+      "verified": "Verified People Only",
+      "verifiedDesc": "We ensure every person is real and belongs to the community.",
       "highSignal": "High Signal Matches",
       "highSignalDesc": "Algorithm focuses on shared interests and values."
+    },
+    "tabs": {
+      "matches": "Matches",
+      "persona": "Love Persona",
+      "profile": "Profile"
+    },
+    "persona": {
+      "discoverTitle": "Discover Your Love Persona",
+      "discoverDesc": "Complete the LDFR personality questionnaire during onboarding to unlock your unique love archetype and personalized romantic insights.",
+      "analyzing": "Analyzing Your Love Persona...",
+      "analyzingDesc": "Our AI is crafting your personalized romantic profile",
+      "retry": "Retry",
+      "yourVibe": "Your Vibe",
+      "aiAnalysis": "AI Romantic Analysis",
+      "strengths": "Strengths",
+      "watchOut": "Watch Out",
+      "flirtSignals": "Flirt Signals",
+      "sparkMoment": "Spark Moment",
+      "idealDateSpots": "Ideal Date Spots",
+      "aiSuggested": "AI Suggested",
+      "bestMatchTypes": "Best Match Types",
+      "allTypes": "All 8 Love Archetypes",
+      "you": "YOU",
+      "reanalyze": "Re-analyze Persona"
+    },
+    "profile": {
+      "personalInfo": "Personal Info",
+      "age": "Age",
+      "gender": "Gender",
+      "height": "Height",
+      "datingGoal": "Dating Goal",
+      "matchMode": "Match Mode",
+      "bio": "Bio",
+      "location": "Location",
+      "vibes": "Vibes",
+      "weekendVibes": "Weekend Vibes",
+      "datingPrefs": "Dating Preferences",
+      "lookingFor": "Looking For",
+      "goals": "Goals",
+      "ageRange": "Age Range",
+      "langPref": "Language Pref",
+      "attractionSignals": "Attraction Signals",
+      "heightBuild": "Height & Build",
+      "facialFeatures": "Facial Features",
+      "energyVibe": "Energy & Vibe",
+      "status": "Status",
+      "activeInPool": "Active in Pool",
+      "editProfile": "Edit Profile",
+      "aboutMe": "About Me",
+      "prefsAndType": "Preferences & Type",
+      "auraAnalysis": "Aura Profile Analysis",
+      "romanticStyle": "Romantic Style",
+      "idealMatch": "Ideal Match",
+      "conversationStarters": "Conversation Starters",
+      "firstDateIdeas": "First Date Ideas",
+      "matchSignals": "Match Signals",
+      "lovePersona": "Love Persona",
+      "feedbackAfterDate": "Feedback opens after the date is marked as happened.",
+      "suggestedSpot": "Suggested Date Spot",
+      "acceptMatch": "Accept Match",
+      "decline": "Decline"
+    },
+    "matchFlow": {
+      "whyMatched": "Why You're Matched",
+      "step1Title": "Step 1 · Pick a Date & Time",
+      "step1Desc": "Choose a time slot that works for both of you",
+      "step2Title": "Step 2 · Confirm Date Spot",
+      "step2Desc": "Our AI picked a spot based on your vibes",
+      "confirmSpot": "Looks great, confirm!",
+      "step3Title": "Contact Exchange",
+      "step3Desc": "You've both confirmed — here's how to reach each other",
+      "partnerContact": "Partner's Contact",
+      "giftTitle": "Meeting Gift Ideas",
+      "giftDesc": "A small gesture goes a long way — here are some ideas for your first meeting",
+      "giftIdeas": [
+        "A handwritten note or card",
+        "Their favorite drink (check their vibe tags!)",
+        "A small souvenir from your campus",
+        "A playlist QR code of songs that remind you of them"
+      ],
+      "waitingPartner": "Waiting for your match to confirm…",
+      "waitingPartnerTitle": "Waiting for your partner",
+      "waitingPartnerDesc": "You've shown your sincerity! We've notified your match — once they confirm, you'll both get each other's contact info.",
+      "emailSent": "Email notification sent to your match",
+      "partnerAlreadyConfirmed": "Your match has already confirmed — they're waiting for you!",
+      "dateConfirmed": "Date Confirmed!",
+      "feedbackTitle": "How was the date?",
+      "confirmed": "Confirmed",
+      "icebreakerTitle": "AI Matchmaker Says",
+      "icebreakerLoading": "Preparing your icebreaker intro…",
+      "talkAbout": "Conversation Starters"
     }
   },
   "admin": {
@@ -286,7 +398,7 @@
     "msgCreated": "Created {{count}} new matches.",
     "msgReset": "Demo data reset.",
     "stats": {
-      "students": "Students Joined",
+      "students": "People Joined",
       "profiles": "Complete Profiles",
       "dates": "Dates Scheduled",
       "rematch": "Rematches requested"
@@ -294,7 +406,7 @@
     "recentMatches": "Recent Matches",
     "score": "Score",
     "open": "Open",
-    "studentDir": "Student Directory",
+    "studentDir": "Personal Directory",
     "incomplete": "Incomplete",
     "view": "View",
     "loading": "Loading logs…"
@@ -331,10 +443,6 @@
         "prompt": "When is your birthday?",
         "why": "We only show your age to others."
       },
-      "ethnicity": {
-        "prompt": "What is your ethnicity?",
-        "why": "Optional preference data to better understand your background."
-      },
       "height": {
         "prompt": "How tall are you? (cm)",
         "why": "Some people have height preferences, we use this for better matching."
@@ -354,10 +462,6 @@
       "ageRange": {
         "prompt": "Preferred age range",
         "why": "Useful for dating comfort boundaries."
-      },
-      "targetEthnicity": {
-        "prompt": "Ethnicity preferences (if any)",
-        "why": "Optional preference data; leave broad if you do not care."
       },
       "matchMode": {
         "prompt": "How selective should we be?",
@@ -387,10 +491,6 @@
         "prompt": "Which MTR line/area do you most frequently hang out around?",
         "why": "Helps algorithm match you locally or plan the date location."
       },
-      "languagePref": {
-        "prompt": "What's your most comfortable language for dating?",
-        "why": "Essential in HK's trilingual environment for a comfortable first date."
-      },
       "hkWeekendVibe": {
         "prompt": "What's your ideal weekend vibe in HK?",
         "why": "Shows personality through local context."
@@ -412,13 +512,13 @@
         "why": "How do you organize your life?"
       },
       "photos": {
-        "prompt": "Add profile photos",
-        "why": "Photos make your profile feel more personal and help your match recognize your vibe."
+        "prompt": "Add 3 media cards",
+        "why": "Each card pairs one photo with a short note, so your profile feels personal instead of like a photo dump."
       },
       "mediaNotes": {
         "prompt": "Anything the system should know about these photos?",
         "why": "Optional notes for interpreting your media profile.",
-        "placeholder": "e.g. first photo is my usual look; second is from a hiking day"
+        "placeholder": "Add a short caption, context, or the vibe this photo shows."
       },
       "ldfr_q1": {
         "prompt": "Friday night 9 PM, your ideal state is:",

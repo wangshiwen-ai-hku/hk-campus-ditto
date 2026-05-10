@@ -1,4 +1,4 @@
-export type Locale = "en" | "yue";
+export type Locale = "en" | "zh-HK" | "zh-CN";
 export type VerificationStatus = "pending" | "verified";
 
 export interface University {
@@ -62,6 +62,10 @@ export interface DatingPreferences {
   matchMode?: "fast" | "balanced" | "intentional" | "wait_for_the_one";
   phoneNumber?: string;
   photoUrls?: string[];
+  mediaCards?: Array<{
+    photoUrl?: string;
+    caption?: string;
+  }>;
 }
 
 export interface ProfileAnalysis {
@@ -91,6 +95,7 @@ export interface StudentProfile {
   seeking: string;
   bio: string;
   languages: string[];
+  preferredLocale?: Locale;
   interests: string[];
   vibeTags: string[];
   dealBreakers: string[];
@@ -112,6 +117,15 @@ export interface StudentProfile {
   onboardingAnswers?: Record<string, Record<string, unknown>>;
   vibeWeights?: Record<string, number>;
   onboardingStage?: "auth" | "basic" | "life" | "mind" | "social" | "complete";
+  ldfrResult?: {
+    code: string;
+    title: string;
+    vibe: string;
+    analysis: string;
+    strengths: string[];
+    traps: string[];
+    idealDate: string;
+  };
 }
 
 export type MatchStatus =
@@ -139,6 +153,13 @@ export interface MatchEvent {
 export interface MatchAcceptance {
   userId: string;
   choice: "yes" | "no" | "skip";
+  at: string;
+}
+
+export interface DateConfirmation {
+  userId: string;
+  slot: string;
+  place?: string;
   at: string;
 }
 
@@ -185,6 +206,8 @@ export interface MatchRecord {
   proposedPlace?: ProposedPlace;
   llmRationale?: LlmRationale;
   universityId?: string;
+  dateConfirmations?: DateConfirmation[];
+  icebreaker?: string;
 }
 
 export interface VerificationCode {

@@ -1,8 +1,8 @@
 import type { MatchRecord, StudentProfile } from "../types.js";
 import { sendEmail } from "../auth/email.js";
-import { renderDateScheduled, renderFeedbackRequest, renderMatchDrop } from "./templates.js";
+import { renderDateScheduled, renderFeedbackRequest, renderMatchDrop, renderPartnerConfirmed } from "./templates.js";
 
-export type NotifyTemplate = "match_drop" | "date_scheduled" | "feedback_request";
+export type NotifyTemplate = "match_drop" | "date_scheduled" | "feedback_request" | "partner_confirmed";
 
 export interface NotifyContext {
   match?: MatchRecord;
@@ -21,6 +21,8 @@ export async function notify(
     rendered = renderDateScheduled(to, ctx.partner, ctx.match);
   } else if (template === "feedback_request" && ctx.match) {
     rendered = renderFeedbackRequest(to, ctx.match);
+  } else if (template === "partner_confirmed" && ctx.partner && ctx.match) {
+    rendered = renderPartnerConfirmed(to, ctx.partner, ctx.match);
   } else {
     return { ok: false };
   }
@@ -29,6 +31,7 @@ export async function notify(
     to: to.email,
     subject: rendered.subject,
     text: rendered.body,
+    html: rendered.html,
   });
   return { ok: result.ok };
 }
