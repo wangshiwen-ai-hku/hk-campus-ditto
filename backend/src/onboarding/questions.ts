@@ -53,6 +53,7 @@ export const onboardingGroups: QuestionGroup[] = [
         id: "birthday",
         promptKey: "onboarding.q.birthday.prompt",
         whyItMattersKey: "onboarding.q.birthday.why",
+        placeholderKey: "onboarding.q.birthday.placeholder",
         kind: "date",
       },
       {
@@ -131,6 +132,7 @@ export const onboardingGroups: QuestionGroup[] = [
         id: "ageRange",
         promptKey: "onboarding.q.ageRange.prompt",
         whyItMattersKey: "onboarding.q.ageRange.why",
+        placeholderKey: "onboarding.q.ageRange.placeholder",
         kind: "range",
         min: 18,
         max: 60,

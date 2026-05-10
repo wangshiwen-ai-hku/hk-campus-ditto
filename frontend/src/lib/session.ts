@@ -3,6 +3,7 @@ import type { Locale } from "../types";
 const USER_KEY = "campus-ditto-hk-user";
 const TOKEN_KEY = "campus-ditto-hk-token";
 const LOCALE_KEY = "campus-ditto-hk-locale";
+const WELCOME_KEY = "campus-ditto-hk-welcome-seen";
 
 export function getStoredUserId() { return localStorage.getItem(USER_KEY); }
 export function setStoredUserId(id: string | null) { if (!id) localStorage.removeItem(USER_KEY); else localStorage.setItem(USER_KEY, id); }
@@ -16,3 +17,9 @@ export function getStoredLocale(): Locale {
   return (val as Locale) ?? "en"; 
 }
 export function setStoredLocale(locale: Locale) { localStorage.setItem(LOCALE_KEY, locale); }
+
+export function getWelcomeSeen() { return localStorage.getItem(WELCOME_KEY) === "1"; }
+export function setWelcomeSeen(seen: boolean) {
+  if (seen) localStorage.setItem(WELCOME_KEY, "1");
+  else localStorage.removeItem(WELCOME_KEY);
+}

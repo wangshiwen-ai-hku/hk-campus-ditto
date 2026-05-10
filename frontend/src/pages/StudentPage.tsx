@@ -2,11 +2,12 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useTranslation } from "react-i18next";
-import type { MatchRecord, StudentProfile, University, ProfileAnalysis, DatingPreferences } from "../types";
+import type { Locale, MatchRecord, StudentProfile, University, ProfileAnalysis, DatingPreferences } from "../types";
 import { SectionCard } from "../components/SectionCard";
 import { User, Heart, ArrowLeft, X, MapPin, Ruler, Calendar, Sparkles, Target, ChevronDown, ChevronUp, Flame, Pencil } from "lucide-react";
 
 type Tab = "profile" | "matches" | "persona";
+const PREFERRED_LOCALES: Locale[] = ["en", "zh-HK", "zh-CN"];
 
 type MatchView = {
   match: MatchRecord;
@@ -393,7 +394,17 @@ function TagRow({ label, tags, color }: { label: string; tags: string[]; color: 
 }
 
 /* ─── Profile Tab ─── */
-function ProfileTab({ profile, t }: { profile: StudentProfile; t: (k: string, o?: any) => string }) {
+function ProfileTab({
+  profile,
+  t,
+  savingLocale,
+  onPreferredLocale,
+}: {
+  profile: StudentProfile;
+  t: (k: string, o?: any) => string;
+  savingLocale: boolean;
+  onPreferredLocale: (locale: Locale) => void;
+}) {
   const navigate = useNavigate();
   const dp = profile.datingPreferences;
   const photos = dp?.photoUrls?.filter((u) => u && u.length > 10) ?? [];
@@ -430,6 +441,30 @@ function ProfileTab({ profile, t }: { profile: StudentProfile; t: (k: string, o?
             <Pencil size={12} /> {t("student.profile.editProfile")}
           </button>
         </div>
+        <SectionCard className="border-white/10 !p-4">
+          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-white/25">{t("student.profile.preferredLocale")}</div>
+          <div className="grid gap-2">
+            {PREFERRED_LOCALES.map((locale) => {
+              const active = (profile.preferredLocale ?? "en") === locale;
+              return (
+                <button
+                  key={locale}
+                  type="button"
+                  disabled={savingLocale || active}
+                  onClick={() => onPreferredLocale(locale)}
+                  className={`rounded-xl border px-3 py-2 text-left text-xs font-black transition-all disabled:cursor-default ${
+                    active
+                      ? "border-aura/40 bg-aura/20 text-aura"
+                      : "border-white/10 bg-white/5 text-white/45 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {t(`join.preferredLocales.${locale}`)}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-3 text-xs leading-relaxed text-white/35">{t("student.profile.preferredLocaleHint")}</div>
+        </SectionCard>
       </div>
 
       {/* Right Column */}
@@ -1340,13 +1375,14 @@ function MatchesTab({ matches, profile, onRefresh, t }: {
 }
 
 /* ─── Main StudentPage ─── */
-export function StudentPage({ userId }: { userId: string | null }) {
+export function StudentPage({ userId, onLocale }: { userId: string | null; onLocale: (locale: Locale) => void }) {
   const { t, i18n } = useTranslation();
   const [tab, setTab] = useState<Tab>("matches");
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [matches, setMatches] = useState<MatchView[]>([]);
   const [personaLoading, setPersonaLoading] = useState(false);
   const [personaError, setPersonaError] = useState("");
+  const [savingLocale, setSavingLocale] = useState(false);
 
   const isZh = i18n.language.startsWith("zh");
   const ldfrLang = isZh ? "zh-CN" : "en";
@@ -1376,6 +1412,23 @@ export function StudentPage({ userId }: { userId: string | null }) {
       setPersonaLoading(false);
     }
   }, [refresh]);
+
+  async function updatePreferredLocale(locale: Locale) {
+    setSavingLocale(true);
+    try {
+      const result = await api.updatePreferredLocale(locale);
+      setProfile(result.user as StudentProfile);
+      onLocale(locale);
+      if (profile?.profileComplete) {
+        await api.regeneratePersona(locale);
+        await refresh();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingLocale(false);
+    }
+  }
 
   // Initial load + auto-generate persona & profile analysis if needed
   useEffect(() => {
@@ -1450,7 +1503,7 @@ export function StudentPage({ userId }: { userId: string | null }) {
         </button>
       </div>
 
-      {tab === "profile" && <ProfileTab profile={profile} t={t} />}
+      {tab === "profile" && <ProfileTab profile={profile} t={t} savingLocale={savingLocale} onPreferredLocale={updatePreferredLocale} />}
       {tab === "matches" && <MatchesTab matches={matches} profile={profile} onRefresh={refresh} t={t} />}
       {tab === "persona" && <PersonaTab profile={profile} t={t} lang={i18n.language} personaLoading={personaLoading} personaError={personaError} onRegenerate={() => generatePersona(profile, ldfrLang)} />}
     </main>

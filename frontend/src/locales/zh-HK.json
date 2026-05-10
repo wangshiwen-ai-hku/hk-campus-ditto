@@ -105,7 +105,7 @@
   "join": {
     "title": "加入下一次星期三配對",
     "pageTitle": "個人加入",
-    "subtitle": "用大學電郵，透過 Demo Code 驗證，然後填好資料等下個星期三配對。",
+    "subtitle": "用大學電郵，透過驗證碼確認身份，然後加入下一次星期三配對。",
     "emailLabel": "大學電郵",
     "emailPlaceholder": "name@connect.hku.hk",
     "nameLabel": "全名",
@@ -133,8 +133,7 @@
       "account": "帳號",
       "profile": "資料",
       "done": "完成",
-      "accountDesc": "請輸入學校電郵同邀請碼。驗證碼會傳送到你嘅電郵。",
-      "inviteCode": "邀請碼",
+      "accountDesc": "請輸入學校電郵。驗證碼會傳送到你嘅電郵。",
       "verifyContinue": "驗證並繼續",
       "profileBasics": "基本資料",
       "profileDesc": "呢啲資料會幫 Ditto 理解你嘅校園生活、偏好同配對語境。",
@@ -160,7 +159,9 @@
       "chatFormFallback": "我會保持專注，幫你完成資料流程。請繼續填寫而家嘅表單，入到問卷後我會更智能咁協助你。",
       "chatPlaceholder": "輸入你嘅回答...",
       "chatTooltip": "表單填寫助手",
-      "uploadOnePhoto": "上載一張相"
+      "uploadOnePhoto": "上載一張相",
+      "chatSurveyAssist": "我可以幫你填呢一部分。你可以用自己嘅講法回答，我會幫你放到對應欄位。",
+      "chatQuestionLabel": "問題"
     },
     "tags": {
       "coffee": "探店打卡",
@@ -256,6 +257,11 @@
       "interests": "其他興趣",
       "vibes": "其他氛圍標籤",
       "availability": "其他得閒時間"
+    },
+    "questionKinds": {
+      "single": "單選",
+      "multi": "多選",
+      "range": "格式：18-26"
     }
   },
   "student": {
@@ -356,7 +362,9 @@
       "feedbackAfterDate": "約會結束後先可以提交反饋。",
       "suggestedSpot": "建議約會地點",
       "acceptMatch": "接受配對",
-      "decline": "婉拒"
+      "decline": "婉拒",
+      "preferredLocale": "偏好語言",
+      "preferredLocaleHint": "用於你嘅 App 語言同配對電郵。"
     },
     "matchFlow": {
       "whyMatched": "點解配對你哋",
@@ -440,7 +448,8 @@
       },
       "birthday": {
         "prompt": "你嘅生日係幾時？",
-        "why": "我哋只會向其他人顯示你嘅年齡。"
+        "why": "我哋只會向其他人顯示你嘅年齡。",
+        "placeholder": "例如：2001-09-18"
       },
       "height": {
         "prompt": "你身高係幾多？(cm)",
@@ -460,7 +469,8 @@
       },
       "ageRange": {
         "prompt": "你偏好嘅年齡範圍？",
-        "why": "用嚟劃定令你覺得舒服嘅界線。"
+        "why": "用嚟劃定令你覺得舒服嘅界線。",
+        "placeholder": "建議填寫格式：18-26"
       },
       "matchMode": {
         "prompt": "你希望配對有幾嚴格？",

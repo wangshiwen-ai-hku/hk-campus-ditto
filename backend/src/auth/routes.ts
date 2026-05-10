@@ -103,10 +103,7 @@ authRouter.post("/verify-code", async (req, res) => {
   const isNew = !user;
 
   if (isNew) {
-    if (env.auth.inviteRequired) {
-      if (!parsed.data.inviteCode) {
-        return res.status(400).json({ error: "Invite code is required during the beta." });
-      }
+    if (env.auth.inviteRequired && parsed.data.inviteCode) {
       const invite = findInvite(db, parsed.data.inviteCode);
       if (!isInviteUsable(invite)) {
         return res.status(400).json({ error: "Invite code is invalid or already used." });

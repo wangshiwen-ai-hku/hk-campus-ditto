@@ -108,6 +108,8 @@ Question: ${question.prompt || question.id}
 Options Available (JSON mapping 'key' -> 'label'):
 ${JSON.stringify(translatedOptions || question.optionsKeys || question.options || [])}
 Question Kind: ${question.kind}
+Selection mode: ${question.kind === "single" ? "single choice; choose exactly one option key" : question.kind === "multi" ? "multiple choice; choose one or more option keys as an array" : question.kind === "range" ? "range; normalize age ranges to an object like {\"min\":18,\"max\":26}; strongly prefer parsing user text written as xx-xx" : "free input"}
+Placeholder or expected format: ${question.placeholderKey || question.placeholder || (question.kind === "range" ? "xx-xx, for example 18-26" : "")}
 Current section answers so far:
 ${JSON.stringify(currentAnswers || {})}
 Recent chat, newest last:
@@ -116,7 +118,7 @@ ${JSON.stringify(recentMessages || [])}
 User's response: "${userMessage}"
 
 If intent is "answer_current_question":
-1. Extract the user's intended value for this question. If it's a single choice, pick the closest option and return its EXACT 'key' from the Options Available. If it's multi-choice, pick an array of EXACT 'key's. If it's text, keep the text. For date/number/range, normalize to the most useful value for the form. Do NOT return labels for option questions, only keys.
+1. Extract the user's intended value for this question. If it's a single choice, pick the closest option and return its EXACT 'key' from the Options Available. If it's multi-choice, pick an array of EXACT 'key's. If it's text, keep the text. For date/number/range, normalize to the most useful value for the form. For range, return {"min": number, "max": number}; parse patterns like "18-26" or "18到26". Do NOT return labels for option questions, only keys.
 2. Set shouldUpdateAnswer true.
 3. Reply with exactly one short emotionally supportive acknowledgement using this language rule: ${replyLanguage}.
 4. The acknowledgement must lightly reference the user's actual answer or what it suggests about them. Avoid generic replies like "Got it", "Thanks for sharing", "收到", or "已记录" unless they are paired with a specific observation.

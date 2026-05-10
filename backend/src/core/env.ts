@@ -71,6 +71,6 @@ export const env = {
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),
     codeRateLimitPerHour: num("AUTH_CODE_RATE_LIMIT_PER_HOUR", 5),
-    inviteRequired: bool("INVITE_REQUIRED", true),
+    inviteRequired: bool("INVITE_REQUIRED", false),
   },
 };

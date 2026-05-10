@@ -99,6 +99,22 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
   res.json({ ok: true, user });
 });
 
+onboardingRouter.post("/preferred-locale", requireAuth, async (req, res) => {
+  const schema = z.object({
+    preferredLocale: z.enum(["en", "zh-HK", "zh-CN"]),
+  });
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
+
+  const db = await ensureDb();
+  const user = db.students.find((s) => s.id === req.auth!.sub);
+  if (!user) return res.status(404).json({ error: "User not found." });
+
+  user.preferredLocale = parsed.data.preferredLocale;
+  await saveDb(db);
+  res.json({ ok: true, user });
+});
+
 // Submit one onboarding survey group (life / mind / social)
 onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   const schema = z.object({

@@ -105,7 +105,7 @@
   "join": {
     "title": "加入下一次周三匹配",
     "pageTitle": "个人入驻",
-    "subtitle": "使用大学邮箱登录，通过验证码验证后完善资料，等待下个周三发布。",
+    "subtitle": "使用大学邮箱登录，通过验证码验证后加入下一次周三匹配。",
     "emailLabel": "大学邮箱",
     "emailPlaceholder": "name@connect.hku.hk",
     "nameLabel": "真实姓名",
@@ -133,8 +133,7 @@
       "account": "账号",
       "profile": "资料",
       "done": "完成",
-      "accountDesc": "请输入学校邮箱和邀请码。验证码会发送到你的邮箱。",
-      "inviteCode": "邀请码",
+      "accountDesc": "请输入学校邮箱。验证码会发送到你的邮箱。",
       "verifyContinue": "验证并继续",
       "profileBasics": "基础资料",
       "profileDesc": "这些资料会帮助 Ditto 理解你的校园生活、偏好和匹配语境。",
@@ -160,7 +159,9 @@
       "chatFormFallback": "我会保持专注，帮你完成资料流程。请继续填写当前表单，进入问卷后我会更智能地协助你。",
       "chatPlaceholder": "输入你的回答...",
       "chatTooltip": "表单填写助手",
-      "uploadOnePhoto": "上传一张照片"
+      "uploadOnePhoto": "上传一张照片",
+      "chatSurveyAssist": "我可以辅助你填写这一部分。你可以用自己的话回答，我会帮你放到对应字段里。",
+      "chatQuestionLabel": "问题"
     },
     "tags": {
       "coffee": "探店打卡",
@@ -256,6 +257,11 @@
       "interests": "其他兴趣",
       "vibes": "其他氛围标签",
       "availability": "其他空闲时间"
+    },
+    "questionKinds": {
+      "single": "单选",
+      "multi": "多选",
+      "range": "格式：18-26"
     }
   },
   "student": {
@@ -356,7 +362,9 @@
       "feedbackAfterDate": "约会结束后才能提交反馈。",
       "suggestedSpot": "建议约会地点",
       "acceptMatch": "接受匹配",
-      "decline": "婉拒"
+      "decline": "婉拒",
+      "preferredLocale": "偏好语言",
+      "preferredLocaleHint": "用于你的 App 语言和匹配邮件。"
     },
     "matchFlow": {
       "whyMatched": "为什么匹配你们",
@@ -440,7 +448,8 @@
       },
       "birthday": {
         "prompt": "你的生日是哪天？",
-        "why": "我们只向他人显示你的年龄。"
+        "why": "我们只向他人显示你的年龄。",
+        "placeholder": "例如：2001-09-18"
       },
       "height": {
         "prompt": "你的身高是多少？(cm)",
@@ -460,7 +469,8 @@
       },
       "ageRange": {
         "prompt": "你偏好的年龄范围是？",
-        "why": "用于划定让你感到舒适的约会界限。"
+        "why": "用于划定让你感到舒适的约会界限。",
+        "placeholder": "推荐填写格式：18-26"
       },
       "matchMode": {
         "prompt": "你希望我们多严格地筛选？",

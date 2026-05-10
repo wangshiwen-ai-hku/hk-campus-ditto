@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Heart, MessageSquare, X } from "lucide-react";
@@ -13,7 +13,6 @@ const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"]
 const TAGS = ["coffee", "cantopop", "art", "film", "night", "hiking", "citywalk", "supper", "tech", "thrifting"];
 const VIBES = ["chill", "curious", "empathetic", "playful", "grounded", "creative", "ambitious", "warm"];
 const LANGUAGES = ["english", "cantonese", "mandarin", "japanese", "korean"];
-const PREFERRED_LOCALES = ["en", "zh-HK", "zh-CN"];
 
 type Step = "account" | "profile" | string | "done";
 
@@ -54,6 +53,20 @@ function toggleAnswer(current: unknown, option: string) {
 function mergeOther(values: string[], other: string) {
   const trimmed = other.trim();
   return Array.from(new Set(trimmed ? [...values, trimmed] : values));
+}
+
+function splitKnownAndOther(values: string[] | undefined, known: string[]) {
+  const knownSet = new Set(known);
+  const selected: string[] = [];
+  const other: string[] = [];
+  for (const value of values ?? []) {
+    if (knownSet.has(value)) selected.push(value);
+    else if (value.trim()) other.push(value.trim());
+  }
+  return {
+    selected,
+    other: Array.from(new Set(other)).join(", "),
+  };
 }
 
 const MAX_PHOTO_EDGE = 1200;
@@ -107,10 +120,16 @@ function QuestionField({
   const prompt = (
     <>
       {question.promptKey ? t(question.promptKey) : question.prompt ?? question.id}
+      {(question.kind === "single" || question.kind === "multi") && (
+        <span className="ml-2 rounded-full border border-aura/30 bg-aura/10 px-2 py-0.5 align-middle text-[10px] font-black text-aura">
+          {t(question.kind === "single" ? "join.questionKinds.single" : "join.questionKinds.multi")}
+        </span>
+      )}
       {question.required && <span className="ml-1 text-pink-400">*</span>}
     </>
   );
   const why = question.whyItMattersKey ? t(question.whyItMattersKey) : question.whyItMatters ?? "";
+  const hint = question.placeholderKey ? t(question.placeholderKey) : "";
   const options = question.optionsKeys ?? question.options ?? [];
   const photos = Array.isArray(value) ? value.filter((x) => typeof x === "string") as string[] : [];
   const mediaCards = Array.from({ length: question.max ?? 3 }, (_, index) => {
@@ -125,13 +144,14 @@ function QuestionField({
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
       <div className="text-lg font-black text-white">{prompt}</div>
       <div className="mt-1 text-sm text-white/45">{why}</div>
+      {question.kind === "range" && hint ? <div className="mt-2 text-xs font-bold text-aura/70">{hint}</div> : null}
 
       {question.kind === "text" || question.kind === "date" ? (
         <textarea
           className="mt-4 min-h-[92px] w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none transition-all focus:ring-2 focus:ring-aura/50"
           rows={question.kind === "date" ? 1 : 3}
           value={typeof value === "string" ? value : ""}
-          placeholder={question.kind === "date" ? "YYYY-MM-DD" : (question.placeholderKey ? t(question.placeholderKey) : "")}
+          placeholder={question.placeholderKey ? t(question.placeholderKey) : (question.kind === "date" ? "YYYY-MM-DD" : "")}
           onChange={(e) => onChange(e.target.value)}
         />
       ) : null}
@@ -295,14 +315,15 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [step, setStep] = useState<Step>(userId ? "profile" : "account");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(true);
-  const [isChatExpanded, setIsChatExpanded] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatExpanded, setIsChatExpanded] = useState(false);
+  const [activeChatQuestionId, setActiveChatQuestionId] = useState<string | null>(null);
+  const questionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [floatingEmojis, setFloatingEmojis] = useState<{ id: string; emoji: string; x: number; y: number }[]>([]);
   const [ldfrCard, setLdfrCard] = useState<any>(null);
 
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
   const [code, setCode] = useState("");
   const [profileId, setProfileId] = useState(userId ?? "");
 
@@ -320,7 +341,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [vibeOther, setVibeOther] = useState("");
   const [availability, setAvailability] = useState<string[]>([]);
   const [availabilityOther, setAvailabilityOther] = useState("");
-  const [crossUniOk, setCrossUniOk] = useState(true);
+  const [crossUniOk, setCrossUniOk] = useState(false);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
   const [answers, setAnswers] = useState<Record<string, Record<string, unknown>>>({});
@@ -349,9 +370,21 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       if (data.bio) setBio(data.bio);
       if (data.preferredLocale) setPreferredLocale(data.preferredLocale);
       if (data.languages?.length) setLanguages(data.languages);
-      if (data.interests?.length) setInterests(data.interests);
-      if (data.vibeTags?.length) setVibeTags(data.vibeTags);
-      if (data.availability?.length) setAvailability(data.availability);
+      if (data.interests?.length) {
+        const next = splitKnownAndOther(data.interests, TAGS);
+        setInterests(next.selected);
+        setInterestOther(next.other);
+      }
+      if (data.vibeTags?.length) {
+        const next = splitKnownAndOther(data.vibeTags, VIBES);
+        setVibeTags(next.selected);
+        setVibeOther(next.other);
+      }
+      if (data.availability?.length) {
+        const next = splitKnownAndOther(data.availability, SLOTS);
+        setAvailability(next.selected);
+        setAvailabilityOther(next.other);
+      }
       if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
       // Parse "degreeLevel - grade" from yearOfStudy
       if (data.yearOfStudy) {
@@ -386,6 +419,26 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     [groups, step]
   );
 
+  useEffect(() => {
+    if (step === "profile") {
+      setIsChatOpen(true);
+      setIsChatExpanded(false);
+      setActiveChatQuestionId(null);
+    } else if (step === "onboarding_basics") {
+      setIsChatOpen(true);
+      setIsChatExpanded(true);
+    } else if (step === "onboarding_media") {
+      setIsChatOpen(true);
+      setIsChatExpanded(false);
+    }
+  }, [step]);
+
+  useEffect(() => {
+    if (!currentGroup || !activeChatQuestionId) return;
+    const target = questionRefs.current[`${currentGroup.template}:${activeChatQuestionId}`];
+    target?.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+  }, [activeChatQuestionId, currentGroup]);
+
   function acceptSession(data: { token: string; user: { id: string; fullName?: string; email?: string } }) {
     setStoredToken(data.token);
     setProfileId(data.user.id);
@@ -411,7 +464,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     setLoading(true);
     setMessage("");
     try {
-      const data = await api.verifyCode(email, code, fullName, inviteCode);
+      const data = await api.verifyCode(email, code, fullName);
       acceptSession(data);
       setStep("profile");
       setMessage(t("join.dev.signedIn"));
@@ -430,7 +483,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     const finalInterests = mergeOther(interests, interestOther);
     const finalVibeTags = mergeOther(vibeTags, vibeOther);
     const finalAvailability = mergeOther(availability, availabilityOther);
-    if (!fullName || !preferredLocale || !profileType || !degreeLevel || !grade || !faculty || !bio || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
+    const gradeValue = profileType === "Alumni" ? "" : grade;
+    if (!fullName || !preferredLocale || !profileType || !degreeLevel || (profileType !== "Alumni" && !grade) || !faculty || !bio || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
       alert(t("join.errors.required"));
       return;
     }
@@ -440,7 +494,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       await api.saveProfile({
         fullName,
         preferredLocale,
-        yearOfStudy: `${profileType} - ${degreeLevel} - ${grade}`,
+        yearOfStudy: [profileType, degreeLevel, gradeValue].filter(Boolean).join(" - "),
         major: department ? `${faculty} - ${department}` : faculty,
         gender: "Prefer not to say",
         seeking: "Meaningful connection",
@@ -550,7 +604,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         </div>
       ))}
       {/* Main Content Wrapper */}
-      <div className={`transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isChatOpen ? (isChatExpanded ? "md:pr-[75vw]" : "md:pr-[400px]") : ""}`}>
+      <div className={`transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isChatOpen ? (isChatExpanded ? "md:pr-[75vw]" : "md:pr-[25vw]") : ""}`}>
         {/* Refined Hero Section with Collage Background */}
         <header className="relative pt-32 pb-24 px-5 border-b border-white/[0.05] overflow-hidden">
         {/* Puzzle Collage Background - Clearer Visibility */}
@@ -702,10 +756,6 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
-                  <span>{t("join.dev.inviteCode")} <span className="text-pink-400">*</span></span>
-                  <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} />
-                </label>
-                <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.verifyCodeLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={code} onChange={(e) => setCode(e.target.value)} />
                 </label>
@@ -731,27 +781,17 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t("join.placeholders.fullName")} />
                 </label>
-                <div className={`grid gap-3 text-sm font-bold text-white/50 ${isChatExpanded ? "" : "md:col-span-2"}`}>
-                  <span>{t("join.preferredLocale")} <span className="text-pink-400">*</span></span>
-                  <div className="flex flex-wrap gap-3">
-                    {PREFERRED_LOCALES.map((locale) => {
-                      const active = preferredLocale === locale;
-                      return (
-                        <button
-                          type="button"
-                          key={locale}
-                          onClick={() => setPreferredLocale(locale)}
-                          className={`rounded-xl px-4 py-2 text-sm font-medium transition-all ${active ? "bg-aura/90 text-white shadow-lg shadow-aura/20" : "border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80"}`}
-                        >
-                          {t(`join.preferredLocales.${locale}`)}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.profileType")} <span className="text-pink-400">*</span></span>
-                  <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={profileType} onChange={(e) => setProfileType(e.target.value)}>
+                  <select
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50"
+                    value={profileType}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setProfileType(next);
+                      if (next === "Alumni") setGrade("");
+                    }}
+                  >
                     <option value="" disabled>{t("join.placeholders.select")}</option>
                     <option value="Current Student">{t("join.profileTypes.current")}</option>
                     <option value="Alumni">{t("join.profileTypes.alumni")}</option>
@@ -769,11 +809,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                     <option value="Other">{t("join.degrees.other")}</option>
                   </select>
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-white/50">
-                  <span>{t("join.grade")} <span className="text-pink-400">*</span></span>
-                  {profileType === "Alumni" ? (
-                    <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder={t("join.placeholders.alumniYear")} />
-                  ) : (
+                {profileType !== "Alumni" ? (
+                  <label className="grid gap-2 text-sm font-bold text-white/50">
+                    <span>{t("join.grade")} <span className="text-pink-400">*</span></span>
                     <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)}>
                       <option value="" disabled>{t("join.placeholders.select")}</option>
                       <option value="Year 1">{t("join.grades.y1")}</option>
@@ -782,8 +820,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                       <option value="Year 4">{t("join.grades.y4")}</option>
                       <option value="Year 5+">{t("join.grades.y5_plus")}</option>
                     </select>
-                  )}
-                </label>
+                  </label>
+                ) : null}
                 <label className="grid gap-2 text-sm font-bold text-white/50">
                   <span>{t("join.faculty")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={faculty} onChange={(e) => setFaculty(e.target.value)}>
@@ -839,14 +877,21 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               </div>
               <div className="grid gap-4">
                 {currentGroup.questions.map((question) => (
-                  <QuestionField
+                  <div
                     key={question.id}
-                    question={question}
-                    value={answers[currentGroup.template]?.[question.id] ?? defaultAnswer(question)}
-                    onChange={(value) => setQuestionAnswer(currentGroup, question.id, value)}
-                    t={t}
-                    isChatExpanded={isChatExpanded}
-                  />
+                    ref={(el) => { questionRefs.current[`${currentGroup.template}:${question.id}`] = el; }}
+                    className={`scroll-mt-24 rounded-3xl transition-all duration-500 ${
+                      activeChatQuestionId === question.id ? "ring-2 ring-aura/60 ring-offset-4 ring-offset-[#020617]" : ""
+                    }`}
+                  >
+                    <QuestionField
+                      question={question}
+                      value={answers[currentGroup.template]?.[question.id] ?? defaultAnswer(question)}
+                      onChange={(value) => setQuestionAnswer(currentGroup, question.id, value)}
+                      t={t}
+                      isChatExpanded={isChatExpanded}
+                    />
+                  </div>
                 ))}
               </div>
               <div className="flex flex-wrap gap-3">
@@ -891,6 +936,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       currentSectionLabel={currentGroup ? t(currentGroup.titleKey || currentGroup.title || currentGroup.template) : t(`join.dev.${step}`, { defaultValue: String(step) })}
       answers={currentGroup ? (answers[currentGroup.template] as Record<string, unknown> ?? {}) : {}}
       onAnswer={(qid, val) => currentGroup && setQuestionAnswer(currentGroup, qid, val)}
+      onActiveQuestionChange={setActiveChatQuestionId}
       language={i18n.language}
     />
 

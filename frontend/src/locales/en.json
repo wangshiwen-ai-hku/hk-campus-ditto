@@ -105,7 +105,7 @@
   "join": {
     "title": "Join next Wednesday Drop",
     "pageTitle": "Personal Intake",
-    "subtitle": "Use your university email, enter your invite code, and join the next Wednesday drop.",
+    "subtitle": "Use your university email, verify with a code, and join the next Wednesday drop.",
     "emailLabel": "University Email",
     "emailPlaceholder": "name@connect.hku.hk",
     "nameLabel": "Full Name",
@@ -133,8 +133,7 @@
       "account": "Account",
       "profile": "Profile",
       "done": "Done",
-      "accountDesc": "Enter your university email and invite code. The verification code will be sent to your inbox.",
-      "inviteCode": "Invite code",
+      "accountDesc": "Enter your university email. The verification code will be sent to your inbox.",
       "verifyContinue": "Verify + continue",
       "profileBasics": "Profile basics",
       "profileDesc": "These details help Ditto understand your campus life, preferences, and matching context.",
@@ -160,7 +159,9 @@
       "chatFormFallback": "I'll keep this focused so we can finish your profile. Continue with the current form, then I'll help with the questionnaire.",
       "chatPlaceholder": "Type your answer...",
       "chatTooltip": "Form Filling Assistant",
-      "uploadOnePhoto": "Upload one photo"
+      "uploadOnePhoto": "Upload one photo",
+      "chatSurveyAssist": "I can help you fill this section. Answer in your own words, and I will place it into the right field.",
+      "chatQuestionLabel": "Question"
     },
     "tags": {
       "coffee": "Coffee Hopping",
@@ -257,6 +258,11 @@
       "interests": "Other interests",
       "vibes": "Other vibe tags",
       "availability": "Other available times"
+    },
+    "questionKinds": {
+      "single": "Single choice",
+      "multi": "Multiple choice",
+      "range": "Format: 18-26"
     }
   },
   "student": {
@@ -357,7 +363,9 @@
       "feedbackAfterDate": "Feedback opens after the date is marked as happened.",
       "suggestedSpot": "Suggested Date Spot",
       "acceptMatch": "Accept Match",
-      "decline": "Decline"
+      "decline": "Decline",
+      "preferredLocale": "Preferred language",
+      "preferredLocaleHint": "Used for your app language and match emails."
     },
     "matchFlow": {
       "whyMatched": "Why You're Matched",
@@ -441,7 +449,8 @@
       },
       "birthday": {
         "prompt": "When is your birthday?",
-        "why": "We only show your age to others."
+        "why": "We only show your age to others.",
+        "placeholder": "e.g. 2001-09-18"
       },
       "height": {
         "prompt": "How tall are you? (cm)",
@@ -461,7 +470,8 @@
       },
       "ageRange": {
         "prompt": "Preferred age range",
-        "why": "Useful for dating comfort boundaries."
+        "why": "Useful for dating comfort boundaries.",
+        "placeholder": "Recommended format: 18-26"
       },
       "matchMode": {
         "prompt": "How selective should we be?",

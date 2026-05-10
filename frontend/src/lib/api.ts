@@ -47,6 +47,7 @@ export const api = {
   // Onboarding
   getQuestions: () => request("/onboarding/questions"),
   saveProfile: (payload: unknown) => request("/onboarding/profile", { method: "POST", body: JSON.stringify(payload) }),
+  updatePreferredLocale: (preferredLocale: string) => request<{ ok: boolean; user: any }>("/onboarding/preferred-locale", { method: "POST", body: JSON.stringify({ preferredLocale }) }),
   submitSurvey: (template: string, answers: unknown, language?: string) => request("/onboarding/survey", { method: "POST", body: JSON.stringify({ template, answers, language }) }),
   regeneratePersona: (language?: string) => request("/onboarding/persona/regenerate", { method: "POST", body: JSON.stringify({ language }) }),
   chatExtract: (
