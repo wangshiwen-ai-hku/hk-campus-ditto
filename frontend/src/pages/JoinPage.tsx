@@ -30,6 +30,14 @@ function nextStep(step: Step, groups: QuestionGroup[]): Step {
   return steps[idx + 1] ?? "done";
 }
 
+function unlockIndexForStep(step: Step, groups: QuestionGroup[]) {
+  return Math.max(0, stepIndex(step, groups));
+}
+
+function nextUnlockIndex(step: Step, groups: QuestionGroup[]) {
+  return unlockIndexForStep(nextStep(step, groups), groups);
+}
+
 function defaultAnswer(q: Question): unknown {
   if (q.defaultValue !== undefined) return q.defaultValue;
   if (q.kind === "mediaCards") return Array.from({ length: q.max ?? 3 }, () => ({ photoUrl: "", caption: "" }));
@@ -313,6 +321,7 @@ function QuestionField({
 export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (id: string) => void; }) {
   const { t, i18n } = useTranslation();
   const [step, setStep] = useState<Step>(userId ? "profile" : "account");
+  const [unlockedStepIndex, setUnlockedStepIndex] = useState(userId ? 1 : 0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -386,6 +395,25 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         setAvailabilityOther(next.other);
       }
       if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
+      const savedProfile = Boolean(data.fullName && data.bio && data.languages?.length && data.interests?.length && data.vibeTags?.length && data.availability?.length);
+      let nextUnlocked = savedProfile && groups.length ? nextUnlockIndex("profile", groups) : (userId ? 1 : 0);
+      const savedAnswers = data.onboardingAnswers && typeof data.onboardingAnswers === "object" ? data.onboardingAnswers : {};
+      if (Object.keys(savedAnswers).length) {
+        setAnswers((prev) => ({
+          ...prev,
+          ...Object.fromEntries(
+            groups
+              .filter((group) => savedAnswers[group.template] && typeof savedAnswers[group.template] === "object")
+              .map((group) => [group.template, savedAnswers[group.template] as Record<string, unknown>])
+          ),
+        }));
+      }
+      for (const group of groups) {
+        if (savedAnswers[group.template]) {
+          nextUnlocked = Math.max(nextUnlocked, nextUnlockIndex(group.template, groups));
+        }
+      }
+      setUnlockedStepIndex(nextUnlocked);
       // Parse "degreeLevel - grade" from yearOfStudy
       if (data.yearOfStudy) {
         const parts = data.yearOfStudy.split(" - ");
@@ -412,7 +440,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         }
       }
     }).catch(() => {});
-  }, [userId]);
+  }, [userId, groups]);
 
   const currentGroup = useMemo(
     () => groups.find((group) => group.template === step),
@@ -467,6 +495,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       const data = await api.verifyCode(email, code, fullName);
       acceptSession(data);
       setStep("profile");
+      setUnlockedStepIndex((prev) => Math.max(prev, 1));
       setMessage(t("join.dev.signedIn"));
     } catch (e: any) {
       setMessage(e.message);
@@ -508,6 +537,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         availability: finalAvailability,
       });
       setStep(groups[0]?.template ?? "done");
+      setUnlockedStepIndex((prev) => Math.max(prev, nextUnlockIndex("profile", groups)));
       setMessage(t("join.dev.profileSaved"));
     } catch (e: any) {
       setMessage(e.message);
@@ -548,6 +578,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
       const next = nextStep(step, groups);
       setStep(next);
+      setUnlockedStepIndex((prev) => Math.max(prev, unlockIndexForStep(next, groups)));
       setMessage(next === "done" ? t("join.dev.completeMsg") : t("join.dev.sectionSaved"));
     } catch (e: any) {
       setMessage(e.message);
@@ -574,7 +605,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   }
 
   function goToStep(target: Step) {
-    if (!flowSteps(groups).includes(target)) return;
+    const targetIndex = stepIndex(target, groups);
+    if (targetIndex < 0 || targetIndex > unlockedStepIndex) return;
     setStep(target);
     setMessage("");
   }
@@ -688,7 +720,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               ? t(group.titleKey)
               : group?.title ?? item;
             const active = index === stepIndex(step, groups);
-            const complete = index < stepIndex(step, groups);
+            const complete = index < unlockedStepIndex;
             
             return (
               <div key={item} className="flex items-center gap-3 shrink-0 snap-start">
@@ -704,7 +736,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   
                   <button
                     type="button"
-                    disabled={index > stepIndex(step, groups)}
+                    disabled={index > unlockedStepIndex}
                     onClick={() => goToStep(item)}
                     className={`relative flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-bold transition-all duration-500 disabled:cursor-not-allowed group ${
                       active 
