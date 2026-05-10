@@ -92,8 +92,18 @@ export interface StudentProfile {
   socialSignals?: SocialSignals;
   datingPreferences?: DatingPreferences;
   personaSummary?: string;
+  onboardingAnswers?: Record<string, unknown>;
   vibeWeights?: Record<string, number>;
   onboardingStage?: "auth" | "basic" | "life" | "mind" | "social" | "complete";
+  ldfrResult?: {
+    code: string;
+    title: string;
+    vibe: string;
+    analysis: string;
+    strengths: string[];
+    traps: string[];
+    idealDate: string;
+  };
 }
 
 export type MatchStatus =
@@ -121,6 +131,13 @@ export interface MatchEvent {
 export interface MatchAcceptance {
   userId: string;
   choice: "yes" | "no" | "skip";
+  at: string;
+}
+
+export interface DateConfirmation {
+  userId: string;
+  slot: string;
+  place?: string;
   at: string;
 }
 
@@ -167,6 +184,8 @@ export interface MatchRecord {
   proposedPlace?: ProposedPlace;
   llmRationale?: LlmRationale;
   universityId?: string;
+  dateConfirmations?: DateConfirmation[];
+  icebreaker?: string;
 }
 
 export interface VerificationCode {
@@ -206,6 +225,22 @@ export interface Survey {
   answers: Record<string, unknown>;
   derivedSignals: string[];
   at: string;
+}
+
+export interface ProfileAnalysis {
+  generatedAt: string;
+  summary: string;
+  romanticStyle: string;
+  emotionalTone: string;
+  datingIntent: string;
+  strengths: string[];
+  growthEdges: string[];
+  idealMatch: string;
+  matchSignals: string[];
+  conversationHooks: string[];
+  firstDateSuggestions: string[];
+  profileCompletenessNotes: string[];
+  sourceTemplates: string[];
 }
 
 export interface Database {

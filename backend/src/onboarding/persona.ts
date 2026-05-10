@@ -1,6 +1,6 @@
-import type { StudentProfile } from "../types.js";
+import type { StudentProfile, Survey, ProfileAnalysis } from "../types.js";
 import { llmCall } from "../llm/client.js";
-import { personaSummaryPrompt } from "../llm/prompts.js";
+import { personaSummaryPrompt, profileAnalysisPrompt } from "../llm/prompts.js";
 
 export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
   const { system, prompt } = personaSummaryPrompt(p);
@@ -17,6 +17,31 @@ export async function buildPersonaSummary(p: StudentProfile): Promise<string> {
   return parts.join(" ");
 }
 
+export async function buildProfileAnalysis(
+  p: StudentProfile,
+  surveys: Survey[],
+  language = "en"
+): Promise<ProfileAnalysis> {
+  const relevantSurveys = surveys
+    .filter((s) => s.userId === p.id && s.template.startsWith("onboarding_"))
+    .slice(-12);
+  const { system, prompt } = profileAnalysisPrompt(p, relevantSurveys, language);
+  const out = await llmCall<Omit<ProfileAnalysis, "generatedAt" | "sourceTemplates">>({
+    system,
+    prompt,
+    responseJson: true,
+    tag: "profile-analysis",
+    maxOutputTokens: 1300,
+    temperature: 0.45,
+  });
+
+  const sourceTemplates = Array.from(new Set(relevantSurveys.map((s) => s.template)));
+  if (out.json && !out.usedFallback) {
+    return normalizeProfileAnalysis(out.json, sourceTemplates);
+  }
+
+  return fallbackProfileAnalysis(p, sourceTemplates, language);
+}
 export function applyOnboardingAnswers(
   user: StudentProfile,
   template: "onboarding_life" | "onboarding_mind" | "onboarding_social" | "onboarding_basics" | "onboarding_preferences" | "onboarding_attraction" | "onboarding_ldfr" | "onboarding_media",
@@ -141,6 +166,81 @@ export function applyOnboardingAnswers(
   }
 }
 
+function normalizeProfileAnalysis(
+  input: Partial<ProfileAnalysis>,
+  sourceTemplates: string[]
+): ProfileAnalysis {
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: str(input.summary, "A concise profile summary will become more specific as more answers are collected."),
+    romanticStyle: str(input.romanticStyle, "Still emerging"),
+    emotionalTone: str(input.emotionalTone, "Still emerging"),
+    datingIntent: str(input.datingIntent, "Still emerging"),
+    strengths: strArray(input.strengths).slice(0, 4),
+    growthEdges: strArray(input.growthEdges).slice(0, 3),
+    idealMatch: str(input.idealMatch, "Someone whose pace and expectations fit their stated preferences."),
+    matchSignals: strArray(input.matchSignals).slice(0, 8),
+    conversationHooks: strArray(input.conversationHooks).slice(0, 5),
+    firstDateSuggestions: strArray(input.firstDateSuggestions).slice(0, 4),
+    profileCompletenessNotes: strArray(input.profileCompletenessNotes).slice(0, 3),
+    sourceTemplates,
+  };
+}
+
+/** Strip i18n key prefixes so raw keys don't leak into UI text */
+function stripKey(val?: string): string | undefined {
+  if (!val) return undefined;
+  if (val.includes(".")) {
+    const last = val.split(".").pop() ?? val;
+    return last.replace(/_/g, " ");
+  }
+  return val;
+}
+
+function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[], language = "en"): ProfileAnalysis {
+  const matchSignals = Array.from(new Set([
+    ...p.vibeTags.map((v) => stripKey(v) ?? v),
+    ...p.interests.slice(0, 4),
+    stripKey(p.lifeSignals?.energyMode),
+    stripKey(p.datingPreferences?.datingGoal),
+    stripKey(p.datingPreferences?.matchMode),
+  ].filter((x): x is string => typeof x === "string" && x.length > 0))).slice(0, 8);
+
+  const isZh = language.startsWith("zh");
+  const interests = p.interests.slice(0, 3).join(", ");
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: isZh
+      ? [
+          `${p.fullName || "这位同学"}正在就读${p.major || ""}专业，兴趣包括${interests || "日常生活中的共同爱好"}。`,
+          p.bio ? `个人简介：${p.bio}` : "",
+        ].filter(Boolean).join(" ")
+      : [
+          `${p.fullName || "This student"} is studying ${p.major || "their field"} and seems to connect through ${interests || "shared everyday interests"}.`,
+          p.bio ? `Their bio says: ${p.bio}` : "",
+        ].filter(Boolean).join(" "),
+    romanticStyle: stripKey(p.datingPreferences?.matchMode) ?? stripKey(p.lifeSignals?.energyMode) ?? (isZh ? "尚待探索" : "Still emerging"),
+    emotionalTone: p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v).join(", ") || (isZh ? "尚待探索" : "Still emerging"),
+    datingIntent: stripKey(p.datingPreferences?.datingGoal) ?? stripKey(p.seeking) ?? (isZh ? "尚待探索" : "Still emerging"),
+    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v) : [isZh ? "填写更多问卷后将更清晰" : "Clearer once more form answers are available"],
+    growthEdges: [isZh ? "填写更多具体回答后匹配将更加精准" : "May need a few more specific answers before matching can be highly personalized"],
+    idealMatch: stripKey(p.seeking) || (isZh ? "与TA的偏好和节奏一致的人" : "Someone aligned with their stated preferences and pace"),
+    matchSignals,
+    conversationHooks: p.interests.slice(0, 5),
+    firstDateSuggestions: isZh ? ["校园附近轻松咖啡", "一起散步聊天"] : ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
+    profileCompletenessNotes: sourceTemplates.length ? [] : [isZh ? "暂无问卷答案" : "No onboarding survey answers have been saved yet"],
+    sourceTemplates,
+  };
+}
+
+function str(v: unknown, fallback: string): string {
+  return typeof v === "string" && v.trim() ? v.trim() : fallback;
+}
+
+function strArray(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((x) => x.trim()) : [];
+}
 function strOrUndef(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 }

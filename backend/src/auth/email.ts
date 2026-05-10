@@ -25,9 +25,10 @@ async function sendViaResend(msg: EmailMessage): Promise<{ ok: boolean; error?: 
       html: msg.html,
     }),
   });
+  const body = await res.text().catch(() => "");
+  console.log(`[email:resend] to=${msg.to} subject="${msg.subject}" status=${res.status} body=${body.slice(0, 300)}`);
   if (!res.ok) {
-    const t = await res.text().catch(() => "");
-    return { ok: false, error: `Resend ${res.status}: ${t.slice(0, 200)}` };
+    return { ok: false, error: `Resend ${res.status}: ${body.slice(0, 200)}` };
   }
   return { ok: true };
 }

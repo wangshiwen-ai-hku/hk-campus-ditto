@@ -72,6 +72,15 @@ export interface StudentProfile {
   personaSummary?: string;
   proposedSlots?: string[];
   blockedUserIds?: string[];
+  ldfrResult?: {
+    code: string;
+    title: string;
+    vibe: string;
+    analysis: string;
+    strengths: string[];
+    traps: string[];
+    idealDate: string;
+  };
   crossUniOk?: boolean;
   lifeSignals?: LifeSignals;
   datingPreferences?: DatingPreferences;
@@ -121,6 +130,13 @@ export interface MatchRecord {
     choice: "yes" | "no" | "skip";
     at: string;
   }>;
+  dateConfirmations?: Array<{
+    userId: string;
+    slot: string;
+    place?: string;
+    at: string;
+  }>;
+  icebreaker?: string;
   feedback: Array<{
     userId: string;
     sentiment: "love" | "pass" | "rematch";

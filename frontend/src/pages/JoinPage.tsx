@@ -280,6 +280,42 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       .catch((e) => setMessage(e.message));
   }, []);
 
+  // Pre-populate form fields with existing profile data
+  useEffect(() => {
+    if (!userId) return;
+    api.getProfile(userId).then((data: any) => {
+      if (!data) return;
+      if (data.fullName) setFullName(data.fullName);
+      if (data.email) setEmail(data.email);
+      if (data.bio) setBio(data.bio);
+      if (data.languages?.length) setLanguages(data.languages);
+      if (data.interests?.length) setInterests(data.interests);
+      if (data.vibeTags?.length) setVibeTags(data.vibeTags);
+      if (data.availability?.length) setAvailability(data.availability);
+      if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
+      // Parse "degreeLevel - grade" from yearOfStudy
+      if (data.yearOfStudy) {
+        const parts = data.yearOfStudy.split(" - ");
+        if (parts.length >= 2) {
+          setDegreeLevel(parts[0].trim());
+          setGrade(parts.slice(1).join(" - ").trim());
+        } else {
+          setDegreeLevel(data.yearOfStudy);
+        }
+      }
+      // Parse "faculty - department" from major
+      if (data.major) {
+        const parts = data.major.split(" - ");
+        if (parts.length >= 2) {
+          setFaculty(parts[0].trim());
+          setDepartment(parts.slice(1).join(" - ").trim());
+        } else {
+          setFaculty(data.major);
+        }
+      }
+    }).catch(() => {});
+  }, [userId]);
+
   const currentGroup = useMemo(
     () => groups.find((group) => group.template === step),
     [groups, step]
