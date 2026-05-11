@@ -15,7 +15,7 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
             <span className="hidden sm:inline">{t("brand")}</span>
           </Link>
           <div className="flex items-center gap-3 sm:gap-6">
-            <LanguageSwitcher locale={locale} onLocale={onLocale} />
+            {!userId && <LanguageSwitcher locale={locale} onLocale={onLocale} />}
             
             {!userId && (
               <Link to="/join" className="rounded-full bg-white px-6 py-2 text-sm font-black text-black transition-all hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.1)]">

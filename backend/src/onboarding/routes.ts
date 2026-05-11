@@ -171,7 +171,7 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   user.profileComplete = recomputeProfileComplete(user);
   if (next === "complete") {
     user.personaSummary = await buildPersonaSummary(user);
-    user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, parsed.data.language ?? "en");
+    user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, parsed.data.language ?? user.preferredLocale ?? "en");
   }
   await saveDb(db);
   res.json({ ok: true, user });
@@ -182,8 +182,9 @@ onboardingRouter.post("/persona/regenerate", requireAuth, async (req, res) => {
   const db = await ensureDb();
   const user = db.students.find((s) => s.id === req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
+  const lang = req.body?.language ?? user.preferredLocale ?? "en";
   user.personaSummary = await buildPersonaSummary(user);
-  user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, req.body?.language ?? "en");
+  user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, lang);
   await saveDb(db);
   res.json({ ok: true, personaSummary: user.personaSummary, profileAnalysis: user.profileAnalysis });
 });
