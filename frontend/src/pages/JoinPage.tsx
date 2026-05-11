@@ -53,6 +53,62 @@ function cleanAnswers(group: QuestionGroup, answers: Record<string, unknown>) {
   );
 }
 
+function answersFromProfile(profile: any, groups: QuestionGroup[]) {
+  const savedAnswers = profile?.onboardingAnswers && typeof profile.onboardingAnswers === "object" ? profile.onboardingAnswers : {};
+  const dp = profile?.datingPreferences ?? {};
+  const derived: Record<string, Record<string, unknown>> = {};
+
+  for (const group of groups) {
+    const savedGroup = savedAnswers[group.template] && typeof savedAnswers[group.template] === "object"
+      ? savedAnswers[group.template] as Record<string, unknown>
+      : {};
+
+    if (group.template === "onboarding_basics") {
+      derived[group.template] = {
+        gender: profile.gender,
+        birthday: dp.birthday,
+        height: dp.heightCm,
+        hkMtrLocation: dp.hkMtrLocations,
+        mbtiE: dp.mbti?.energy,
+        mbtiS: dp.mbti?.information,
+        mbtiT: dp.mbti?.decision,
+        mbtiJ: dp.mbti?.lifestyle,
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_preferences") {
+      derived[group.template] = {
+        targetGender: dp.dateGenders,
+        datingGoal: dp.datingGoals ?? (dp.datingGoal ? [dp.datingGoal] : undefined),
+        ageRange: dp.ageRange,
+        languagePref: dp.languagePreferences,
+        matchMode: dp.matchMode,
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_attraction") {
+      derived[group.template] = {
+        hkWeekendVibe: profile.lifeSignals?.weekendVibes,
+        attractionHeightAndBuild: dp.attractionSignals?.heightAndBuild,
+        attractionEnergyAndVibe: dp.attractionSignals?.energyAndVibe,
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_media") {
+      derived[group.template] = {
+        mediaCards: dp.mediaCards?.length ? dp.mediaCards : dp.photoUrls?.map((photoUrl: string) => ({ photoUrl, caption: "" })),
+        photoUrls: dp.photoUrls,
+        ...savedGroup,
+      };
+    } else {
+      derived[group.template] = savedGroup;
+    }
+
+    derived[group.template] = Object.fromEntries(
+      Object.entries(derived[group.template]).filter(([, value]) => value !== undefined)
+    );
+  }
+
+  return derived;
+}
+
 function toggleAnswer(current: unknown, option: string) {
   const values = Array.isArray(current) ? current.filter((x) => typeof x === "string") as string[] : [];
   return values.includes(option) ? values.filter((x) => x !== option) : [...values, option];
@@ -206,8 +262,9 @@ function QuestionField({
           type="number"
           min={question.min ?? 1}
           max={question.max ?? 10}
-          value={typeof value === "number" ? value : question.min ?? 5}
-          onChange={(e) => onChange(Number(e.target.value))}
+          value={typeof value === "number" ? String(value) : typeof value === "string" ? value : ""}
+          placeholder={String(question.min ?? 5)}
+          onChange={(e) => onChange(e.target.value === "" ? "" : Number(e.target.value))}
         />
       ) : null}
 
@@ -221,7 +278,7 @@ function QuestionField({
               min={question.min ?? 18}
               max={rangeValue.max}
               value={rangeValue.min}
-              onChange={(e) => onChange({ ...rangeValue, min: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...rangeValue, min: e.target.value === "" ? "" : Number(e.target.value) })}
             />
           </label>
           <label className="grid gap-2 text-sm font-bold text-white/50">
@@ -232,7 +289,7 @@ function QuestionField({
               min={rangeValue.min}
               max={question.max ?? 60}
               value={rangeValue.max}
-              onChange={(e) => onChange({ ...rangeValue, max: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...rangeValue, max: e.target.value === "" ? "" : Number(e.target.value) })}
             />
           </label>
         </div>
@@ -324,6 +381,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [unlockedStepIndex, setUnlockedStepIndex] = useState(userId ? 1 : 0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hydratingProfile, setHydratingProfile] = useState(Boolean(userId));
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatExpanded, setIsChatExpanded] = useState(false);
   const [activeChatQuestionId, setActiveChatQuestionId] = useState<string | null>(null);
@@ -360,9 +418,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       .then((data) => {
         const loaded = (data as { groups: QuestionGroup[] }).groups;
         setGroups(loaded);
-        setAnswers(Object.fromEntries(loaded.map((group) => [
+        setAnswers((prev) => Object.fromEntries(loaded.map((group) => [
           group.template,
-          {},
+          prev[group.template] ?? {},
         ])));
         setStep((prev) => flowSteps(loaded).includes(prev) ? prev : loaded[0]?.template ?? "profile");
       })
@@ -371,9 +429,15 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
   // Pre-populate form fields with existing profile data
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setHydratingProfile(false);
+      return;
+    }
+    if (!groups.length) return;
+    let cancelled = false;
+    setHydratingProfile(true);
     api.getProfile(userId).then((data: any) => {
-      if (!data) return;
+      if (cancelled || !data) return;
       if (data.fullName) setFullName(data.fullName);
       if (data.email) setEmail(data.email);
       if (data.bio) setBio(data.bio);
@@ -397,15 +461,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
       const savedProfile = Boolean(data.fullName && data.bio && data.languages?.length && data.interests?.length && data.vibeTags?.length && data.availability?.length);
       let nextUnlocked = savedProfile && groups.length ? nextUnlockIndex("profile", groups) : (userId ? 1 : 0);
-      const savedAnswers = data.onboardingAnswers && typeof data.onboardingAnswers === "object" ? data.onboardingAnswers : {};
+      const savedAnswers = answersFromProfile(data, groups);
       if (Object.keys(savedAnswers).length) {
         setAnswers((prev) => ({
           ...prev,
-          ...Object.fromEntries(
-            groups
-              .filter((group) => savedAnswers[group.template] && typeof savedAnswers[group.template] === "object")
-              .map((group) => [group.template, savedAnswers[group.template] as Record<string, unknown>])
-          ),
+          ...savedAnswers,
         }));
       }
       for (const group of groups) {
@@ -439,7 +499,12 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           setFaculty(data.major);
         }
       }
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => {
+      if (!cancelled) setHydratingProfile(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [userId, groups]);
 
   const currentGroup = useMemo(
@@ -555,6 +620,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         const val = (answers[currentGroup.template] ?? {})[q.id];
         if (val === undefined || val === null || val === "") return true;
         if (Array.isArray(val) && val.length === 0) return true;
+        if ((q.kind === "number" || q.kind === "scale") && typeof val !== "number") return true;
+        if (q.kind === "range") {
+          const range = val as { min?: unknown; max?: unknown };
+          return typeof range?.min !== "number" || typeof range?.max !== "number";
+        }
         if (q.kind === "mediaCards" && Array.isArray(val)) {
           return !val.some((item) => typeof item === "object" && item !== null && "photoUrl" in item && typeof item.photoUrl === "string" && item.photoUrl.length > 0);
         }
@@ -772,7 +842,17 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
       <div className="flex flex-col gap-8">
         <SectionCard className="w-full">
-          {step === "account" ? (
+          {hydratingProfile ? (
+            <div className="flex min-h-[260px] items-center justify-center text-center">
+              <div>
+                <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-aura" />
+                <div className="text-base font-black text-white">{t("student.loading")}</div>
+                <div className="mt-2 text-sm text-white/45">{t("join.dev.profileDesc")}</div>
+              </div>
+            </div>
+          ) : null}
+
+          {!hydratingProfile && step === "account" ? (
             <div className="grid gap-6">
               <div>
                 <h2 className="text-2xl font-black">{t("join.dev.account")}</h2>
@@ -802,7 +882,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {step === "profile" ? (
+          {!hydratingProfile && step === "profile" ? (
             <div className="grid gap-7">
               <div>
                 <h2 className="text-2xl font-black">{t("join.dev.profileBasics")}</h2>
@@ -901,7 +981,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {currentGroup ? (
+          {!hydratingProfile && currentGroup ? (
             <div className="grid gap-6">
               <div>
                 <h2 className="text-2xl font-black">{currentGroup.titleKey ? t(currentGroup.titleKey) : currentGroup.title}</h2>
@@ -937,7 +1017,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {step === "done" ? (
+          {!hydratingProfile && step === "done" ? (
             <div className="grid gap-5 text-center">
               <h2 className="text-3xl font-black">{t("join.dev.completeTitle")}</h2>
               <p className="mx-auto max-w-xl text-white/55">{t("join.dev.completeDesc")}</p>

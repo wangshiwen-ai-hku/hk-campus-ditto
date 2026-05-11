@@ -1,14 +1,33 @@
 import { Router } from "express";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
-import { ensureDb, saveDb } from "../db.js";
+import { getStudentById, getSurveysForUser, saveStudent, saveSurvey } from "../db.js";
 import { requireAuth } from "../core/auth-middleware.js";
 import { onboardingGroups, findGroup } from "./questions.js";
 import { applyOnboardingAnswers, buildPersonaSummary, buildProfileAnalysis, recomputeProfileComplete } from "./persona.js";
 import { chatRouter } from "./chat.js";
-import { StudentProfile } from "../types.js";
+import type { StudentProfile, Survey } from "../types.js";
 
 export const onboardingRouter = Router();
+
+function regenerateProfileInBackground(userId: string, language: string) {
+  void (async () => {
+    try {
+      const user = await getStudentById(userId);
+      if (!user) return;
+      const surveys = await getSurveysForUser(userId);
+      const personaSummary = await buildPersonaSummary(user);
+      const profileAnalysis = await buildProfileAnalysis(user, surveys, language);
+      const latestUser = await getStudentById(userId);
+      if (!latestUser) return;
+      latestUser.personaSummary = personaSummary;
+      latestUser.profileAnalysis = profileAnalysis;
+      await saveStudent(latestUser);
+    } catch (error) {
+      console.error("Background profile generation failed", error);
+    }
+  })();
+}
 
 onboardingRouter.use("/chat", chatRouter);
 
@@ -64,8 +83,7 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
 
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
 
   const { datingPreferences, ...rest } = parsed.data;
@@ -95,7 +113,7 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
   }
 
   user.profileComplete = recomputeProfileComplete(user);
-  await saveDb(db);
+  await saveStudent(user);
   res.json({ ok: true, user });
 });
 
@@ -106,12 +124,11 @@ onboardingRouter.post("/preferred-locale", requireAuth, async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload.", details: parsed.error.flatten() });
 
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
 
   user.preferredLocale = parsed.data.preferredLocale;
-  await saveDb(db);
+  await saveStudent(user);
   res.json({ ok: true, user });
 });
 
@@ -137,20 +154,23 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   const group = findGroup(parsed.data.template);
   if (!group) return res.status(400).json({ error: "Unknown survey template." });
 
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
 
+  user.onboardingAnswers = {
+    ...(user.onboardingAnswers ?? {}),
+    [parsed.data.template]: parsed.data.answers,
+  };
   applyOnboardingAnswers(user, parsed.data.template, parsed.data.answers);
 
-  db.surveys.push({
+  const survey: Survey = {
     id: uuid(),
     userId: user.id,
     template: parsed.data.template,
     answers: parsed.data.answers,
     derivedSignals: [],
     at: new Date().toISOString(),
-  });
+  };
 
   // advance stage
   const order: Array<typeof user.onboardingStage> = ["auth", "basic", "life", "mind", "social", "complete"];
@@ -170,20 +190,25 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
 
   user.profileComplete = recomputeProfileComplete(user);
   if (next === "complete") {
-    user.personaSummary = await buildPersonaSummary(user);
-    user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, parsed.data.language ?? "en");
+    delete user.profileAnalysis;
   }
-  await saveDb(db);
-  res.json({ ok: true, user });
+  await Promise.all([
+    saveStudent(user),
+    saveSurvey(survey),
+  ]);
+  res.json({ ok: true, user, profileAnalysisPending: next === "complete" });
+  if (next === "complete") {
+    regenerateProfileInBackground(user.id, parsed.data.language ?? "en");
+  }
 });
 
 // Generate persona summary on demand (cheap LLM call, cached on user)
 onboardingRouter.post("/persona/regenerate", requireAuth, async (req, res) => {
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
+  const surveys = await getSurveysForUser(user.id);
   user.personaSummary = await buildPersonaSummary(user);
-  user.profileAnalysis = await buildProfileAnalysis(user, db.surveys, req.body?.language ?? "en");
-  await saveDb(db);
+  user.profileAnalysis = await buildProfileAnalysis(user, surveys, req.body?.language ?? "en");
+  await saveStudent(user);
   res.json({ ok: true, personaSummary: user.personaSummary, profileAnalysis: user.profileAnalysis });
 });

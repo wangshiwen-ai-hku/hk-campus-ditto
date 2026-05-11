@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { ensureDb, saveDb } from "../db.js";
+import { ensureDb, getMatchesForUser, getStudentById, getUniversityById, saveDb } from "../db.js";
 import { requireAdmin, requireAuth } from "../core/auth-middleware.js";
 import { rankCandidatesFor, runWeeklyMatchmaking } from "./ranker.js";
 import { poolFor } from "./filter.js";
@@ -10,9 +10,9 @@ export const matchingRouter = Router();
 
 // Get current active match for the authenticated user
 matchingRouter.get("/current", requireAuth, async (req, res) => {
-  const db = await ensureDb();
   const userId = req.auth!.sub;
-  const match = db.matches.find(
+  const matches = await getMatchesForUser(userId);
+  const match = matches.find(
     (m) =>
       (m.userAId === userId || m.userBId === userId) &&
       [
@@ -29,24 +29,21 @@ matchingRouter.get("/current", requireAuth, async (req, res) => {
   );
   if (!match) return res.json({ matchView: null });
   const partnerId = match.userAId === userId ? match.userBId : match.userAId;
-  const partner = db.students.find((s) => s.id === partnerId);
-  const university = partner ? db.universities.find((u) => u.id === partner.universityId) : undefined;
+  const partner = await getStudentById(partnerId);
+  const university = partner ? await getUniversityById(partner.universityId) : undefined;
   res.json({ matchView: { match, partner, university } });
 });
 
 // All matches for the authenticated user (active + history), with partner profiles
 matchingRouter.get("/all", requireAuth, async (req, res) => {
-  const db = await ensureDb();
   const userId = req.auth!.sub;
-  const matches = db.matches
-    .filter((m) => m.userAId === userId || m.userBId === userId)
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-  const items = matches.map((match) => {
+  const matches = await getMatchesForUser(userId);
+  const items = await Promise.all(matches.map(async (match) => {
     const partnerId = match.userAId === userId ? match.userBId : match.userAId;
-    const partner = db.students.find((s) => s.id === partnerId);
-    const university = partner ? db.universities.find((u) => u.id === partner.universityId) : undefined;
+    const partner = await getStudentById(partnerId);
+    const university = partner ? await getUniversityById(partner.universityId) : undefined;
     return { match, partner: partner ?? null, university: university ?? null };
-  });
+  }));
   res.json({ matches: items });
 });
 

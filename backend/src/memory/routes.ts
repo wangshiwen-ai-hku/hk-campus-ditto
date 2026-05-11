@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { ensureDb, saveDb } from "../db.js";
+import { ensureDb, getStudentById, saveStudent } from "../db.js";
 import { requireAuth } from "../core/auth-middleware.js";
 import { buildUserMemory, listUserSurveys } from "./store.js";
 import { buildHistory } from "./history.js";
@@ -40,8 +40,7 @@ memoryRouter.post("/preferences", requireAuth, async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
 
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
 
   if (parsed.data.crossUniOk !== undefined) user.crossUniOk = parsed.data.crossUniOk;
@@ -49,8 +48,8 @@ memoryRouter.post("/preferences", requireAuth, async (req, res) => {
   if (parsed.data.vibeWeights) user.vibeWeights = { ...(user.vibeWeights ?? {}), ...parsed.data.vibeWeights };
   if (parsed.data.optedIn !== undefined) user.optedIn = parsed.data.optedIn;
 
-  await saveDb(db);
-  res.json({ ok: true, memory: buildUserMemory(db, user.id) });
+  await saveStudent(user);
+  res.json({ ok: true, memory: buildUserMemory({ universities: [], students: [user], matches: [], verificationCodes: [], inviteCodes: [], surveys: [] }, user.id) });
 });
 
 // Block / unblock a partner manually
@@ -58,8 +57,7 @@ memoryRouter.post("/block", requireAuth, async (req, res) => {
   const schema = z.object({ partnerId: z.string(), action: z.enum(["block", "unblock"]) });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
+  const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
   user.blockedUserIds = user.blockedUserIds ?? [];
   if (parsed.data.action === "block" && !user.blockedUserIds.includes(parsed.data.partnerId)) {
@@ -67,6 +65,6 @@ memoryRouter.post("/block", requireAuth, async (req, res) => {
   } else if (parsed.data.action === "unblock") {
     user.blockedUserIds = user.blockedUserIds.filter((id) => id !== parsed.data.partnerId);
   }
-  await saveDb(db);
+  await saveStudent(user);
   res.json({ ok: true, blockedUserIds: user.blockedUserIds });
 });
