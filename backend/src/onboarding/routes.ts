@@ -198,7 +198,7 @@ onboardingRouter.post("/survey", requireAuth, async (req, res) => {
   ]);
   res.json({ ok: true, user, profileAnalysisPending: next === "complete" });
   if (next === "complete") {
-    regenerateProfileInBackground(user.id, parsed.data.language ?? "en");
+    regenerateProfileInBackground(user.id, parsed.data.language ?? user.preferredLocale ?? "en");
   }
 });
 
@@ -207,8 +207,9 @@ onboardingRouter.post("/persona/regenerate", requireAuth, async (req, res) => {
   const user = await getStudentById(req.auth!.sub);
   if (!user) return res.status(404).json({ error: "User not found." });
   const surveys = await getSurveysForUser(user.id);
+  const lang = req.body?.language ?? user.preferredLocale ?? "en";
   user.personaSummary = await buildPersonaSummary(user);
-  user.profileAnalysis = await buildProfileAnalysis(user, surveys, req.body?.language ?? "en");
+  user.profileAnalysis = await buildProfileAnalysis(user, surveys, lang);
   await saveStudent(user);
   res.json({ ok: true, personaSummary: user.personaSummary, profileAnalysis: user.profileAnalysis });
 });

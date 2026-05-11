@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { llmCall } from "../llm/client.js";
 import { requireAuth } from "../core/auth-middleware.js";
-import { ensureDb, saveDb } from "../db.js";
+import { getStudentById, saveStudent } from "../db.js";
 
 export const chatRouter = Router();
 
@@ -210,10 +210,14 @@ const LDFR_META: Record<string, { titleZh: string; titleEn: string; vibeZh: stri
 chatRouter.post("/ldfr-analyze", requireAuth, async (req, res) => {
   const schema = z.object({
     answers: z.record(z.string(), z.any()),
-    language: z.string().default("en")
+    language: z.string().optional()
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
+
+  // Resolve language: explicit param > user's preferredLocale > fallback "en"
+  const user = await getStudentById(req.auth!.sub);
+  const language = parsed.data.language ?? user?.preferredLocale ?? "en";
 
   const prompt = `
 You are an expert personality analyst for Aura-HK. The user has completed the LDFR (Love, Desire, Flow, Rhythm) personality test.
@@ -236,7 +240,7 @@ The 8 types are:
 User's Answers:
 ${JSON.stringify(parsed.data.answers, null, 2)}
 
-Please output a JSON with the following structure in ${parsed.data.language}:
+Please output a JSON with the following structure in ${language}:
 {
   "code": "LFF", // One of the 8 codes
   "title": "...", // The localized title
@@ -260,7 +264,7 @@ Please output a JSON with the following structure in ${parsed.data.language}:
   if (!ldfrData) {
     const code = scoreLdfr(parsed.data.answers);
     const meta = LDFR_META[code] ?? LDFR_META.DFF;
-    const isZh = parsed.data.language.startsWith("zh");
+    const isZh = language.startsWith("zh");
     ldfrData = {
       code,
       title: isZh ? meta.titleZh : meta.titleEn,
@@ -275,11 +279,9 @@ Please output a JSON with the following structure in ${parsed.data.language}:
   }
 
   // Persist LDFR result on user profile
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.auth!.sub);
   if (user) {
     user.ldfrResult = ldfrData;
-    await saveDb(db);
+    await saveStudent(user);
   }
   res.json(ldfrData);
 });

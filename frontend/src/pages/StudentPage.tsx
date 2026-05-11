@@ -7,7 +7,6 @@ import { SectionCard } from "../components/SectionCard";
 import { User, Heart, ArrowLeft, X, MapPin, Ruler, Calendar, Sparkles, Target, ChevronDown, ChevronUp, Flame, Pencil } from "lucide-react";
 
 type Tab = "profile" | "matches" | "persona";
-const PREFERRED_LOCALES: Locale[] = ["en", "zh-HK", "zh-CN"];
 
 type MatchView = {
   match: MatchRecord;
@@ -397,20 +396,20 @@ function TagRow({ label, tags, color }: { label: string; tags: string[]; color: 
 function ProfileTab({
   profile,
   t,
-  savingLocale,
-  onPreferredLocale,
 }: {
   profile: StudentProfile;
   t: (k: string, o?: any) => string;
-  savingLocale: boolean;
-  onPreferredLocale: (locale: Locale) => void;
 }) {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isZh = i18n.language.startsWith("zh");
   const dp = profile.datingPreferences;
   const photos = dp?.photoUrls?.filter((u) => u && u.length > 10) ?? [];
   const weekendVibes = profile.lifeSignals?.weekendVibes ?? [];
   const mbtiStr = getMbtiString(dp?.mbti);
   const age = getAge(dp?.birthday);
+  const ldfrCode = profile.ldfrResult?.code;
+  const ldfrArch = ldfrCode ? LDFR_ARCHETYPES[ldfrCode] : null;
   const hasAttrSignals = dp?.attractionSignals && (dp.attractionSignals.heightAndBuild || dp.attractionSignals.energyAndVibe);
 
   return (
@@ -441,30 +440,6 @@ function ProfileTab({
             <Pencil size={12} /> {t("student.profile.editProfile")}
           </button>
         </div>
-        <SectionCard className="border-white/10 !p-4">
-          <div className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-white/25">{t("student.profile.preferredLocale")}</div>
-          <div className="grid gap-2">
-            {PREFERRED_LOCALES.map((locale) => {
-              const active = (profile.preferredLocale ?? "en") === locale;
-              return (
-                <button
-                  key={locale}
-                  type="button"
-                  disabled={savingLocale || active}
-                  onClick={() => onPreferredLocale(locale)}
-                  className={`rounded-xl border px-3 py-2 text-left text-xs font-black transition-all disabled:cursor-default ${
-                    active
-                      ? "border-aura/40 bg-aura/20 text-aura"
-                      : "border-white/10 bg-white/5 text-white/45 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  {t(`join.preferredLocales.${locale}`)}
-                </button>
-              );
-            })}
-          </div>
-          <div className="mt-3 text-xs leading-relaxed text-white/35">{t("student.profile.preferredLocaleHint")}</div>
-        </SectionCard>
       </div>
 
       {/* Right Column */}
@@ -472,6 +447,16 @@ function ProfileTab({
         {/* Personal Info — compact grid */}
         <SectionCard className="border-white/10 shadow-2xl">
           <div className="text-xs font-black uppercase tracking-[0.3em] text-white/20 mb-3">{t("student.profile.personalInfo")}</div>
+          {ldfrArch && (
+            <div className="mb-3 rounded-2xl bg-gradient-to-r from-aura/15 via-purple-500/10 to-harbour/15 border border-aura/20 p-4 flex items-center gap-4">
+              <span className="text-3xl">{ldfrArch.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-lg font-black text-aura tracking-[0.25em]">{ldfrCode}</div>
+                <div className="text-sm font-bold text-white/70">{isZh ? ldfrArch.nameZh : ldfrArch.nameEn}</div>
+              </div>
+              <Flame size={18} className="text-aura/40 shrink-0" />
+            </div>
+          )}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {age && <InfoChip icon={<Calendar size={14} />} label={t("student.profile.age")} value={`${age}`} />}
             {profile.gender && <InfoChip icon={<User size={14} />} label={t("student.profile.gender")} value={tOpt(t, profile.gender)} />}
@@ -544,7 +529,7 @@ function ProfileTab({
               {dp?.matchMode && (
                 <div className="flex items-center gap-3">
                   <span className="text-[10px] font-black uppercase tracking-wider text-white/25 shrink-0 w-16">{t("student.profile.matchMode")}</span>
-                  <span className="text-sm font-bold text-white/60">{tOpt(t, `mode_${dp.matchMode}`)}</span>
+                  <span className="text-sm font-bold text-white/60">{tOpt(t, dp.matchMode)}</span>
                 </div>
               )}
               {hasAttrSignals && (
@@ -1382,8 +1367,6 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
   const [matches, setMatches] = useState<MatchView[]>([]);
   const [personaLoading, setPersonaLoading] = useState(false);
   const [personaError, setPersonaError] = useState("");
-  const [savingLocale, setSavingLocale] = useState(false);
-
   const isZh = i18n.language.startsWith("zh");
   const ldfrLang = isZh ? "zh-CN" : "en";
 
@@ -1413,27 +1396,16 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
     }
   }, [refresh]);
 
-  async function updatePreferredLocale(locale: Locale) {
-    setSavingLocale(true);
-    try {
-      const result = await api.updatePreferredLocale(locale);
-      setProfile(result.user as StudentProfile);
-      onLocale(locale);
-      if (profile?.profileComplete) {
-        await api.regeneratePersona(locale);
-        await refresh();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSavingLocale(false);
-    }
-  }
-
   // Initial load + auto-generate persona & profile analysis if needed
   useEffect(() => {
     refresh().then(async (p) => {
       if (!p) return;
+
+      // Sync UI language from user's preferredLocale
+      if (p.preferredLocale && p.preferredLocale !== i18n.language) {
+        i18n.changeLanguage(p.preferredLocale);
+        onLocale(p.preferredLocale as Locale);
+      }
 
       // Auto-generate LDFR persona
       const answers = p.onboardingAnswers?.onboarding_ldfr;
@@ -1503,7 +1475,7 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
         </button>
       </div>
 
-      {tab === "profile" && <ProfileTab profile={profile} t={t} savingLocale={savingLocale} onPreferredLocale={updatePreferredLocale} />}
+      {tab === "profile" && <ProfileTab profile={profile} t={t} />}
       {tab === "matches" && <MatchesTab matches={matches} profile={profile} onRefresh={refresh} t={t} />}
       {tab === "persona" && <PersonaTab profile={profile} t={t} lang={i18n.language} personaLoading={personaLoading} personaError={personaError} onRegenerate={() => generatePersona(profile, ldfrLang)} />}
     </main>
