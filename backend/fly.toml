@@ -1,0 +1,14 @@
+# 这个 app 名称必须替换为你在 Fly.io 后台创建的名字
+app = "thrumming-island-597"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
