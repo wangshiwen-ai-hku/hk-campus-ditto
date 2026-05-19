@@ -3,7 +3,7 @@ import type { Locale } from "./types";
 type Dict = Record<string, { en: string; "zh-HK": string; "zh-CN": string }>;
 
 export const copy: Dict = {
-  brand: { en: "Aura HK", "zh-HK": "Aura HK", "zh-CN": "Aura HK" },
+  brand: { en: "DopaMine", "zh-HK": "DopaMine", "zh-CN": "DopaMine" },
   navHow: { en: "How it works", "zh-HK": "點樣運作", "zh-CN": "如何运作" },
   navSafety: { en: "Safety", "zh-HK": "安全", "zh-CN": "安全保障" },
   navFAQ: { en: "FAQ", "zh-HK": "常見問題", "zh-CN": "常见问题" },

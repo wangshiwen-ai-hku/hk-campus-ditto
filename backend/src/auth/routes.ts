@@ -52,7 +52,7 @@ authRouter.post("/request-code", async (req, res) => {
   const code = generateCode();
   const emailResult = await sendEmail({
     to: email,
-    subject: "Your Aura verification code",
+    subject: "Your DopaMine verification code",
     text: `Your verification code is: ${code}\n\nIt expires in ${env.auth.codeTtlMin} minutes.\n\nIf you didn't request this, ignore the email.`,
   });
   if (!emailResult.ok) {
@@ -208,7 +208,7 @@ authRouter.get("/invites/export.csv", requireAdmin, async (req, res) => {
     ),
   ].join("\n");
   res.header("Content-Type", "text/csv; charset=utf-8");
-  res.header("Content-Disposition", "attachment; filename=aura-hk-invites.csv");
+  res.header("Content-Disposition", "attachment; filename=dopamine-invites.csv");
   res.send(csv);
 });
 

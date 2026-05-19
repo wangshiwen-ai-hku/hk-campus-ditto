@@ -118,6 +118,6 @@ if (env.nodeEnv !== "production") {
 }
 
 app.listen(env.port, () => {
-  console.log(`Aura HK API listening on http://localhost:${env.port}`);
+  console.log(`DopaMine API listening on http://localhost:${env.port}`);
   console.log(`LLM provider=${env.llm.provider} model=${env.llm.model} | email provider=${env.email.provider}`);
 });

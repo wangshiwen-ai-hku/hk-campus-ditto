@@ -1,6 +1,6 @@
-# Aura HK
+# DopaMine
 
-Aura HK is a **TypeScript + React + Tailwind + Express** full-stack demo inspired by the high-conversion product rhythm of weekly "match drops", specifically redesigned for **Hong Kong universities**.
+DopaMine is a **TypeScript + React + Tailwind + Express** full-stack demo inspired by the high-conversion product rhythm of weekly "match drops", specifically redesigned for **Hong Kong universities**.
 
 > [!IMPORTANT]
 > This project has been upgraded with a **Modern Dark Theme** and modular architecture for better scalability.

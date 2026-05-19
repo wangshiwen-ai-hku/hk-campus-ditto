@@ -66,7 +66,7 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "Aura HK <noreply@aura.hk>"),
+    from: str("EMAIL_FROM", "DopaMine (PsyAI) <noreply@aurahk.me>"),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),

@@ -210,7 +210,7 @@ export function renderPartnerConfirmed(
         reasons?.length ? `` : "",
         isHk ? `打開 App 確認你呢邊，確認後你哋會收到對方聯絡方式。` : `打开 App 确认你的选择，确认后你们会收到对方联系方式。`,
         ``,
-        `— Aura HK`,
+        `— DopaMine`,
       ].filter((line) => line !== "").join("\n"),
     };
   }
@@ -241,7 +241,7 @@ export function renderPartnerConfirmed(
     ``,
     `Open the app to confirm your side — once you do, you'll both get each other's contact info!`,
     ``,
-    `— Aura HK 💜`,
+    `— DopaMine 💜`,
   ]
     .filter((line) => line !== "")
     .join("\n");
@@ -256,7 +256,7 @@ export function renderPartnerConfirmed(
 
     <!-- Header -->
     <div style="text-align:center;padding:24px 0 16px;">
-      <div style="font-size:28px;font-weight:900;color:#a855f7;letter-spacing:-0.5px;">Aura HK</div>
+      <div style="font-size:28px;font-weight:900;color:#a855f7;letter-spacing:-0.5px;">DopaMine</div>
     </div>
 
     <!-- Main Card -->
@@ -308,7 +308,7 @@ export function renderPartnerConfirmed(
 
     <!-- Footer -->
     <div style="text-align:center;padding:24px 0 8px;">
-      <p style="color:#475569;font-size:12px;margin:0;">Aura HK · One intentional date at a time 💜</p>
+      <p style="color:#475569;font-size:12px;margin:0;">DopaMine · One intentional date at a time 💜</p>
     </div>
   </div>
 </body>

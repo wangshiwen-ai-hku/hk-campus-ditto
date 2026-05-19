@@ -1,5 +1,5 @@
 {
-  "brand": "Aura HK",
+  "brand": "DopaMine",
   "nav": {
     "how": "How it works",
     "safety": "Safety",
@@ -154,7 +154,7 @@
       "uploadPhotos": "Upload photos",
       "uploadPhotosHint": "Add up to {{count}} clear photos.",
       "remove": "Remove",
-      "chatWelcome": "Hi! I'm Aura-HK. I'm here to help you complete your profile. You can fill out the form, or ask me when you get stuck.",
+      "chatWelcome": "Hi! I'm DopaMine. I'm here to help you complete your profile. You can fill out the form, or ask me when you get stuck.",
       "chatGroupDone": "This section is complete. Review your answers, then click “Save & Continue” on the left.",
       "chatFormFallback": "I'll keep this focused so we can finish your profile. Continue with the current form, then I'll help with the questionnaire.",
       "chatPlaceholder": "Type your answer...",
@@ -296,7 +296,7 @@
     },
     "nextDropView": {
       "title": "You’ve joined the next drop!",
-      "desc": "Aura believes in quality over quantity. No more swiping. Every Wednesday at 7:00 PM you get one **intentional match**.",
+      "desc": "DopaMine believes in quality over quantity. No more swiping. Every Wednesday at 7:00 PM you get one **intentional match**.",
       "countdownTitle": "Countdown to Next Drop",
       "checkBack": "See you Wednesday!",
       "verified": "Verified People Only",
@@ -353,7 +353,7 @@
       "editProfile": "Edit Profile",
       "aboutMe": "About Me",
       "prefsAndType": "Preferences & Type",
-      "auraAnalysis": "Aura Profile Analysis",
+      "auraAnalysis": "DopaMine Profile Analysis",
       "romanticStyle": "Romantic Style",
       "idealMatch": "Ideal Match",
       "conversationStarters": "Conversation Starters",
@@ -439,7 +439,7 @@
       },
       "ldfr": {
         "title": "Emotional Persona (LDFR)",
-        "desc": "A short, optional check to discover your unique Aura Persona."
+        "desc": "A short, optional check to discover your unique DopaMine Persona."
       }
     },
     "q": {

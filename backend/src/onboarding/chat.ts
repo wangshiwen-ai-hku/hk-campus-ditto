@@ -33,7 +33,7 @@ chatRouter.post("/nudge", requireAuth, async (req, res) => {
   const { userMessage, language, sectionLabel, recentMessages } = parsed.data;
   const replyLanguage = languageInstruction(language, userMessage);
   const prompt = `
-You are Aura-HK, a warm but focused AI assistant for a campus dating profile form.
+You are DopaMine, a warm but focused AI assistant for a campus dating profile form.
 The user is currently in this app section: ${sectionLabel}.
 There is no specific active questionnaire question right now, so do not extract or save answers.
 
@@ -95,7 +95,7 @@ chatRouter.post("/extract", requireAuth, async (req, res) => {
   const replyLanguage = languageInstruction(language, userMessage);
 
   const prompt = `
-You are Aura-HK, a warm and empathetic AI dating assistant.
+You are DopaMine, a warm and empathetic AI dating assistant.
 Your primary job is to help the user finish the questionnaire. You are not a long-form companion.
 
 Classify the user's message first:
@@ -220,7 +220,7 @@ chatRouter.post("/ldfr-analyze", requireAuth, async (req, res) => {
   const language = parsed.data.language ?? user?.preferredLocale ?? "en";
 
   const prompt = `
-You are an expert personality analyst for Aura-HK. The user has completed the LDFR (Love, Desire, Flow, Rhythm) personality test.
+You are an expert personality analyst for DopaMine. The user has completed the LDFR (Love, Desire, Flow, Rhythm) personality test.
 Based on their answers, analyze their personality and assign them one of the 8 LDFR types.
 The 3 dimensions are:
 1. Energy (L Lumen / D Dusk)
