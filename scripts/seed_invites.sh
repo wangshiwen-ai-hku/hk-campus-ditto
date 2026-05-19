@@ -22,17 +22,17 @@ npm run invites:db -- generate \
 #  # 手动标记已用
 
 # npm run invites:db -- mark-used \
-#     --code=DITTO-HKU-XXXX-YYYY \
+#     --code=DOPAMINE-HKU-XXXX-YYYY \
 #     --userId=some-user-id
 
 #   # 如果只是运营上占用，不对应真实用户：
 
 # npm run invites:db -- mark-used \
-#     --code=DITTO-HKU-XXXX-YYYY
+#     --code=DOPAMINE-HKU-XXXX-YYYY
 
 #   # 默认会标成 usedBy: "manual-used"。
 
 #   # 手动恢复未使用
 
 # npm run invites:db -- mark-unused \
-#     --code=DITTO-HKU-XXXX-YYYY
+#     --code=DOPAMINE-HKU-XXXX-YYYY

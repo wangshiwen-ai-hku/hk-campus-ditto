@@ -1,4 +1,4 @@
-# 校园 Ditto 500人内测部署与发版测试报告 (Beta Launch Report)
+# 校园 DopaMine 500人内测部署与发版测试报告 (Beta Launch Report)
 
 基于 CTO 提供的 `launch-readiness.md` 要求，已于 2026年4月 顺利完成后端从本地单机架构向云端敏捷高可用架构的完整演进与集成测试验证。
 

@@ -749,7 +749,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               {t("join.dev.title").split(" ")[0]}
             </span>{" "}
             <span className="font-romantic italic bg-gradient-to-r from-aura via-pink-400 to-aura bg-clip-text text-transparent">
-              {t("join.dev.title").split(" ")[1] || "Ditto"}
+              {t("join.dev.title").split(" ")[1] || "DopaMine"}
             </span>
           </h1>
 
@@ -1067,7 +1067,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         
         {/* The "A" Icon Branding */}
         <div className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/20 shadow-xl">
-          <span className="text-2xl font-black text-white tracking-tighter drop-shadow-lg">A</span>
+          <span className="text-2xl font-black text-white tracking-tighter drop-shadow-lg">D</span>
           {/* Subtle gloss line */}
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none"></div>
         </div>

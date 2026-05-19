@@ -10,7 +10,7 @@
 
 1. **操作：** 直接在 Vercel 上导入你的前端项目并点击 Deploy。
 2. **目的：** 不用管环境变量，我们的唯一目的是让 Vercel 分配给你一个公网网址。
-3. **结果：** 拿到你的前端专属 URL（例如：`https://hk-campus-ditto.vercel.app`）。**请复制它，注意结尾绝对不要带斜杠 `/`。**
+3. **结果：** 拿到你的前端专属 URL（例如：`https://hk-campus-dopamine.vercel.app`）。**请复制它，注意结尾绝对不要带斜杠 `/`。**
 
 ---
 
@@ -22,8 +22,8 @@
 2. **配置环境变量 (Render 的 Environment 选项卡)：**
    * 加上你的数据库地址：`DATABASE_URL` = `你的 Supabase 连接池地址`
    * 加上你的管理员密码：`ADMIN_SECRET` = `你自己编的复杂密码`
-   * **👉 最关键的一步（配置 CORS）：** 根据你后端的代码逻辑，添加变量 `CORS_ORIGINS`（或者你代码里实际叫的名字，比如 `FRONTEND_URL`），值为刚才拿到的前端网址：`https://hk-campus-ditto.vercel.app`。
-3. **结果：** 点击 Deploy。部署成功后，Render 会给你一个后端专属 URL（例如：`https://hk-campus-ditto-backend.onrender.com`）。**请复制它。**
+   * **👉 最关键的一步（配置 CORS）：** 根据你后端的代码逻辑，添加变量 `CORS_ORIGINS`（或者你代码里实际叫的名字，比如 `FRONTEND_URL`），值为刚才拿到的前端网址：`https://hk-campus-dopamine.vercel.app`。
+3. **结果：** 点击 Deploy。部署成功后，Render 会给你一个后端专属 URL（例如：`https://hk-campus-dopamine-backend.onrender.com`）。**请复制它。**
 
 ---
 
@@ -35,7 +35,7 @@
 2. **配置环境变量：**
    * 假设你的前端是用 Vite 写的，通常请求地址的变量名是以 `VITE_` 开头的（比如 `VITE_API_BASE_URL` 或 `VITE_API_URL`，具体看你的前端代码是怎么写的）。
    * **Key:** `VITE_API_BASE_URL`
-   * **Value:** 填入你刚才在 Render 拿到的后端网址：`https://hk-campus-ditto-backend.onrender.com`。
+   * **Value:** 填入你刚才在 Render 拿到的后端网址：`https://hk-campus-dopamine-backend.onrender.com`。
 3. **👉 最关键的一步（重新构建）：** * 环境变量只在**打包（Build）**的时候才会被前端代码“吃”进去。
    * 添加完变量后，去 Vercel 的 **Deployments** 页面。
    * 点击你最新那次部署右侧的三个点 `...`，选择 **Redeploy**（重新部署）。

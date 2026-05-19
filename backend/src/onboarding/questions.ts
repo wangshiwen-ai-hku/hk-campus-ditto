@@ -1,4 +1,4 @@
-// Question bank for onboarding surveys based on Ditto Questionnaire.
+// Question bank for onboarding surveys based on DopaMine Questionnaire.
 // Designed as 3 thematic groups.
 // Each question carries a `whyItMatters` so the UI can show transparency.
 
