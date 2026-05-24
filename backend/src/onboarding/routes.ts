@@ -50,7 +50,7 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
     interests: z.array(z.string()),
     vibeTags: z.array(z.string()),
     dealBreakers: z.array(z.string()).default([]),
-    crossUniOk: z.boolean().default(false),
+    crossUniOk: z.boolean().default(true),
     optedIn: z.boolean().default(true),
     availability: z.array(z.string()).default([]),
     datingPreferences: z.object({

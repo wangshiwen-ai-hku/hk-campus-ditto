@@ -73,4 +73,9 @@ export const env = {
     codeRateLimitPerHour: num("AUTH_CODE_RATE_LIMIT_PER_HOUR", 5),
     inviteRequired: bool("INVITE_REQUIRED", false),
   },
+  scheduler: {
+    enabled: bool("SCHEDULER_ENABLED", false),
+    trigger: str("SCHEDULER_TRIGGER", "Wednesday 19:00"),
+  },
 };
+

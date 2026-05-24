@@ -136,7 +136,7 @@ export async function runWeeklyMatchmaking(
       const a = eligible[i];
       const b = eligible[j];
       if (!poolFor(a, eligible).some((s) => s.id === b.id)) continue;
-      const ranked = await rankCandidatesFor(a, [b], db, { ...opts, topK: 1 });
+      const ranked = await rankCandidatesFor(a, [b], db, { minStructuredScore: 0, ...opts, topK: 1 });
       const pick = ranked[0];
       if (pick) edges.push({ a, b, pick });
     }

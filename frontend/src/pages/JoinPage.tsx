@@ -408,7 +408,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [vibeOther, setVibeOther] = useState("");
   const [availability, setAvailability] = useState<string[]>([]);
   const [availabilityOther, setAvailabilityOther] = useState("");
-  const [crossUniOk, setCrossUniOk] = useState(false);
+  const [crossUniOk, setCrossUniOk] = useState(true);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
   const [answers, setAnswers] = useState<Record<string, Record<string, unknown>>>({});

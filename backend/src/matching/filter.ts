@@ -43,15 +43,13 @@ function pairHasPassFeedback(matches: MatchRecord[], a: string, b: string): bool
 }
 
 function dealbreakerHit(a: StudentProfile, b: StudentProfile): boolean {
-  const lowerB = new Set([...b.vibeTags, ...b.interests].map((t) => t.toLowerCase()));
+  const lowerB = new Set([...(b.vibeTags ?? []), ...(b.interests ?? [])].map((t) => t.toLowerCase()));
   return (a.dealBreakers ?? []).some((db) => lowerB.has(db.toLowerCase()));
 }
 
 export function isEligibleForRound(s: StudentProfile, ctx: FilterContext): boolean {
   if (s.verificationStatus !== "verified") return false;
   if (!s.optedIn) return false;
-  if (!s.profileComplete) return false;
-  if (hasActiveMatch(ctx.matches, s.id)) return false;
   return true;
 }
 
@@ -61,15 +59,12 @@ export function isEligiblePair(
   ctx: FilterContext
 ): { ok: boolean; reason?: string } {
   if (a.id === b.id) return { ok: false, reason: "same user" };
-  if ((a.blockedUserIds ?? []).includes(b.id)) return { ok: false, reason: "a blocked b" };
-  if ((b.blockedUserIds ?? []).includes(a.id)) return { ok: false, reason: "b blocked a" };
-  if (pairHasPassFeedback(ctx.matches, a.id, b.id)) return { ok: false, reason: "prior pass" };
-  if (pairWasRecentlyMatched(ctx.matches, a.id, b.id)) return { ok: false, reason: "matched within 90d" };
   if (dealbreakerHit(a, b) || dealbreakerHit(b, a)) return { ok: false, reason: "dealbreaker" };
   const constraints = hardConstraints(a, b);
   if (!constraints.ok) return { ok: false, reason: constraints.reasons.join("; ") };
   return { ok: true };
 }
+
 
 export function poolFor(student: StudentProfile, all: StudentProfile[]): StudentProfile[] {
   if (student.crossUniOk) return all;

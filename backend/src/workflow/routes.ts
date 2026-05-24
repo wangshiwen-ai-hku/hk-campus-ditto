@@ -24,13 +24,16 @@ function userInMatch(match: { userAId: string; userBId: string }, userId: string
 workflowRouter.post("/drop", requireAdmin, async (_req, res) => {
   const db = await ensureDb();
   const dropped: string[] = [];
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   for (const match of db.matches) {
     if (match.status !== "pending") continue;
     const a = db.students.find((s) => s.id === match.userAId);
     const b = db.students.find((s) => s.id === match.userBId);
     if (!a || !b) continue;
     await notify(a, "match_drop", { match, partner: b });
+    await sleep(600);
     await notify(b, "match_drop", { match, partner: a });
+    await sleep(600);
     transition(match, "notified", { dropAt: new Date().toISOString() });
     transition(match, "awaiting-acceptance");
     dropped.push(match.id);

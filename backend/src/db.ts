@@ -33,7 +33,7 @@ function migrate(db: Partial<Database>): Database {
   const full: Database = {
     universities: db.universities ?? [],
     students: (db.students ?? []).map((s) => ({
-      crossUniOk: false,
+      crossUniOk: true,
       blockedUserIds: [],
       onboardingStage: "complete",
       ...s,
@@ -407,4 +407,30 @@ export async function resetDb(): Promise<Database> {
     await saveFileDb(db);
   }
   return db;
+}
+
+export async function runInLock<T>(lockKeyName: string, fn: () => Promise<T>): Promise<T | null> {
+  if (env.db.provider !== "postgres") {
+    return fn();
+  }
+  await ensurePostgresSchema();
+  const client = await postgresPool().connect();
+  try {
+    await client.query("begin");
+    const res = await client.query(`select pg_try_advisory_xact_lock(hashtext($1)) as locked`, [lockKeyName]);
+    const locked = res.rows[0]?.locked;
+    if (!locked) {
+      console.log(`[Lock] Could not acquire lock for "${lockKeyName}". Skipping execution.`);
+      await client.query("rollback");
+      return null;
+    }
+    const result = await fn();
+    await client.query("commit");
+    return result;
+  } catch (error) {
+    await client.query("rollback");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

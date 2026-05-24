@@ -11,6 +11,7 @@ import { feedbackRouter } from "./feedback/routes.js";
 import { memoryRouter } from "./memory/routes.js";
 import { devRouter } from "./dev/routes.js";
 import { inviteStats } from "./auth/invite.js";
+import { startScheduler } from "./core/scheduler.js";
 
 const app = express();
 app.use(cors({
@@ -120,4 +121,5 @@ if (env.nodeEnv !== "production") {
 app.listen(env.port, () => {
   console.log(`DopaMine API listening on http://localhost:${env.port}`);
   console.log(`LLM provider=${env.llm.provider} model=${env.llm.model} | email provider=${env.email.provider}`);
+  startScheduler();
 });

@@ -136,7 +136,7 @@ authRouter.post("/verify-code", async (req, res) => {
       optedIn: true,
       availability: [],
       profileComplete: false,
-      crossUniOk: false,
+      crossUniOk: true,
       blockedUserIds: [],
       onboardingStage: "basic",
     } satisfies StudentProfile;
