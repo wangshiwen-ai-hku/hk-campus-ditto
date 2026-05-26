@@ -12,8 +12,8 @@ en = {
   },
   "home": {
     "hero": {
-      "getADate": "get a date every",
-      "wednesday": "wednesday",
+      "getADate": "Every Wednesday you get",
+      "wednesday": "A Heart-Fluttering Date",
       "atYourSchool": "@YOUR SCHOOL",
       "nextDrop": "Next HK Campus Drop: Wednesday at 7PM",
       "joinDrop": "Join Next Drop →"
@@ -198,7 +198,7 @@ zh_hk = {
   "home": {
     "hero": {
       "getADate": "逢星期三送你",
-      "wednesday": "一個約會",
+      "wednesday": "一次心動約會",
       "atYourSchool": "@你嘅大學",
       "nextDrop": "下一次配對：星期三晚7點",
       "joinDrop": "加入下一次配對 →"
@@ -382,8 +382,8 @@ zh_cn = {
   },
   "home": {
     "hero": {
-      "getADate": "每个星期三为你送上",
-      "wednesday": "一个约会",
+      "getADate": "每周三为你送上",
+      "wednesday": "一次心动约会",
       "atYourSchool": "@你的大学",
       "nextDrop": "下一次匹配发布：周三 7PM",
       "joinDrop": "加入下一次匹配 →"

@@ -9,8 +9,8 @@
   },
   "home": {
     "hero": {
-      "getADate": "每个星期三为你送上",
-      "wednesday": "一个约会",
+      "getADate": "每周三为你送上",
+      "wednesday": "一次心动约会",
       "atYourSchool": "@你的大学",
       "nextDrop": "下一次匹配发布：周三 7PM",
       "joinDrop": "加入下一次匹配 →"

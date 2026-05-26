@@ -52,23 +52,25 @@ authRouter.post("/request-code", async (req, res) => {
   const code = generateCode();
   const emailResult = await sendEmail({
     to: email,
-    subject: "🗝️ Your DopaMine verification code",
-    text: `Your verification code is: ${code}\n\nIt expires in ${env.auth.codeTtlMin} minutes.\n\nIf you didn't request this, ignore the email.`,
+    subject: "Your DopaMine verification code",
+    text: `Hi,
+
+Your DopaMine verification code is:
+
+${code}
+
+This code expires in ${env.auth.codeTtlMin} minutes.
+
+If you did not request this code, you can ignore this email.
+
+DopaMine`,
     html: `
-      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; background-color: #0d0e12; color: #ffffff; border-radius: 16px; border: 1px solid #1f2029;">
-        <div style="text-align: center; margin-bottom: 24px;">
-          <span style="font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #ff3366 0%, #ff66cc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #ff3366;">DopaMine</span>
-        </div>
-        <p style="font-size: 16px; line-height: 1.5; color: #b5b7c0; margin: 0 0 16px 0;">Hi there,</p>
-        <p style="font-size: 15px; line-height: 1.5; color: #b5b7c0; margin: 0 0 24px 0;">Use the verification code below to access your account. This code is valid for <strong>${env.auth.codeTtlMin} minutes</strong>.</p>
-        <div style="background-color: #16171f; border: 1px solid #2a2b36; padding: 16px; text-align: center; font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #ff3366; border-radius: 12px; margin-bottom: 24px;">
-          ${code}
-        </div>
-        <p style="font-size: 13px; line-height: 1.4; color: #696b7a; margin: 0 0 24px 0;">If you did not request this code, please safely ignore this email.</p>
-        <div style="border-top: 1px solid #1f2029; padding-top: 24px; text-align: center;">
-          <p style="font-size: 12px; color: #4e505e; margin: 0;">DopaMine Network • Hong Kong University Student Social Community</p>
-        </div>
-      </div>
+      <p>Hi,</p>
+      <p>Your DopaMine verification code is:</p>
+      <p style="font-size:24px;font-weight:bold;letter-spacing:4px;">${code}</p>
+      <p>This code expires in ${env.auth.codeTtlMin} minutes.</p>
+      <p>If you did not request this code, you can ignore this email.</p>
+      <p>DopaMine</p>
     `,
   });
   if (!emailResult.ok) {

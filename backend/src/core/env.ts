@@ -66,7 +66,7 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "DopaMine (PsyAI) <noreply@aurahk.me>"),
+    from: str("EMAIL_FROM", "DopaMine <support@aurahk.me>"),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),
@@ -78,4 +78,3 @@ export const env = {
     trigger: str("SCHEDULER_TRIGGER", "Wednesday 19:00"),
   },
 };
-
