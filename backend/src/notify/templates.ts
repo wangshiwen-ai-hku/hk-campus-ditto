@@ -195,7 +195,7 @@ export function renderPartnerConfirmed(
       body: [
         `Hi ${firstName},`,
         ``,
-        isHk ? `好消息！${partner.fullName} 已經確認約會，TA 期待同你見面。` : `好消息！${partner.fullName} 已经确认约会，TA 很期待和你见面。`,
+        isHk ? `好消息！${partner.fullName} 已經確認約會，佢期待同你見面。` : `好消息！${partner.fullName} 已经确认约会，TA 很期待和你见面。`,
         ``,
         isHk ? `── 關於 ${partnerFirst} ──` : `── 关于 ${partnerFirst} ──`,
         ...highlights.map((h) => `  • ${h}`),

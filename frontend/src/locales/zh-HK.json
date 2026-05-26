@@ -1,8 +1,8 @@
 {
   "brand": "DopaMine",
   "nav": {
-    "how": "點樣運作",
-    "safety": "安全",
+    "how": "運作方式",
+    "safety": "安全保障",
     "faq": "常見問題",
     "join": "立即加入",
     "signOut": "登出"
@@ -12,53 +12,53 @@
       "getADate": "逢星期三送你",
       "wednesday": "一個約會",
       "atYourSchool": "@你嘅大學",
-      "nextDrop": "下一次配對：星期三晚7點",
+      "nextDrop": "下一波配對：星期三晚7點",
       "joinDrop": "加入下一次配對 →"
     },
-    "stats": "{{students}} 位個人已加入 • 100% 大學電郵驗證 • {{dates}} 次成功見面 •",
+    "stats": "{{students}} 位同學已加入 • 100% 經已驗證 • 已安排 {{dates}} 個約會 •",
     "why": {
-      "badge": "打破香港的左滑右滑文化",
-      "title": "星期三<br/> <1>認真約會</1>",
-      "desc": "厭倦咗無止境嘅 Swipe 同埋無下文嘅「Hi」？我哋每個星期三為你送上一個認真嘅配對。無需要估估吓，只做同校高質素配對。",
-      "noSwiping": "唔需要 Swipe",
-      "noSwipingDesc": "我哋嘅演算法幫你搞掂。",
+      "badge": "唔使再盲目 Swipe",
+      "title": "每個星期三，一個<br/> <1>認真約會</1>",
+      "desc": "厭倦咗無止境嘅 Swipe 同埋無下文嘅「Hi」？我哋每個星期三為你送上一個高質素嘅配對。唔使玩心理戰，只有真實嘅大學同學。",
+      "noSwiping": "零 Swipe",
+      "noSwipingDesc": "我哋嘅演算法會幫你搞掂一切。",
       "campusSafe": "校園安全",
-      "campusSafeDesc": "只限已驗證 .edu.hk 電郵嘅個人。",
-      "personalized": "個人化",
-      "personalizedDesc": "根據價值觀、Vibe、同得閒時間去配對。"
+      "campusSafeDesc": "只限已驗證 .edu.hk 電郵嘅大專學生。",
+      "personalized": "專屬配對",
+      "personalizedDesc": "我哋會根據價值觀、生活 Vibe 同得閒時間進行配對。"
     },
     "curated": {
-      "title": "真係可以<br/>成事嘅<br/>校園約會。",
-      "desc": "我哋唔只俾配對你；仲會建議一個你校內安全、氣氛好嘅地方，兼一個簡單嘅破冰話題。",
+      "title": "真係會<br/>成事嘅<br/>約會。",
+      "desc": "我哋唔單止俾個 Profile 你，仲會建議一個安全、有校園氣氛嘅地點，同埋一個簡單嘅破冰話題。",
       "cta": "即刻開始 →"
     },
-    "stepsTitle": "點樣有約會",
+    "stepsTitle": "點樣獲取約會",
     "steps": {
       "step1": {
-        "title": "話俾我哋知你鍾意咩",
-        "desc": "喺星期二晚之前填好你張 Profile。",
+        "title": "話俾我哋知你嘅 Vibe",
+        "desc": "喺星期二晚之前填好你嘅個人檔案。",
         "example": "例如：『我鍾意去尖沙咀睇夜景』",
-        "detailQuote": "\"你嘅 Profile 就係你嘅 Digital Vibe。我哋唔單止問你讀咩科，仲想了解你個人。\" ✨",
+        "detailQuote": "\"你嘅 Profile 就係你嘅數碼 Vibe。我哋唔單止想知你讀咩學系，更想知道咩最能代表你。\" ✨",
         "interests": "興趣",
         "interestsDesc": "由廣東歌到科技倫理",
         "vibeTags": "Vibe 標籤",
-        "vibeTagsDesc": "追雲者、夜貓子、或圖書館達人",
+        "vibeTagsDesc": "追雲者、夜貓子、或圖書館常客",
         "encryptionNote": "你嘅資料已加密，只會分享俾同你配對嘅人。"
       },
       "step2": {
-        "title": "星期三配對出爐",
-        "desc": "晏晝7點收到一個認真配對。",
+        "title": "星期三配對發布",
+        "desc": "夜晚7點收到你嘅配對。",
         "example": "例如：同一個港大同學 Match",
-        "detailQuote": "\"每個星期三夜晚7點，奇蹟發生。唔使再患得患失，就只係一個人。\" ✉️",
+        "detailQuote": "\"逢星期三夜晚7點，魔法就會降臨。唔使再揀來揀去，就只有呢一個。\" ✉️",
         "algoFocus": "算法焦點",
         "algoFocusDesc": "\"高訊號，低噪音\"",
-        "userQuote": "\"我 7:01 㩒開電話，見到一個同我同 College 嘅人。感覺好命中注定。\" — 中大 Year 3 個人"
+        "userQuote": "\"我 7:01 㩒開電話，見到一個同我同校嘅男仔。感覺好命中注定。\" — 中大 Year 3 同學"
       },
       "step3": {
         "title": "分享有空時間",
         "desc": "確認一個簡單見面時間。",
         "example": "例如：『不如去 Book Cafe 見！』",
-        "detailQuote": "\"我哋幫你搵你哋時間表重疊嘅時段，唔使再夾來夾去。\" ☕",
+        "detailQuote": "\"我哋會自動幫你搵重疊嘅時間，唔使你再自己夾。\" ☕",
         "check1": "喺預先設定好嘅校園安全地點揀。",
         "check2": "建議一小時內嘅初次約會。",
         "check3": "高誠意、低壓力嘅見面。"
@@ -68,10 +68,10 @@
         "desc": "根據反饋改善下次配對。",
         "example": "例如：『氣氛好好，再約！』",
         "detailQuote": "\"喺現實世界見面，先至會有火花。\" 🌟",
-        "match": "有 Feel！",
+        "match": "超鍾意！",
         "friends": "做住朋友先",
         "retry": "再試吓",
-        "userQuote": "\"你俾嘅 Feedback 會改善所有人嘅配對質素。下次 Drop 會因為你而變得更好。\""
+        "userQuote": "\"你嘅反饋會改善所有人嘅配對質素。你嘅下一次配對亦會因此變得更好。\""
       }
     },
     "faqTitle": "常見問題",
@@ -79,32 +79,32 @@
     "faqs": [
       {
         "q": "配對係點運作？",
-        "a": "我哋嘅演算法唔單止睇『樣』，仲會分析你嘅興趣、價值觀，甚至你個禮拜幾時得閒，務求幫你搵到個最有可能喺校園見面嘅對象。"
+        "a": "我哋嘅演算法唔單止睇相。仲會分析你嘅興趣、價值觀，甚至你每星期嘅得閒時間，確保你喺校園見到一個真正啱傾嘅人。"
       },
       {
         "q": "淨係可以用 .edu.hk 電郵？",
-        "a": "係。為咗確保社群內都係真係個人，所以只限支援嘅香港大學嘅機構電郵。"
+        "a": "係。為咗保持社群安全同息息相關，我哋只支援經已驗證嘅香港大專院校電郵。"
       },
       {
         "q": "點解一星期得一次配對？",
-        "a": "無止境咁轆只會令人眼花撩亂同埋無誠意。每個星期三俾一個認真嘅 Match 你，幫你專心認識一個人。"
+        "a": "無止境嘅名單只會令人疲倦。逢星期三為你送上一個認真嘅配對，可以幫你專注去深入認識一個人。"
       },
       {
         "q": "如果 Match 得唔好點算？",
-        "a": "主導權喺你手。每次配對後你都可以俾 Feedback。如果你揀『Pass』或『Rematch』，演算法會學你口味，下次配對會更好。安全同舒服係我哋首要考慮。"
+        "a": "主導權永遠喺你手。每次配對後都可以提供反饋。如果你選擇『Pass』或者『Rematch』，演算法就會學習你嘅喜好。安全同舒適係我哋嘅首要任務。"
       },
       {
         "q": "去邊度見面好？",
-        "a": "我哋會建議你大學嘅公眾地方，好似港大 Book Cafe 或中大未圓湖。保持低壓力，公開，同埋初次見面一小時內。"
+        "a": "我哋建議喺校園嘅公共地方見面，例如港大嘅 Book Cafe 或者中大嘅未圓湖。初次約會最好保持低壓力、喺公開場合，時間大約一個鐘。"
       }
     ],
     "footerTitle": "準備好認識下一個<br/>同校嘅佢未？",
     "footerCta": "即刻開始 →",
-    "footerDesc": "超過 147k+ 香港個人已經加入"
+    "footerDesc": "超過 147k+ 本港大專生已加入"
   },
   "join": {
     "title": "加入下一次星期三配對",
-    "pageTitle": "個人加入",
+    "pageTitle": "填寫基本資料",
     "subtitle": "用大學電郵，透過驗證碼確認身份，然後加入下一次星期三配對。",
     "emailLabel": "大學電郵",
     "emailPlaceholder": "name@connect.hku.hk",
@@ -113,50 +113,50 @@
     "sendCode": "傳送驗證碼",
     "verifyCodeLabel": "驗證碼",
     "verifyBtn": "驗證",
-    "majorLabel": "主修科目",
-    "majorPlaceholder": "主修科目",
-    "bioLabel": "簡介",
+    "majorLabel": "主修學科",
+    "majorPlaceholder": "主修學科",
+    "bioLabel": "自我介紹",
     "bioPlaceholder": "介紹下你自己...",
     "languages": "語言",
     "interests": "興趣",
-    "availability": "得閒時間",
+    "availability": "可約時間",
     "saveBtn": "儲存個人檔案",
-    "dashboardBtn": "打開控制面板",
-    "verifiedMsg": "已驗證，繼續填寫。",
-    "verifyFirstMsg": "請先驗證電郵。",
-    "savedMsg": "已儲存！即將跳轉到面板...",
+    "dashboardBtn": "打開個人中心",
+    "verifiedMsg": "已驗證，請繼續填寫資料。",
+    "verifyFirstMsg": "儲存前請先驗證電郵。",
+    "savedMsg": "已儲存！正為你跳轉到個人中心...",
     "dev": {
       "eyebrow": "加入 DopaMine",
       "title": "加入 DopaMine",
       "subtitle": "使用學校電郵完成驗證，填寫資料後進入下一次配對。",
-      "studentDashboard": "個人控制面板",
+      "studentDashboard": "個人中心",
       "account": "帳號",
-      "profile": "資料",
+      "profile": "個人檔案",
       "done": "完成",
-      "accountDesc": "請輸入學校電郵。驗證碼會傳送到你嘅電郵。",
+      "accountDesc": "請輸入你嘅大學電郵。驗證碼將會傳送到你嘅收件箱。",
       "verifyContinue": "驗證並繼續",
       "profileBasics": "基本資料",
       "profileDesc": "呢啲資料會幫 DopaMine 理解你嘅校園生活、偏好同配對語境。",
       "year": "年級",
       "vibeTags": "氛圍標籤",
-      "crossCampus": "容許跨校區候選人加入配對池",
+      "crossCampus": "接受跨校配對",
       "saveProfileContinue": "儲存資料並繼續",
       "saveSection": "儲存{{section}}",
-      "completeTitle": "加入完成",
-      "completeDesc": "你已經完成加入資料同問卷。配對發布後，可以喺個人頁查看結果。",
-      "openStudent": "打開個人頁",
+      "completeTitle": "註冊完成",
+      "completeDesc": "你已完成個人檔案同問卷。當配對發布時，你就可以喺個人中心查看。",
+      "openStudent": "打開個人中心",
       "codeSent": "驗證碼已傳送。",
       "signedIn": "已登入，請繼續完善資料。",
-      "profileSaved": "資料已儲存。依家填真實問卷。",
+      "profileSaved": "資料已儲存。依家開始填寫配對問卷。",
       "sectionSaved": "已儲存，繼續下一段。",
-      "completeMsg": "加入完成。你可以進入個人頁查看狀態。",
+      "completeMsg": "註冊完成。你依家可以去個人中心查看狀態。",
       "back": "返回",
       "uploadPhotos": "上載相片",
       "uploadPhotosHint": "最多加入 {{count}} 張清晰相片。",
       "remove": "移除",
-      "chatWelcome": "你好，我係 DopaMine。我會幫你完成資料填寫；如果卡住咗，都可以直接問我。",
+      "chatWelcome": "哈囉！我係 DopaMine。我喺度幫你填寫個人檔案，你可以直接填表，或者有咩問題隨時問我。",
       "chatGroupDone": "呢一部分已經完成。你可以先檢查答案，然後撳左邊嘅「儲存並繼續」。",
-      "chatFormFallback": "我會保持專注，幫你完成資料流程。請繼續填寫而家嘅表單，入到問卷後我會更智能咁協助你。",
+      "chatFormFallback": "我會先專注幫你完成個人檔案。請繼續填寫而家嘅表單，之後我會喺問卷部分幫手。",
       "chatPlaceholder": "輸入你嘅回答...",
       "chatTooltip": "表單填寫助手",
       "uploadOnePhoto": "上載一張相",
@@ -164,26 +164,26 @@
       "chatQuestionLabel": "問題"
     },
     "tags": {
-      "coffee": "探店打卡",
+      "coffee": "Cafe 打卡",
       "cantopop": "廣東歌與獨立音樂",
-      "art": "睇展如M+",
+      "art": "睇藝術展覽",
       "film": "菲林攝影",
       "night": "夜遊與夜景",
       "hiking": "行山與自然",
       "citywalk": "城市漫步",
       "supper": "宵夜糖水",
       "tech": "科技與創業",
-      "thrifting": "古著與二手市場"
+      "thrifting": "古著尋寶"
     },
     "vibes": {
-      "chill": "隨性佛系",
+      "chill": "Chill / 隨性",
       "curious": "充滿好奇",
       "empathetic": "充滿同理心",
       "playful": "幽默有趣",
       "grounded": "踏實靠譜",
       "creative": "天馬行空",
       "ambitious": "有上進心",
-      "warm": "似小太陽"
+      "warm": "溫難"
     },
     "slots": {
       "wed_eve": "星期三晚",
@@ -201,12 +201,12 @@
       "korean": "韓文"
     },
     "placeholders": {
-      "fullName": "例如：張三",
-      "year": "例如：Year 3 / Master",
+      "fullName": "例如：陳大文",
+      "year": "例如：Year 3",
       "major": "例如：Computer Science",
       "bio": "例如：鍾意飲咖啡，校園漫步，以及隨性低壓嘅初次約會...",
       "select": "請選擇...",
-      "alumniYear": "例如：2024 屆"
+      "alumniYear": "例如：Class of 2024"
     },
     "degreeLevel": "學位 / 項目",
     "grade": "就讀年級",
@@ -216,19 +216,20 @@
       "required": "請填寫所有必填欄位以繼續。"
     },
     "degrees": {
-      "undergrad": "本科 (Undergraduate)",
-      "taught_master": "授課型碩士 (Taught Master)",
+      "undergrad": "學士學位 (Undergraduate)",
+      "taught_master": "授課式碩士 (Taught Master)",
+      "mphil_phd": "研究型碩士 / 博士 (MPhil / PhD)",
       "other": "其他 (Other)",
       "mphil": "研究型碩士 (MPhil)",
       "phd": "博士 (PhD)",
       "exchange": "交換生"
     },
     "grades": {
-      "y1": "Year 1 (大一/研一)",
-      "y2": "Year 2 (大二/研二)",
-      "y3": "Year 3 (大三/研三)",
-      "y4": "Year 4 (大四/研四)",
-      "y5_plus": "Year 5+ (五年級及以上)"
+      "y1": "Year 1",
+      "y2": "Year 2",
+      "y3": "Year 3",
+      "y4": "Year 4",
+      "y5_plus": "Year 5+"
     },
     "faculties": {
       "arts": "文學院 / 人文學科",
@@ -242,7 +243,7 @@
       "education": "教育學院",
       "other": "其他"
     },
-    "preferredLocale": "App 同電郵偏好語言",
+    "preferredLocale": "偏好語言",
     "preferredLocales": {
       "en": "English",
       "zh-HK": "繁體中文",
@@ -265,40 +266,40 @@
     }
   },
   "student": {
-    "title": "個人控制面板",
-    "signInPrompt": "請先登入。",
+    "title": "個人中心",
+    "signInPrompt": "請先登入以查看你嘅個人中心。",
     "loading": "載入中…",
     "hi": "你好, {{name}}！",
-    "major": "主修科目",
+    "major": "主修學科",
     "pending": "未填寫",
     "languages": "語言",
-    "currentDrop": "今個星期配對",
+    "currentDrop": "今期配對",
     "compatibility": "契合度: ",
     "aboutThem": "關於佢",
     "curatedDate": "建議約會",
-    "scheduling": "時間夾檔",
-    "waitOverlap": "等緊重疊時間",
+    "scheduling": "約會時間安排",
+    "waitOverlap": "等緊時間重疊",
     "overlap": "重疊時間：{{slots}}",
     "noneYet": "暫時未有",
     "notesSys": "俾系統嘅筆記",
     "notesPlaceholder": "有咩想系統學到？",
-    "lovedIt": "好鍾意",
+    "lovedIt": "超鍾意！",
     "pass": "Pass",
     "requestRematch": "要求重新配對",
     "findingMatch": "搵緊新配對...",
     "feedbackSaved": "反饋已儲存。",
     "countdown": {
-      "days": "日",
-      "hours": "時",
-      "minutes": "分",
+      "days": "天",
+      "hours": "小時",
+      "minutes": "分鐘",
       "seconds": "秒"
     },
     "nextDropView": {
-      "title": "你已經加入咗下一次配對！",
-      "desc": "DopaMine 相信重質不重量。唔駛再 Swipe，每個星期三 7:00 PM 你會收到一 個**認真嘅配對**。",
+      "title": "你已成功加入下一波配對！",
+      "desc": "DopaMine 相信重質不重量。唔駛再 Swipe，每個星期三 7:00 PM 你會收到一個**認真嘅配對**。",
       "countdownTitle": "下一次配對倒數",
       "checkBack": "星期三見！",
-      "verified": "僅限已驗證個人",
+      "verified": "僅限已驗證同學",
       "verifiedDesc": "我哋會確認每個人真實屬於呢個社群。",
       "highSignal": "高訊號配對",
       "highSignalDesc": "演算法專注喺共同興趣同價值觀。"
@@ -322,8 +323,8 @@
       "sparkMoment": "心動瞬間",
       "idealDateSpots": "理想約會場景",
       "aiSuggested": "AI 推薦",
-      "bestMatchTypes": "最佳配對人格",
-      "allTypes": "8 種戀愛畫像",
+      "bestMatchTypes": "最佳配對類型",
+      "allTypes": "全部 8 種戀愛原型",
       "you": "你",
       "reanalyze": "重新分析人格"
     },
@@ -333,13 +334,13 @@
       "gender": "性別",
       "height": "身高",
       "datingGoal": "戀愛目標",
-      "matchMode": "配對節奏",
+      "matchMode": "配對模式",
       "bio": "自我介紹",
       "location": "常去地區",
       "vibes": "氛圍標籤",
       "weekendVibes": "週末 Vibe",
       "datingPrefs": "戀愛偏好",
-      "lookingFor": "想識",
+      "lookingFor": "想搵",
       "goals": "目標",
       "ageRange": "年齡範圍",
       "langPref": "語言偏好",
@@ -359,7 +360,7 @@
       "firstDateIdeas": "初次約會建議",
       "matchSignals": "配對訊號",
       "lovePersona": "戀愛人格",
-      "feedbackAfterDate": "約會結束後先可以提交反饋。",
+      "feedbackAfterDate": "約會標記為「已見面」後，即可填寫反饋。",
       "suggestedSpot": "建議約會地點",
       "acceptMatch": "接受配對",
       "decline": "婉拒",
@@ -376,44 +377,44 @@
       "step3Title": "互換聯絡方式",
       "step3Desc": "雙方已確認——可以聯絡對方啦",
       "partnerContact": "對方聯絡方式",
-      "giftTitle": "見面禮建議",
+      "giftTitle": "初次見面小心意",
       "giftDesc": "一個小心意就能加分唔少——以下係一啲初次見面嘅建議",
       "giftIdeas": [
         "手寫嘅小卡片",
-        "TA 鍾意嘅飲品（睇下 TA 嘅 vibe 標籤！）",
+        "佢鍾意嘅飲品（睇下佢嘅 Vibe 標籤！）",
         "你學校嘅特色小紀念品",
-        "一個歌單二維碼，放你諗到 TA 時會聽嘅歌"
+        "一個歌單二維碼，放你諗到佢時會聽嘅歌"
       ],
       "waitingPartner": "等緊對方確認…",
       "waitingPartnerTitle": "等緊對方確認",
-      "waitingPartnerDesc": "你已經表達咗誠意！我哋已通知對方——一旦TA都確認，你哋就可以互換聯絡方式啦。",
+      "waitingPartnerDesc": "你已經表達咗誠意！我哋已通知對方——一旦佢都確認，你哋就可以互換聯絡方式啦。",
       "emailSent": "已發送電郵通知對方",
-      "partnerAlreadyConfirmed": "對方已確認——TA喺度等緊你！",
+      "partnerAlreadyConfirmed": "對方已確認——佢喺度等緊你！",
       "dateConfirmed": "約會已確認！",
       "feedbackTitle": "約會感覺點樣？",
       "confirmed": "已確認",
       "icebreakerTitle": "AI 撮合官",
       "icebreakerLoading": "正在為你準備破冰介紹…",
-      "talkAbout": "傾計話題"
+      "talkAbout": "傾偈話題"
     }
   },
   "admin": {
-    "title": "管理員控制面板",
-    "pageTitle": "管理員控制面板",
+    "title": "管理後台",
+    "pageTitle": "管理後台",
     "resetDemo": "重置示範數據",
     "runDrop": "運行星期三配對",
     "msgCreated": "新建立咗 {{count}} 個配對。",
     "msgReset": "示範數據已重置。",
     "stats": {
-      "students": "個人人數",
-      "profiles": "完成資料",
-      "dates": "約會次數",
+      "students": "已加入同學",
+      "profiles": "已完成個人檔案",
+      "dates": "已安排約會",
       "rematch": "重新配對"
     },
     "recentMatches": "最近配對",
     "score": "分數",
     "open": "打開",
-    "studentDir": "個人目錄",
+    "studentDir": "成員名冊",
     "incomplete": "未完成",
     "view": "查看",
     "loading": "載入中…"
@@ -426,15 +427,15 @@
       },
       "prefs": {
         "title": "約會偏好",
-        "desc": "你喺度搵緊咩人？"
+        "desc": "你想搵點樣嘅對象，同埋你嘅約會目標係咩？"
       },
       "attraction": {
         "title": "背景與吸引力",
-        "desc": "你嘅興趣係咩？咩特質吸引到你？"
+        "desc": "咩最能代表你，同埋點樣嘅人會吸引到你嘅目光？"
       },
       "media": {
-        "title": "媒體資料",
-        "desc": "加入可以展示你樣貌、風格同日常氛圍嘅相片。"
+        "title": "相片與媒體資料",
+        "desc": "新增相片，等對方可以更了解你嘅樣子、穿搭同日常 Vibe。"
       },
       "ldfr": {
         "title": "情感人格 (LDFR)",
@@ -461,11 +462,11 @@
       },
       "targetGender": {
         "prompt": "你想同咩人約會？",
-        "why": "呢個係硬性要求，唔只係排序。"
+        "why": "呢個係硬性篩選條件，而唔只係排序訊號。"
       },
       "datingGoal": {
         "prompt": "你而家嘅約會目標係？",
-        "why": "確保目標唔同嘅人唔會夾硬配埋一齊。"
+        "why": "確保想認真拍拖、純粹交友或者只想輕鬆約會嘅用戶唔會被配對到一齊。"
       },
       "ageRange": {
         "prompt": "你偏好嘅年齡範圍？",
@@ -478,12 +479,12 @@
       },
       "hobbies": {
         "prompt": "分享吓你嘅愛好同興趣",
-        "why": "開放式回答會令你嘅個人檔案更豐富。",
+        "why": "開放式嘅回答將會用嚟生成你嘅戀愛人格摘要。",
         "placeholder": "例如：探店，攀岩，閱讀..."
       },
       "attractHeight": {
         "prompt": "你通常會留意嘅外貌特徵：身高 / 身型",
-        "why": "具體少少嘅要求可以避免純粹憑感覺配對。",
+        "why": "填寫具體偏好（可選）有助避免純粹憑感覺配對。",
         "placeholder": "175cm，運動型，寬膊..."
       },
       "attractFace": {
@@ -493,16 +494,16 @@
       },
       "attractEnergy": {
         "prompt": "你通常會俾咩氣場吸引？",
-        "why": "將模糊嘅化學反應變成我哋可以對比嘅信號。",
+        "why": "將模糊嘅化學反應變為算法可以對比嘅訊號。",
         "placeholder": "沉穩，文藝，自信..."
       },
       "hkMtrLocation": {
         "prompt": "你平時主要喺邊條地鐵線/邊區活動？",
-        "why": "過海約會成本比較高，呢個幫到算法就近配對或者揀約會地點。"
+        "why": "幫算法進行就近配對，或者規劃約會地點。"
       },
       "hkWeekendVibe": {
         "prompt": "喺香港，你最理想嘅週末約會安排係？",
-        "why": "用本地化嘅場景直接反映你嘅生活方式。"
+        "why": "透過本地生活場景展現你嘅個性。"
       },
       "mbtiE": {
         "prompt": "MBTI: 能量來源",
@@ -526,31 +527,31 @@
       },
       "mediaNotes": {
         "prompt": "關於呢啲相，有咩想系統知道？",
-        "why": "可選說明，用嚟輔助理解你嘅媒體資料。",
+        "why": "（可選）備註，用嚟輔助理解你嘅相片資料。",
         "placeholder": "寫一句說明、場景，或者呢張相想表達嘅氛圍。"
       },
       "ldfr_q1": {
         "prompt": "星期五晚 9 點，你嘅理想狀態係：",
-        "why": "測試社交電池。"
+        "why": "測試社交電量。"
       },
       "ldfr_q4": {
         "prompt": "失戀或遇到挫折後，你嘅自癒方式更接近：",
-        "why": "能量恢復方式。"
+        "why": "了解你點樣恢復精力。"
       },
       "ldfr_q5": {
-        "prompt": "同 ta 傾偈，你覺得邊種狀態最滿足？",
-        "why": "交流深度傾向。"
+        "prompt": "同佢傾偈，你覺得邊種狀態最滿足？",
+        "why": "你偏好嘅溝通深度。"
       },
       "ldfr_q7": {
-        "prompt": "你最希望 ta 喺其他人面前點形容你？",
-        "why": "戀愛中嘅自我認同。"
+        "prompt": "你最希望佢喺其他人面前點形容你？",
+        "why": "你喺戀愛中嘅自我認同。"
       },
       "ldfr_q8": {
         "prompt": "你最容易對邊種人一見鍾情？",
-        "why": "對「可能性」心動定係對「真實溫暖」心動？"
+        "why": "你係容易被『發展空間/可能性』定係『真實感』吸引？"
       },
       "ldfr_q9": {
-        "prompt": "第一次約會，ta 講邊句話最戳中你？",
+        "prompt": "第一次約會，佢講邊句話最打動你？",
         "why": "情感接收頻道。"
       },
       "ldfr_q10": {
@@ -559,23 +560,23 @@
       },
       "ldfr_q14": {
         "prompt": "你心目中嘅「靈魂伴侶」係：",
-        "why": "暗喻 vs 長久陪伴。"
+        "why": "浪漫隱喻 vs 長期陪伴。"
       },
       "ldfr_q15": {
-        "prompt": "拍拖第二個月，ta 問「我哋係咩關係？」，你嘅第一反應係：",
-        "why": "對早期束縛嘅接受度。"
+        "prompt": "拍拖第二個月，佢問「我哋係咩關係？」，你嘅第一反應係：",
+        "why": "對早期承諾嘅接受度。"
       },
       "ldfr_q16": {
         "prompt": "你對「承諾」兩個字嘅感覺：",
-        "why": "壓力源 vs 安全感。"
+        "why": "承諾對你嚟講係壓力來源定安全感。"
       },
       "ldfr_q18": {
         "prompt": "你嘅理想戀愛狀態更接近：",
-        "why": "獨立空間 vs 建立日常。"
+        "why": "獨立空間 vs 建立日常規律。"
       },
       "ldfr_q19": {
-        "prompt": "ta 突然話「今晚搬過嚟住一個星期得唔得？」，你嘅反應係：",
-        "why": "對節奏突變嘅適應力。"
+        "prompt": "佢突然話「今晚搬過嚟住一個星期得唔得？」，你嘅反應係：",
+        "why": "對突如其來親密接觸嘅適應力。"
       }
     },
     "opt": {
@@ -622,7 +623,7 @@
       "vibe_cafe": "中上環去Cafe打卡",
       "vibe_nature": "西貢行山/去沙灘",
       "vibe_city": "尖沙咀/銅鑼灣行街",
-      "vibe_dorm": "留喺宿舍/Hall chill吓",
+      "vibe_dorm": "留喺宿舍/Hall chill 吓",
       "vibe_food": "食茶餐廳/大排檔",
       "mbti_e": "E (外向 - 喺人群中獲取能量)",
       "mbti_i": "I (內向 - 獨處時恢復能量)",
@@ -642,14 +643,14 @@
       "ldfr_q4_c": "投入工作 / project",
       "ldfr_q4_d": "食餐好然後瞓 12 個鐘",
       "ldfr_q5_a": "大家七嘴八舌，越多人越好玩",
-      "ldfr_q5_b": "凌晨兩點，淨係得我哋兩個，傾靈魂深處嘅事",
+      "ldfr_q5_b": "凌晨兩點，只有我哋兩個，傾談靈魂深處嘅事",
       "ldfr_q5_c": "一齊睇劇偶爾 comment 吓",
       "ldfr_q5_d": "邊食飯邊輕鬆傾",
-      "ldfr_q7_a": "「TA 一入嚟全場就 highlight 起嚟」",
-      "ldfr_q7_b": "「TA 唔多嘢講，但講出嚟嘅每一句都好深」",
-      "ldfr_q7_c": "「TA 好真誠」",
-      "ldfr_q7_d": "「TA 好叻」",
-      "ldfr_q8_a": "嗰種傾兩句就覺得「TA 嘅世界好特別」嘅人",
+      "ldfr_q7_a": "「佢一入嚟，成個場就著晒」",
+      "ldfr_q7_b": "「佢唔多嘢講，但講出嚟嘅每一句都好有深度」",
+      "ldfr_q7_c": "「佢好真誠」",
+      "ldfr_q7_d": "「佢好叻」",
+      "ldfr_q8_a": "嗰種傾兩句就覺得「佢嘅世界好特別」嘅人",
       "ldfr_q8_b": "嗰種笑容溫暖、對你好真誠嘅人",
       "ldfr_q8_c": "完全中 type 嘅人",
       "ldfr_q8_d": "同你有 common friend 嘅人",
@@ -661,25 +662,25 @@
       "ldfr_q10_b": "一個穩定、可靠、生活有節奏嘅人",
       "ldfr_q10_c": "又好睇又有趣",
       "ldfr_q10_d": "同自己 vibe 好夾嘅人",
-      "ldfr_q14_a": "一個可以 read 懂你夢境同暗喻嘅人",
-      "ldfr_q14_b": "一個 7 年後依然每日朝早同你講早晨嘅人",
+      "ldfr_q14_a": "一個可以讀懂你夢境同暗喻嘅人",
+      "ldfr_q14_b": "一個 7 年後依然每日同你講早晨嘅人",
       "ldfr_q14_c": "一個可以令你笑嘅人",
       "ldfr_q14_d": "一個唔會走嘅人",
-      "ldfr_q15_a": "內心一緊：可唔可以唔好咁早 label？",
+      "ldfr_q15_a": "心裏一緊：可唔可以唔好咁快 label 住？",
       "ldfr_q15_b": "終於！我等咗好耐喇。",
-      "ldfr_q15_c": "睇 ta 嘅語氣",
-      "ldfr_q15_d": "反問 ta 想點",
-      "ldfr_q16_a": "有啲壓力，好似自由被剪走一截",
+      "ldfr_q15_c": "睇佢嘅語氣",
+      "ldfr_q15_d": "反問佢想點",
+      "ldfr_q16_a": "有啲壓力，好似自由被減走咗一截",
       "ldfr_q16_b": "有安全感，係關係入面最 sexy 嘅嘢",
       "ldfr_q16_c": "中性，要睇 context",
       "ldfr_q16_d": "信但唔會講出口",
-      "ldfr_q18_a": "好似兩隻貓，各自有空間，開心就 cuddle",
+      "ldfr_q18_a": "好似兩隻貓咁，各有自己空間，開心就 cuddle 吓",
       "ldfr_q18_b": "兩個人一齊建一個家，有 routine 有未來",
       "ldfr_q18_c": "黐身 type，幾乎每日都要見",
-      "ldfr_q18_d": "Long D 都 OK，只要 ta 係 the one",
+      "ldfr_q18_d": "Long D 都 OK，只要佢係 the one",
       "ldfr_q19_a": "太突然……我需要 personal space",
       "ldfr_q19_b": "緊張但興奮，即刻執嘢",
-      "ldfr_q19_c": "傾吓點解先",
+      "ldfr_q19_c": "傾片刻原因先",
       "ldfr_q19_d": "覺得有啲怪"
     }
   }

@@ -15,7 +15,7 @@
       "nextDrop": "Next drop: Wednesday 7PM",
       "joinDrop": "Join next drop →"
     },
-    "stats": "{{people}} people joined • 100% verified • {{dates}} dates scheduled •",
+    "stats": "{{students}} people joined • 100% verified • {{dates}} dates scheduled •",
     "why": {
       "badge": "No more mindless swiping",
       "title": "One intentional<br/> <1>date</1> every Wednesday",

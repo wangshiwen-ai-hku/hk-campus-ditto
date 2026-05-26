@@ -59,6 +59,9 @@ export function isEligiblePair(
   ctx: FilterContext
 ): { ok: boolean; reason?: string } {
   if (a.id === b.id) return { ok: false, reason: "same user" };
+  if ((a.blockedUserIds ?? []).includes(b.id) || (b.blockedUserIds ?? []).includes(a.id)) {
+    return { ok: false, reason: "blocked" };
+  }
   if (dealbreakerHit(a, b) || dealbreakerHit(b, a)) return { ok: false, reason: "dealbreaker" };
   const constraints = hardConstraints(a, b);
   if (!constraints.ok) return { ok: false, reason: constraints.reasons.join("; ") };

@@ -255,17 +255,25 @@ workflowRouter.post("/:matchId/icebreaker", requireAuth, async (req, res) => {
   } catch {}
 
   // Fallback
+  const isZh = language.startsWith("zh");
+  const isHk = language === "zh-HK" || language === "yue";
   const fallback = {
-    introForA: language.startsWith("zh")
+    introForA: isHk
+      ? `${b.fullName}同你有好多共同之處！佢對${b.interests.slice(0, 2).join("同埋")}好感興趣，${b.vibeTags[0] ? `係一個${b.vibeTags[0]}嘅人` : "期待同你見面"}。`
+      : isZh
       ? `${b.fullName}和你有很多共同点！TA对${b.interests.slice(0, 2).join("和")}很感兴趣，${b.vibeTags[0] ? `是一个${b.vibeTags[0]}的人` : "期待和你见面"}。`
       : `${b.fullName} shares your interest in ${b.interests.slice(0, 2).join(" and ")}${b.vibeTags[0] ? ` and gives off ${b.vibeTags[0]} vibes` : ""}. Looking forward to meeting you!`,
-    introForB: language.startsWith("zh")
+    introForB: isHk
+      ? `${a.fullName}同你有好多共同之處！佢對${a.interests.slice(0, 2).join("同埋")}好感興趣，${a.vibeTags[0] ? `係一個${a.vibeTags[0]}嘅人` : "期待同你見面"}。`
+      : isZh
       ? `${a.fullName}和你有很多共同点！TA对${a.interests.slice(0, 2).join("和")}很感兴趣，${a.vibeTags[0] ? `是一个${a.vibeTags[0]}的人` : "期待和你见面"}。`
       : `${a.fullName} shares your interest in ${a.interests.slice(0, 2).join(" and ")}${a.vibeTags[0] ? ` and gives off ${a.vibeTags[0]} vibes` : ""}. Looking forward to meeting you!`,
-    conversationStarters: language.startsWith("zh")
+    conversationStarters: isHk
+      ? [`聊聊你哋都鍾意嘅${a.interests[0] ?? "嘢"}`, `問下對方喺大學嘅有趣經歷`]
+      : isZh
       ? [`聊聊你们都喜欢的${a.interests[0] ?? "事情"}`, `问问对方在${a.major ?? "学校"}的有趣经历`]
       : [`Chat about ${a.interests[0] ?? "shared interests"}`, `Ask about life studying ${a.major ?? "at uni"}`],
-    dateVibe: language.startsWith("zh") ? "轻松有趣的初次见面" : "A relaxed, fun first meeting",
+    dateVibe: isHk ? "輕鬆有趣嘅初次見面" : isZh ? "轻松有趣的初次见面" : "A relaxed, fun first meeting",
   };
   match.icebreaker = JSON.stringify(fallback);
   await saveDb(db);
