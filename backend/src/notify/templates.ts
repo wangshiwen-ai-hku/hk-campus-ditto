@@ -122,7 +122,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
   const firstName = to.fullName.split(" ")[0];
   const partnerFirst = partner.fullName.split(" ")[0];
   const originalReasons = (match.userAId === to.id ? match.reasonsForA : match.reasonsForB) ?? match.reasonsForA ?? [];
-  const appLink = `${env.email.frontendUrl}/student`;
+  const appLink = `${env.email.frontendUrl}/login`;
 
   const originalPayload: TranslationPayload = {
     major: partner.major || "",
