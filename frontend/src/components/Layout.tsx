@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Settings } from "lucide-react";
 
 export function Layout({ locale, onLocale, userId, onUser, children }: { locale: Locale; onLocale: (v: Locale) => void; userId: string | null; onUser: (v: string | null) => void; children: React.ReactNode; }) {
   const { t } = useTranslation();
@@ -35,6 +36,15 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
         </div>
       </header>
       {children}
+
+      {/* Floating Settings Gear Icon in Bottom Left */}
+      <Link 
+        to="/settings" 
+        className="fixed bottom-6 left-6 z-[100] flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/70 backdrop-blur-md shadow-2xl transition-all hover:scale-110 hover:text-white hover:border-white/20 hover:rotate-45 active:scale-95 duration-300"
+        title="Settings"
+      >
+        <Settings size={20} />
+      </Link>
     </div>
   );
 }

@@ -16,7 +16,7 @@ export async function notify(
 ): Promise<{ ok: boolean }> {
   let rendered;
   if (template === "match_drop" && ctx.partner && ctx.match) {
-    rendered = renderMatchDrop(to, ctx.partner, ctx.match);
+    rendered = await renderMatchDrop(to, ctx.partner, ctx.match);
   } else if (template === "date_scheduled" && ctx.partner && ctx.match) {
     rendered = renderDateScheduled(to, ctx.partner, ctx.match);
   } else if (template === "feedback_request" && ctx.match) {

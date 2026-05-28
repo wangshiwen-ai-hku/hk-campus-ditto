@@ -58,7 +58,7 @@ export const env = {
   },
   llm: {
     provider: str("LLM_PROVIDER", "gemini") as "gemini" | "mock",
-    model: str("LLM_MODEL", "gemini-3-flash"),
+    model: str("LLM_MODEL", "gemini-2.5-flash"),
     apiKey: str("LLM_API_KEY", ""),
     baseUrl: str("LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"),
     budgetPerRun: num("LLM_BUDGET_MAX_CALLS_PER_RUN", 200),
@@ -67,6 +67,7 @@ export const env = {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
     from: str("EMAIL_FROM", "DopaMine <support@aurahk.me>"),
+    frontendUrl: str("FRONTEND_URL", "http://localhost:5173"),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),

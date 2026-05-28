@@ -12,6 +12,7 @@ import { WelcomePage } from "./pages/WelcomePage";
 import { JoinPage } from "./pages/JoinPage";
 import { StudentPage } from "./pages/StudentPage";
 import { AdminPage } from "./pages/AdminPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 function useMeta() {
   const [meta, setMeta] = useState<MetaResponse | null>(null);
@@ -66,6 +67,7 @@ export default function App() {
         <Route path="/join" element={<JoinPage userId={userIdState} onUser={setUser} />} />
         <Route path="/student" element={<StudentPage userId={userIdState} onLocale={setLocale} />} />
         <Route path="/admin" element={<AdminPage onUser={setUser} />} />
+        <Route path="/settings" element={<SettingsPage userId={userIdState} onUser={setUser} locale={localeState} onLocale={setLocale} />} />
       </Routes>
     </Layout>
   );

@@ -1,4 +1,6 @@
 import type { Locale, MatchRecord, StudentProfile } from "../types.js";
+import { env } from "../core/env.js";
+import { llmCall } from "../llm/client.js";
 
 export interface NotifyTemplate {
   subject: string;
@@ -57,45 +59,249 @@ function partnerHighlights(p: StudentProfile, locale: Locale): string[] {
   return highlights;
 }
 
-export function renderMatchDrop(to: StudentProfile, partner: StudentProfile, match: MatchRecord): NotifyTemplate {
-  const locale = localeFor(to);
-  if (locale === "zh-HK") {
-    return {
-      subject: "你今週嘅配對到了",
-      body: [
-        `今週我哋為你揀咗一位：${partner.fullName}。`,
-        ``,
-        `點解配你哋：`,
-        ...match.reasonsForA.map((r) => `• ${r}`),
-        ``,
-        `請喺 24 小時內入 App 回覆 yes 或 no。`,
-      ].join("\n"),
-    };
-  }
-  if (locale === "zh-CN") {
-    return {
-      subject: "你本周的匹配到了",
-      body: [
-        `本周我们为你选择了一位：${partner.fullName}。`,
-        ``,
-        `为什么匹配你们：`,
-        ...match.reasonsForA.map((r) => `• ${r}`),
-        ``,
-        `请在 24 小时内进入 App 回复 yes 或 no。`,
-      ].join("\n"),
-    };
-  }
-  return {
-    subject: "It's a match — meet your Wednesday date",
-    body: [
-      `We picked one person for you this week: ${partner.fullName}.`,
-      ``,
-      `Why we paired you:`,
-      ...match.reasonsForA.map((r) => `• ${r}`),
-      ``,
-      `Reply yes or no in the app within 24h.`,
-    ].join("\n"),
+function renderTagsHtml(tags: string[], colorType: "vibe" | "interest" | "language"): string {
+  if (!tags || tags.length === 0) return "";
+  const styles = {
+    vibe: "background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);color:#d8b4fe;",
+    interest: "background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.25);color:#fbcfe8;",
+    language: "background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);color:#bfdbfe;"
   };
+  const style = styles[colorType];
+  return tags.map(tag => `<span style="display:inline-block;border-radius:12px;padding:3px 10px;margin:2px 3px;font-size:12px;font-weight:500;${style}">${tag}</span>`).join("");
+}
+
+interface TranslationPayload {
+  major: string;
+  vibeTags: string[];
+  interests: string[];
+  languages: string[];
+  reasons: string[];
+}
+
+async function translateContent(
+  payload: TranslationPayload,
+  locale: Locale
+): Promise<TranslationPayload> {
+  if (locale === "en" || env.llm.provider === "mock") {
+    return payload;
+  }
+
+  const targetLang = locale === "zh-HK" ? "Hong Kong Traditional Chinese (Cantonese)" : "Simplified Chinese";
+  
+  const system = `You are a translation assistant for a campus dating app in Hong Kong. 
+Your task is to translate JSON content to ${targetLang}. 
+For major, vibeTags, and interests: translate into natural local terms used by college students (e.g. for zh-HK, "菲林攝影" for "film photography", "海濱散步" for "harbour walks").
+For reasons: translate them into natural, warm, and friendly local phrasing. For zh-HK, write in Traditional Chinese but with local Hong Kong vocabulary and expressions.
+Return ONLY a valid JSON object matching the input structure, with no markdown formatting.`;
+
+  const prompt = `Translate the following JSON object to ${targetLang}:
+${JSON.stringify(payload, null, 2)}`;
+
+  try {
+    const result = await llmCall<TranslationPayload>({
+      system,
+      prompt,
+      responseJson: true,
+      tag: "email-translation",
+      temperature: 0.2,
+      maxOutputTokens: 800
+    });
+    
+    if (result.json && !result.usedFallback) {
+      return result.json;
+    }
+  } catch (e) {
+    console.warn("[email-translation] Failed to translate content, using original English.", e);
+  }
+  
+  return payload;
+}
+
+export async function renderMatchDrop(to: StudentProfile, partner: StudentProfile, match: MatchRecord): Promise<NotifyTemplate> {
+  const locale = localeFor(to);
+  const firstName = to.fullName.split(" ")[0];
+  const partnerFirst = partner.fullName.split(" ")[0];
+  const originalReasons = (match.userAId === to.id ? match.reasonsForA : match.reasonsForB) ?? match.reasonsForA ?? [];
+  const appLink = `${env.email.frontendUrl}/student`;
+
+  const originalPayload: TranslationPayload = {
+    major: partner.major || "",
+    vibeTags: partner.vibeTags || [],
+    interests: partner.interests || [],
+    languages: partner.languages || [],
+    reasons: originalReasons
+  };
+
+  const translated = await translateContent(originalPayload, locale);
+
+  const getHtml = (opts: {
+    expiryText: string;
+    description: string;
+    boxTitle: string;
+    vibeLabel: string;
+    interestsLabel: string;
+    languagesLabel: string;
+    reasonsTitle: string;
+    ctaText: string;
+    hintText: string;
+  }) => `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="margin:0;padding:0;background:#090d16;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#cbd5e1;">
+  <div style="max-width:560px;margin:0 auto;padding:32px 24px;">
+    <!-- Logo Header -->
+    <div style="text-align:center;padding:24px 0 16px;">
+      <div style="font-size:32px;font-weight:900;background:linear-gradient(135deg,#ec4899,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;letter-spacing:-0.5px;">DopaMine</div>
+    </div>
+
+    <!-- Main Card -->
+    <div style="background:#131b2e;border-radius:24px;padding:32px 28px;border:1px solid rgba(168,85,247,0.15);box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+      <!-- Expiry Banner/Badge -->
+      <div style="text-align:right;margin-bottom:20px;">
+        <span style="display:inline-block;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;font-size:11px;font-weight:800;text-transform:uppercase;padding:4px 10px;border-radius:20px;letter-spacing:1px;">
+          ${opts.expiryText}
+        </span>
+      </div>
+
+      <!-- Greeting & Intro -->
+      <p style="color:#f8fafc;font-size:18px;font-weight:600;margin:0 0 12px;">Hi ${firstName},</p>
+      <p style="color:#94a3b8;font-size:15px;line-height:1.6;margin:0 0 24px;">
+        ${opts.description}
+      </p>
+
+      <!-- Partner Card -->
+      <div style="background:linear-gradient(135deg,rgba(236,72,153,0.06),rgba(168,85,247,0.06));border:1px solid rgba(236,72,153,0.15);border-radius:18px;padding:20px 24px;margin-bottom:24px;">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#ec4899;margin-bottom:14px;">${opts.boxTitle}</div>
+        
+        <div style="color:#e2e8f0;font-size:16px;font-weight:700;margin-bottom:12px;">
+          ✨ ${partner.fullName} <span style="font-size:14px;color:#94a3b8;font-weight:normal;">(${partner.yearOfStudy || "HKU Student"}${translated.major ? ` · ${translated.major}` : ""})</span>
+        </div>
+
+        ${translated.vibeTags?.length ? `
+        <div style="margin-bottom:10px;line-height:1.6;">
+          <span style="font-size:12px;color:#94a3b8;margin-right:8px;vertical-align:middle;">${opts.vibeLabel}:</span>
+          ${renderTagsHtml(translated.vibeTags.slice(0, 3), "vibe")}
+        </div>` : ""}
+
+        ${translated.interests?.length ? `
+        <div style="margin-bottom:10px;line-height:1.6;">
+          <span style="font-size:12px;color:#94a3b8;margin-right:8px;vertical-align:middle;">${opts.interestsLabel}:</span>
+          ${renderTagsHtml(translated.interests.slice(0, 4), "interest")}
+        </div>` : ""}
+
+        ${translated.languages?.length ? `
+        <div style="line-height:1.6;">
+          <span style="font-size:12px;color:#94a3b8;margin-right:8px;vertical-align:middle;">${opts.languagesLabel}:</span>
+          ${renderTagsHtml(translated.languages.slice(0, 3), "language")}
+        </div>` : ""}
+      </div>
+
+      <!-- Why Matched -->
+      ${translated.reasons.length ? `
+      <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:20px 24px;margin-bottom:28px;">
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#94a3b8;margin-bottom:12px;">${opts.reasonsTitle}</div>
+        ${translated.reasons.map((r) => `<div style="color:#cbd5e1;font-size:14px;padding:5px 0;line-height:1.5;">💜 ${r}</div>`).join("\n        ")}
+      </div>` : ""}
+
+      <!-- CTA -->
+      <div style="text-align:center;padding:8px 0 16px;">
+        <a href="${appLink}" style="display:inline-block;background:linear-gradient(135deg,#ec4899,#a855f7);color:#fff;font-size:16px;font-weight:800;padding:14px 40px;border-radius:12px;text-decoration:none;box-shadow:0 4px 14px rgba(168,85,247,0.45);letter-spacing:0.5px;">
+          ${opts.ctaText}
+        </a>
+        <p style="color:#64748b;font-size:13px;line-height:1.5;margin:16px 0 0;padding:0 12px;">
+          ${opts.hintText}
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;padding:24px 0 8px;">
+      <p style="color:#475569;font-size:12px;margin:0 0 4px;">DopaMine · One intentional date at a time 💜</p>
+      <p style="color:#334155;font-size:11px;margin:0;">You are receiving this email as a registered member.</p>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  if (locale === "zh-HK") {
+    const subject = "你今週嘅配對到了";
+    const body = [
+      `今週我哋為你揀咗一位配對對象：${partner.fullName}。`,
+      ``,
+      `點解配你哋：`,
+      ...translated.reasons.map((r) => `• ${r}`),
+      ``,
+      `請喺 24 小時內入 App 回覆 yes 或 no。點擊以下連結查看並回覆：`,
+      appLink,
+    ].join("\n");
+    const html = getHtml({
+      expiryText: "⌛ 24 小時內有效",
+      description: "今週我哋特別為你揀選咗一位配對對象！佢已經準備好同你見面啦。✨",
+      boxTitle: `關於 ${partnerFirst}`,
+      vibeLabel: "氛圍",
+      interestsLabel: "興趣",
+      languagesLabel: "語言",
+      reasonsTitle: "點解配你哋",
+      ctaText: "查看配對並回覆 ⚡",
+      hintText: "請喺 24 小時內回覆 yes 或 no。確認後你哋會收到對方嘅聯絡方式！"
+    });
+    return { subject, body, html };
+  }
+
+  if (locale === "zh-CN") {
+    const subject = "你本周的匹配到了";
+    const body = [
+      `本周我们为你选择了一位匹配对象：${partner.fullName}。`,
+      ``,
+      `为什么匹配你们：`,
+      ...translated.reasons.map((r) => `• ${r}`),
+      ``,
+      `请在 24 小时内进入 App 回复 yes 或 no。点击以下链接查看并回复：`,
+      appLink,
+    ].join("\n");
+    const html = getHtml({
+      expiryText: "⌛ 24 小时内有效",
+      description: "本周我们为你精心挑选了一位匹配对象！TA已经准备好和你见面了。✨",
+      boxTitle: `关于 ${partnerFirst}`,
+      vibeLabel: "氛围",
+      interestsLabel: "兴趣",
+      languagesLabel: "语言",
+      reasonsTitle: "为什么匹配你们",
+      ctaText: "查看匹配并回复 ⚡",
+      hintText: "请在 24 小时内回复 yes 或 no。确认后你们会收到对方的联系方式！"
+    });
+    return { subject, body, html };
+  }
+
+  // Default English
+  const subject = "It's a match — meet your Wednesday date";
+  const body = [
+    `We picked one person for you this week: ${partner.fullName}.`,
+    ``,
+    `Why we paired you:`,
+    ...translated.reasons.map((r) => `• ${r}`),
+    ``,
+    `Reply yes or no in the app within 24h. Click below to view and respond:`,
+    appLink,
+  ].join("\n");
+  const html = getHtml({
+    expiryText: "⌛ Expires in 24 hours",
+    description: "We've handpicked a matching connection for you this week! They are waiting to meet you. ✨",
+    boxTitle: `About ${partnerFirst}`,
+    vibeLabel: "Vibe",
+    interestsLabel: "Interests",
+    languagesLabel: "Speaks",
+    reasonsTitle: "Why You're Matched",
+    ctaText: "View Match & Respond ⚡",
+    hintText: "Please reply yes or no in the app within 24h. Once confirmed, you'll receive each other's contact info!"
+  });
+
+  return { subject, body, html };
 }
 
 export function renderDateScheduled(
