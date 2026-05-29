@@ -31,6 +31,9 @@ if (nodeEnv === "production") {
   if (!str("RESEND_API_KEY", "")) {
     throw new Error("RESEND_API_KEY is required in production.");
   }
+  if (!str("FRONTEND_URL", "")) {
+    throw new Error("FRONTEND_URL is required in production.");
+  }
   if (jwtSecret === "dev-secret-change-me") {
     throw new Error("JWT_SECRET must be set to a non-default value in production.");
   }

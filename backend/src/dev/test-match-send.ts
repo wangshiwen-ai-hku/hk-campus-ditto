@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { ensureDb, saveDb, saveStudent } from "../db.js";
+import { ensureDb, saveDb } from "../db.js";
 import { notify } from "../notify/index.js";
 import type { StudentProfile, MatchRecord } from "../types.js";
 
@@ -33,17 +33,13 @@ async function main() {
       crossUniOk: true,
       blockedUserIds: [],
       onboardingStage: "complete",
-      preferredLocale: "zh-HK", // Default fallback if new
+      preferredLocale: "en",
     };
     db.students.push(studentShiwen);
-    console.log("Created test student profile for Shiwen Wang (defaulting to zh-HK).");
+    console.log("Created test student profile for Shiwen Wang.");
   } else {
-    console.log(`Found existing student profile for Shiwen Wang. Preferred locale in DB: ${studentShiwen.preferredLocale}`);
-    // Force preferredLocale to zh-CN as requested
-    studentShiwen.preferredLocale = "zh-CN";
+    console.log(`Found existing student profile for Shiwen Wang. Preferred locale in DB: ${studentShiwen.preferredLocale ?? "(unset → en)"}`);
     studentShiwen.profileComplete = true;
-    await saveStudent(studentShiwen);
-    console.log("Forced preferredLocale to zh-CN and updated student profile in DB.");
   }
 
   // Find a partner (Daniel Wong, from demo data)

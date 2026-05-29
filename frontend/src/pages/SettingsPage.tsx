@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
 import type { Locale, StudentProfile } from "../types";
 import { SectionCard } from "../components/SectionCard";
-import { ArrowLeft, Languages, LogOut, LogIn, Share2, ToggleLeft, ToggleRight, Copy, Check, User, Heart, Settings, Shield } from "lucide-react";
+import { ArrowLeft, Languages, LogOut, LogIn, Share2, Copy, Check, User, Settings, Shield } from "lucide-react";
 
 export function SettingsPage({
   userId,
@@ -25,51 +25,65 @@ export function SettingsPage({
   const [savingField, setSavingField] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const isZhHK = locale === "zh-HK";
-  const isZhCN = locale === "zh-CN";
-  const isZh = isZhHK || isZhCN;
-
-  // Localized text dictionary for zero-conflict translations
   const txt = {
-    title: isZhHK ? "設定" : isZhCN ? "设置" : "Settings",
-    language: isZhHK ? "語言設定" : isZhCN ? "语言设定" : "Language Settings",
-    languageDesc: isZhHK ? "選擇你偏好的應用程式與郵件語言" : isZhCN ? "选择你偏好的应用程序与邮件语言" : "Choose your preferred language for the app and emails",
-    account: isZhHK ? "帳號管理" : isZhCN ? "账号管理" : "Account Management",
-    loggedInAs: isZhHK ? "已登入為：" : isZhCN ? "已登录为：" : "Logged in as:",
-    emailLabel: isZhHK ? "電子郵件：" : isZhCN ? "电子邮件：" : "Email:",
-    logoutBtn: isZhHK ? "登出帳號" : isZhCN ? "登出账号" : "Log Out",
-    loginBtn: isZhHK ? "登入 / 註冊" : isZhCN ? "登入 / 注册" : "Sign In / Register",
-    notLoggedIn: isZhHK ? "你目前尚未登入。" : isZhCN ? "你目前尚未登录。" : "You are not logged in right now.",
-    preferences: isZhHK ? "匹配與約會偏好" : isZhCN ? "匹配与约会偏好" : "Match & Dating Preferences",
-    crossCampus: isZhHK ? "接受跨校配對" : isZhCN ? "接受跨校匹配" : "Cross-Campus Matching",
-    crossCampusDesc: isZhHK ? "開啟後，匹配池中會包含其他學校的候選人" : isZhCN ? "开启后，匹配池中会包含其他学校的候选人" : "Include cross-campus candidates in your matching pool",
-    matchMode: isZhHK ? "匹配節奏" : isZhCN ? "匹配节奏" : "Matching Pace",
-    matchModeDesc: isZhHK ? "控制匹配的精準度與速度" : isZhCN ? "控制匹配的精准度与速度" : "Control the speed and selectivity of the matching algorithm",
-    datingGoal: isZhHK ? "約會目標" : isZhCN ? "约会目标" : "Dating Goal",
-    datingGoalDesc: isZhHK ? "與你目標相近的人進行配對" : isZhCN ? "与你目标相近的人进行配对" : "Match with people looking for a similar connection",
-    share: isZhHK ? "推薦與分享" : isZhCN ? "推荐与分享" : "Share DopaMine",
-    shareDesc: isZhHK ? "將 DopaMine 分享給朋友，一起開啟校園約會！" : isZhCN ? "将 DopaMine 分享给朋友，一起开启校园约会！" : "Share DopaMine with your friends to find campus matches together!",
-    copyLink: isZhHK ? "複製分享連結" : isZhCN ? "复制分享链接" : "Copy Share Link",
-    copied: isZhHK ? "已複製到剪貼簿！" : isZhCN ? "已复制到剪贴板！" : "Copied!",
-    back: isZhHK ? "返回" : isZhCN ? "返回" : "Back",
-    loading: isZhHK ? "載入中..." : isZhCN ? "载入中..." : "Loading...",
-    saving: isZhHK ? "儲存中..." : isZhCN ? "保存中..." : "Saving...",
+    en: {
+      title: "Settings",
+      language: "Language Settings",
+      languageDesc: "Choose your preferred language for the app and emails",
+      account: "Account Management",
+      loggedInAs: "Logged in as:",
+      emailLabel: "Email:",
+      logoutBtn: "Log Out",
+      loginBtn: "Sign In / Register",
+      notLoggedIn: "You are not logged in right now.",
+      share: "Share DopaMine",
+      shareDesc: "Share DopaMine with your friends to find campus matches together!",
+      copyLink: "Copy Share Link",
+      copied: "Copied!",
+      back: "Back",
+      loading: "Loading...",
+    },
+    "zh-HK": {
+      title: "設定",
+      language: "語言設定",
+      languageDesc: "選擇你偏好的應用程式與郵件語言",
+      account: "帳號管理",
+      loggedInAs: "已登入為：",
+      emailLabel: "電子郵件：",
+      logoutBtn: "登出帳號",
+      loginBtn: "登入 / 註冊",
+      notLoggedIn: "你目前尚未登入。",
+      share: "推薦與分享",
+      shareDesc: "將 DopaMine 分享給朋友，一起開啟校園約會！",
+      copyLink: "複製分享連結",
+      copied: "已複製到剪貼簿！",
+      back: "返回",
+      loading: "載入中...",
+    },
+    "zh-CN": {
+      title: "设置",
+      language: "语言设定",
+      languageDesc: "选择你偏好的应用程序与邮件语言",
+      account: "账号管理",
+      loggedInAs: "已登录为：",
+      emailLabel: "电子邮件：",
+      logoutBtn: "登出账号",
+      loginBtn: "登入 / 注册",
+      notLoggedIn: "你目前尚未登录。",
+      share: "推荐与分享",
+      shareDesc: "将 DopaMine 分享给朋友，一起开启校园约会！",
+      copyLink: "复制分享链接",
+      copied: "已复制到剪贴板！",
+      back: "返回",
+      loading: "载入中...",
+    },
+  }[locale];
+
+  const languageLabels: Record<Locale, string> = {
+    en: "English",
+    "zh-HK": "繁體中文",
+    "zh-CN": "简体中文",
   };
-
-  const datingGoalOptions = [
-    { value: "life_partner", label: isZhHK ? "終生伴侶" : isZhCN ? "终生伴侣" : "Life Partner" },
-    { value: "long_term", label: isZhHK ? "長期穩定關係" : isZhCN ? "长期稳定关系" : "Long-term relationship" },
-    { value: "casual", label: isZhHK ? "輕鬆約會" : isZhCN ? "轻松约会" : "Casual dating" },
-    { value: "friends", label: isZhHK ? "結交新朋友" : isZhCN ? "结交新朋友" : "Making new friends" },
-    { value: "unsure", label: isZhHK ? "還不確定" : isZhCN ? "还不确定" : "Still figuring it out" },
-  ];
-
-  const matchModeOptions = [
-    { value: "fast", label: isZhHK ? "速度優先 (快速配對)" : isZhCN ? "速度优先 (快速匹配)" : "Fast (Speed over perfection)" },
-    { value: "balanced", label: isZhHK ? "平衡模式" : isZhCN ? "平衡模式" : "Balanced" },
-    { value: "intentional", label: isZhHK ? "精準優先 (注重合適度)" : isZhCN ? "精准优先 (注重合适度)" : "Intentional (Strong preference fit)" },
-    { value: "wait_for_the_one", label: isZhHK ? "寧缺勿濫 (極高標準)" : isZhCN ? "宁缺勿滥 (极高标准)" : "Wait for the one (Strictest criteria)" },
-  ];
 
   useEffect(() => {
     if (userId) {
@@ -99,71 +113,8 @@ export function SettingsPage({
     }
   };
 
-  const handleToggleCrossUni = async () => {
-    if (!profile) return;
-    setSavingField("crossUniOk");
-    const updatedStatus = !profile.crossUniOk;
-    try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        crossUniOk: updatedStatus,
-      });
-      if (res.user) {
-        setProfile(res.user);
-      }
-    } catch (e: any) {
-      alert(e.message || "Failed to update preference.");
-    } finally {
-      setSavingField(null);
-    }
-  };
-
-  const handleDatingGoalChange = async (goal: string) => {
-    if (!profile) return;
-    setSavingField("datingGoal");
-    const updatedPrefs = {
-      ...(profile.datingPreferences ?? {}),
-      datingGoal: goal,
-    };
-    try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        datingPreferences: updatedPrefs,
-      });
-      if (res.user) {
-        setProfile(res.user);
-      }
-    } catch (e: any) {
-      alert(e.message || "Failed to update dating goal.");
-    } finally {
-      setSavingField(null);
-    }
-  };
-
-  const handleMatchModeChange = async (mode: string) => {
-    if (!profile) return;
-    setSavingField("matchMode");
-    const updatedPrefs = {
-      ...(profile.datingPreferences ?? {}),
-      matchMode: mode,
-    };
-    try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        datingPreferences: updatedPrefs,
-      });
-      if (res.user) {
-        setProfile(res.user);
-      }
-    } catch (e: any) {
-      alert(e.message || "Failed to update match mode.");
-    } finally {
-      setSavingField(null);
-    }
-  };
-
   const handleCopyLink = () => {
-    navigator.clipboard.writeText("https://www.aurahk.me");
+    navigator.clipboard.writeText(window.location.origin);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -227,9 +178,7 @@ export function SettingsPage({
                           : "border-white/5 bg-white/[0.02] text-white/45 hover:bg-white/5 hover:text-white"
                       }`}
                     >
-                      <span>
-                        {lang === "en" ? "English" : lang === "zh-HK" ? "繁體中文" : "简体中文"}
-                      </span>
+                      <span>{languageLabels[lang]}</span>
                       {active && (
                         <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-aura shadow-[0_0_8px_rgba(255,0,102,0.6)]" />
                       )}
@@ -238,93 +187,6 @@ export function SettingsPage({
                 })}
               </div>
             </SectionCard>
-
-            {/* Profile Matching Preferences */}
-            {userId && profile && (
-              <SectionCard className="border-white/10 shadow-2xl backdrop-blur-md space-y-6">
-                <div className="flex items-center gap-3">
-                  <Heart size={18} className="text-aura" />
-                  <div>
-                    <h3 className="font-black text-white">{txt.preferences}</h3>
-                  </div>
-                </div>
-
-                {/* Cross campus matching toggle */}
-                <div className="flex items-center justify-between border-t border-white/5 pt-4">
-                  <div className="max-w-[80%]">
-                    <span className="text-sm font-bold text-white block">{txt.crossCampus}</span>
-                    <span className="text-xs text-white/45 leading-relaxed">{txt.crossCampusDesc}</span>
-                  </div>
-                  <button
-                    disabled={savingField === "crossUniOk"}
-                    onClick={handleToggleCrossUni}
-                    className="text-white/60 hover:text-white transition-colors"
-                  >
-                    {profile.crossUniOk ? (
-                      <ToggleRight size={44} className="text-aura cursor-pointer" />
-                    ) : (
-                      <ToggleLeft size={44} className="text-white/20 cursor-pointer" />
-                    )}
-                  </button>
-                </div>
-
-                {/* Match pace dropdown selector */}
-                <div className="flex flex-col gap-2 border-t border-white/5 pt-4">
-                  <div>
-                    <span className="text-sm font-bold text-white block">{txt.matchMode}</span>
-                    <span className="text-xs text-white/45 leading-relaxed">{txt.matchModeDesc}</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                    {matchModeOptions.map((opt) => {
-                      const active = (profile.datingPreferences?.matchMode ?? "balanced") === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          disabled={savingField === "matchMode" || active}
-                          onClick={() => handleMatchModeChange(opt.value)}
-                          className={`rounded-xl border px-3 py-2 text-left text-xs font-bold transition-all ${
-                            active
-                              ? "border-aura/40 bg-aura/5 text-aura"
-                              : "border-white/5 bg-white/[0.01] text-white/50 hover:bg-white/5 hover:text-white"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Dating Goal dropdown selector */}
-                <div className="flex flex-col gap-2 border-t border-white/5 pt-4">
-                  <div>
-                    <span className="text-sm font-bold text-white block">{txt.datingGoal}</span>
-                    <span className="text-xs text-white/45 leading-relaxed">{txt.datingGoalDesc}</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                    {datingGoalOptions.map((opt) => {
-                      const active = (profile.datingPreferences?.datingGoal ?? "unsure") === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          disabled={savingField === "datingGoal" || active}
-                          onClick={() => handleDatingGoalChange(opt.value)}
-                          className={`rounded-xl border px-3 py-2 text-left text-xs font-bold transition-all ${
-                            active
-                              ? "border-aura/40 bg-aura/5 text-aura"
-                              : "border-white/5 bg-white/[0.01] text-white/50 hover:bg-white/5 hover:text-white"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </SectionCard>
-            )}
 
             {/* Share DopaMine */}
             <SectionCard className="border-white/10 shadow-2xl backdrop-blur-md">
