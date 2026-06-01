@@ -25,7 +25,7 @@
       "campusSafe": "Campus Safe",
       "campusSafeDesc": "Exclusive to people with verified .edu.hk emails.",
       "personalized": "Personalized Matches",
-      "personalizedDesc": "We match based on values, vibe, and availability."
+      "personalizedDesc": "We match based on values, vibe, and dating preferences."
     },
     "curated": {
       "title": "Dates that<br/>actually<br/>happen.",
@@ -55,12 +55,12 @@
         "userQuote": "\"I opened my phone at 7:01 and saw a guy from my college. It felt serendipitous.\" — CUHK Year 3"
       },
       "step3": {
-        "title": "Share your availability",
-        "desc": "Confirm a simple meeting time.",
+        "title": "Confirm your match",
+        "desc": "Once both sides are interested, Dopa shares contact details.",
         "example": "E.g. 'Let's meet at Book Cafe!'",
-        "detailQuote": "\"We find your overlapping schedule automatically so you don't have to.\" ☕",
-        "check1": "Choose from curated campus safe spots.",
-        "check2": "Recommended first date length: 1 hour.",
+        "detailQuote": "\"Dopa makes the introduction; you two can choose the time naturally.\" ☕",
+        "check1": "Confirm that both sides want to connect.",
+        "check2": "Contact details are shared only after both confirm.",
         "check3": "High intent, low stakes meeting."
       },
       "step4": {
@@ -79,7 +79,7 @@
     "faqs": [
       {
         "q": "How does matching work?",
-        "a": "Our algorithm looks at more than just photos. It analyzes interests, values, and even your weekly schedule to ensure you meet someone you’ll actually enjoy talking to on campus."
+        "a": "Our algorithm looks at more than just photos. It analyzes interests, values, and dating preferences to help you meet someone you will actually enjoy talking to."
       },
       {
         "q": "Is it only for .edu.hk emails?",

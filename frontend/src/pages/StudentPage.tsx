@@ -736,10 +736,6 @@ function ProfileTab({
                 tags={weekendVibes.map((v) => tOpt(t, v))} />
             )}
 
-            {profile.availability.length > 0 && (
-              <TagRow label={t("join.availability")} color="bg-green-400/10 border border-green-400/20 text-green-400"
-                tags={profile.availability.map((slot) => slot.includes(".") ? t(slot) : t(`join.slots.${slot}`, { defaultValue: slot }))} />
-            )}
           </div>
         </SectionCard>
 
@@ -1083,7 +1079,6 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
 }) {
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
-  const [busy, setBusy] = useState(false);
   const [icebreaker, setIcebreaker] = useState<{ introForA: string; introForB: string; conversationStarters: string[]; dateVibe: string } | null>(null);
   const [icebreakerLoading, setIcebreakerLoading] = useState(false);
 
@@ -1091,24 +1086,11 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
   const reasons = isUserA ? view.match.reasonsForA : view.match.reasonsForB;
   const canFeedback = ["happened", "feedback-collected"].includes(view.match.status);
 
-  // Dual-confirmation logic
-  const confirmations = view.match.dateConfirmations ?? [];
-  const myConfirm = confirmations.find((x) => x.userId === profile.id);
-  const partnerConfirm = confirmations.find((x) => x.userId !== profile.id);
-  const iConfirmedSlot = !!myConfirm;
-  const iConfirmedPlace = !!(myConfirm?.place);
-  const partnerConfirmedSlot = !!partnerConfirm;
-  const partnerConfirmedPlace = !!(partnerConfirm?.place);
-  const bothFullyConfirmed = iConfirmedPlace && partnerConfirmedPlace;
-
-  // For legacy matches (status=scheduled but no dateConfirmations), treat as needing confirmation
-  const isLegacyScheduled = ["scheduled", "place-confirmed", "slot-confirmed"].includes(view.match.status) && confirmations.length === 0;
-
-  const hasSlot = !!view.match.confirmedSlot;
+  const acceptances = view.match.acceptances ?? [];
+  const bothAccepted = acceptances.some((x) => x.userId === view.match.userAId && x.choice === "yes") &&
+    acceptances.some((x) => x.userId === view.match.userBId && x.choice === "yes");
   const isPostDate = ["happened", "feedback-collected", "closed"].includes(view.match.status);
-  // Contact exchange requires BOTH users to have confirmed (dateConfirmations with place),
-  // OR the match has already progressed past the date (post-date feedback stages)
-  const isComplete = bothFullyConfirmed || isPostDate;
+  const isComplete = bothAccepted || isPostDate || ["mutual-accepted", "slot-proposing", "slot-confirmed", "place-confirmed", "scheduled"].includes(view.match.status);
 
   useEffect(() => {
     setIcebreaker(null);
@@ -1122,27 +1104,6 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
       if (res.icebreaker) setIcebreaker(res.icebreaker);
     }).catch(() => {}).finally(() => setIcebreakerLoading(false));
   }, [isComplete, view.match.id, locale, icebreaker, icebreakerLoading]);
-
-  async function confirmSlot(slot: string) {
-    setBusy(true);
-    try {
-      await api.confirmSlot(view.match.id, slot);
-      try { await api.respondToMatch(view.match.id, "yes"); } catch {}
-      try { await api.pickPlace(view.match.id); } catch {}
-      onRefresh();
-    } catch (e: any) { setMessage(e.message); }
-    finally { setBusy(false); }
-  }
-
-  async function confirmPlace() {
-    setBusy(true);
-    try {
-      await api.pickPlace(view.match.id);
-      try { await api.respondToMatch(view.match.id, "yes"); } catch {}
-      onRefresh();
-    } catch (e: any) { setMessage(e.message); }
-    finally { setBusy(false); }
-  }
 
   async function sendFeedback(sentiment: "love" | "pass" | "rematch") {
     try {
@@ -1212,91 +1173,7 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
           {/* Partner basic info */}
           <PartnerInfoPanel partner={view.partner} t={t} locale={locale} />
 
-          {/* ── Step 1: Choose Date Time ── */}
-          {!iConfirmedSlot && !isPostDate && (
-            <div className="rounded-3xl border border-aura/20 bg-aura/5 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="h-8 w-8 rounded-full bg-aura flex items-center justify-center text-sm font-black text-white">1</span>
-                <h3 className="text-base font-black text-white">{t("student.matchFlow.step1Title")}</h3>
-              </div>
-              <p className="text-sm text-white/40 font-medium mb-5 ml-11">{t("student.matchFlow.step1Desc")}</p>
-              {partnerConfirmedSlot && (
-                <div className="ml-11 mb-4 rounded-2xl bg-amber-400/10 border border-amber-400/20 px-4 py-3">
-                  <span className="text-sm font-bold text-amber-400">{t("student.matchFlow.partnerAlreadyConfirmed")}</span>
-                </div>
-              )}
-              <div className="grid gap-2 sm:grid-cols-2 ml-11">
-                {(view.match.overlapSlots?.length ? view.match.overlapSlots : view.match.proposedSlots ?? []).map((slot) => (
-                  <button key={slot} disabled={busy} onClick={() => confirmSlot(slot)}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-left hover:bg-aura/10 hover:border-aura/30 transition-all disabled:opacity-30 group">
-                    <div className="text-sm font-black text-white group-hover:text-aura transition-colors">
-                      {slot.includes(".") ? t(slot) : t(`join.slots.${slot}`, { defaultValue: slot })}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── Step 2: Confirm Date Spot ── */}
-          {iConfirmedSlot && !iConfirmedPlace && (view.match.curatedDateTitle || view.match.proposedPlace) && (
-            <div className="rounded-3xl border border-harbour/20 bg-harbour/5 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="h-8 w-8 rounded-full bg-harbour flex items-center justify-center text-sm font-black text-white">2</span>
-                <h3 className="text-base font-black text-white">{t("student.matchFlow.step2Title")}</h3>
-              </div>
-              <p className="text-sm text-white/40 font-medium mb-5 ml-11">{t("student.matchFlow.step2Desc")}</p>
-              {partnerConfirmedPlace && (
-                <div className="ml-11 mb-4 rounded-2xl bg-amber-400/10 border border-amber-400/20 px-4 py-3">
-                  <span className="text-sm font-bold text-amber-400">{t("student.matchFlow.partnerAlreadyConfirmed")}</span>
-                </div>
-              )}
-              <div className="ml-11 rounded-2xl bg-white/[0.03] border border-white/10 p-5 mb-4">
-                {view.match.curatedDateTitle && <div className="text-xl font-black text-aura tracking-tight">{view.match.curatedDateTitle}</div>}
-                <div className="text-sm text-white/50 mt-1 font-medium">{view.match.curatedDateSpot ?? view.match.proposedPlace?.name}</div>
-                {view.match.curatedDateTips?.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {view.match.curatedDateTips.map((tip) => (
-                      <span key={tip} className="text-xs text-white/30 font-medium bg-white/5 rounded-full px-3 py-1">{tip}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="ml-11">
-                <button disabled={busy} onClick={confirmPlace}
-                  className="rounded-2xl bg-harbour px-8 py-3.5 text-base font-black text-white shadow-lg shadow-harbour/30 hover:scale-105 active:scale-95 transition-all disabled:opacity-30">
-                  {t("student.matchFlow.confirmSpot")}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Slot confirmed badge (my confirmation) */}
-          {iConfirmedSlot && (
-            <div className="flex items-center gap-3 rounded-2xl bg-green-400/10 border border-green-400/20 px-5 py-3">
-              <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-lg font-black text-green-300">
-                {t("student.matchFlow.confirmed")}: {view.match.confirmedSlot?.includes(".") ? t(view.match.confirmedSlot) : t(`join.slots.${view.match.confirmedSlot}`, { defaultValue: view.match.confirmedSlot })}
-              </span>
-              {view.match.proposedPlace && (
-                <span className="ml-auto text-lg font-black text-green-300/70">📍 {view.match.proposedPlace.name}</span>
-              )}
-            </div>
-          )}
-
-          {/* ── Waiting for partner ── */}
-          {iConfirmedPlace && !partnerConfirmedPlace && !isPostDate && (
-            <div className="rounded-3xl bg-gradient-to-br from-amber-400/5 to-orange-400/5 border border-amber-400/15 p-6 text-center">
-              <div className="text-3xl mb-3 animate-pulse">⏳</div>
-              <h3 className="text-base font-black text-amber-400 mb-2">{t("student.matchFlow.waitingPartnerTitle")}</h3>
-              <p className="text-sm text-white/40 font-medium max-w-md mx-auto">{t("student.matchFlow.waitingPartnerDesc")}</p>
-              <div className="mt-4 rounded-2xl bg-white/[0.03] border border-white/5 px-4 py-3 inline-block">
-                <span className="text-xs font-bold text-white/30">{t("student.matchFlow.emailSent")}</span>
-              </div>
-            </div>
-          )}
-
-          {/* ── Step 3: Contact Exchange + Icebreaker (only after BOTH confirmed) ── */}
+          {/* Contact Exchange + Icebreaker (after BOTH confirmed) */}
           {isComplete && (
             <div className="rounded-3xl border border-green-400/20 bg-green-400/5 p-6 space-y-4">
               <div className="flex items-center gap-3 mb-2">
@@ -1370,14 +1247,6 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
                   ))}
                 </ul>
               </div>
-            </div>
-          )}
-
-          {/* Waiting: I confirmed slot but not place yet, and no place info */}
-          {iConfirmedSlot && !iConfirmedPlace && !view.match.curatedDateTitle && !view.match.proposedPlace && (
-            <div className="rounded-3xl bg-white/[0.02] border border-white/5 p-6 text-center">
-              <div className="text-3xl mb-3 animate-pulse">⏳</div>
-              <p className="text-sm text-white/40 font-bold">{t("student.matchFlow.waitingPartner")}</p>
             </div>
           )}
 

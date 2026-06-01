@@ -9,7 +9,6 @@ import { setStoredToken } from "../lib/session";
 import { AiChatSidebar } from "../components/AiChatSidebar";
 import type { Question, QuestionGroup } from "../types";
 
-const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"];
 const TAGS = ["coffee", "cantopop", "art", "film", "night", "hiking", "citywalk", "supper", "tech", "thrifting"];
 const VIBES = ["chill", "curious", "empathetic", "playful", "grounded", "creative", "ambitious", "warm"];
 const LANGUAGES = ["english", "cantonese", "mandarin", "japanese", "korean"];
@@ -465,8 +464,6 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [interestOther, setInterestOther] = useState("");
   const [vibeTags, setVibeTags] = useState<string[]>([]);
   const [vibeOther, setVibeOther] = useState("");
-  const [availability, setAvailability] = useState<string[]>([]);
-  const [availabilityOther, setAvailabilityOther] = useState("");
   const [crossUniOk, setCrossUniOk] = useState(true);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
@@ -517,13 +514,8 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         setVibeTags(next.selected);
         setVibeOther(next.other);
       }
-      if (data.availability?.length) {
-        const next = splitKnownAndOther(data.availability, SLOTS);
-        setAvailability(next.selected);
-        setAvailabilityOther(next.other);
-      }
       if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
-      const savedProfile = Boolean(data.fullName && data.languages?.length && data.interests?.length && data.vibeTags?.length && data.availability?.length);
+      const savedProfile = Boolean(data.fullName && data.languages?.length && data.interests?.length && data.vibeTags?.length);
       let nextUnlocked = savedProfile && groups.length ? nextUnlockIndex("profile", groups) : (userId ? 1 : 0);
       const savedAnswers = answersFromProfile(data, groups);
       if (Object.keys(savedAnswers).length) {
@@ -640,14 +632,13 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     }
     const finalInterests = mergeOther(interests, interestOther);
     const finalVibeTags = mergeOther(vibeTags, vibeOther);
-    const finalAvailability = mergeOther(availability, availabilityOther);
     const gradeValue = profileType === "Alumni" ? "" : grade;
     const normalizedMbti = mbtiPrefsFromString(mbti);
     if (normalizedMbti === null) {
       alert(t("join.errors.mbti"));
       return;
     }
-    if (!fullName || !preferredLocale || !profileType || !degreeLevel || (profileType !== "Alumni" && !grade) || !faculty || !department || !height || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
+    if (!fullName || !preferredLocale || !profileType || !degreeLevel || (profileType !== "Alumni" && !grade) || !faculty || !department || !height || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0) {
       alert(t("join.errors.required"));
       return;
     }
@@ -668,7 +659,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         dealBreakers: [],
         optedIn: true,
         crossUniOk,
-        availability: finalAvailability,
+        availability: [],
         datingPreferences: {
           birthday: birthday.trim() || undefined,
           heightCm: Number(height),
@@ -1087,8 +1078,6 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                 <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={interestOther} onChange={(e) => setInterestOther(e.target.value)} placeholder={t("join.other.interests")} />
                 <TagSelector title={<span>{t("join.dev.vibeTags")} <span className="text-pink-400">*</span></span>} items={VIBES} values={vibeTags} setValues={setVibeTags} renderLabel={(item) => t(`join.vibes.${item}`)} />
                 <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={vibeOther} onChange={(e) => setVibeOther(e.target.value)} placeholder={t("join.other.vibes")} />
-                <TagSelector title={<span>{t("join.availability")} <span className="text-pink-400">*</span></span>} items={SLOTS} values={availability} setValues={setAvailability} renderLabel={(item) => t(`join.slots.${item}`)} />
-                <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 outline-none transition-colors hover:bg-white/10 focus:ring-2 focus:ring-aura/50" value={availabilityOther} onChange={(e) => setAvailabilityOther(e.target.value)} placeholder={t("join.other.availability")} />
               </div>
               <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white/70">
                 <input type="checkbox" checked={crossUniOk} onChange={(e) => setCrossUniOk(e.target.checked)} />
