@@ -34,11 +34,18 @@ function postgresPool(): pg.Pool {
   if (!env.db.databaseUrl) {
     throw new Error("DATABASE_URL is required when DB_PROVIDER=postgres.");
   }
+  const explicitCaPath = env.db.sslCaPath;
+  const defaultCaPath = path.join(__dirname, "..", "prod-ca-2021.crt");
+  const caPath = explicitCaPath || defaultCaPath;
+  let ca: string | undefined;
+  try {
+    ca = readFileSync(caPath).toString();
+  } catch {
+    ca = undefined;
+  }
   pool ??= new Pool({
     connectionString: env.db.databaseUrl,
-    ssl: {
-      ca: readFileSync(path.join(__dirname, "..", "prod-ca-2021.crt")).toString(),
-    },
+    ssl: ca ? { ca, rejectUnauthorized: env.db.sslRejectUnauthorized } : { rejectUnauthorized: env.db.sslRejectUnauthorized },
   });
   return pool;
 }

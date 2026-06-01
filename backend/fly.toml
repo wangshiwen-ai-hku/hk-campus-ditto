@@ -1,0 +1,19 @@
+app = "thrumming-island-597"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  API_PUBLIC_URL = "https://thrumming-island-597.fly.dev"
+  FRONTEND_URL = "https://www.aurahk.me"
+  SCHEDULER_ENABLED = "true"
+  SCHEDULER_TRIGGER = "Wednesday 19:00"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]

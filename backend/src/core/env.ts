@@ -45,6 +45,8 @@ export const env = {
   db: {
     provider: str("DB_PROVIDER", "file") as "file" | "postgres",
     databaseUrl: str("DATABASE_URL", ""),
+    sslCaPath: str("DATABASE_SSL_CA_PATH", ""),
+    sslRejectUnauthorized: bool("DATABASE_SSL_REJECT_UNAUTHORIZED", false),
   },
   jwt: {
     secret: jwtSecret,
@@ -66,7 +68,8 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "Aura HK <noreply@aura.hk>"),
+    from: str("EMAIL_FROM", "DopaMine <noreply@dopamine.hk>"),
+    apiPublicUrl: str("API_PUBLIC_URL", str("FRONTEND_URL", `http://localhost:${num("PORT", 8787)}`)),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),
