@@ -508,12 +508,19 @@
       "waitingPartnerDesc": "您已經表達咗誠意！我哋已通知對方——一旦佢都確認，雙方就可以互換聯絡方式啦。",
       "emailSent": "已發送電郵通知對方",
       "partnerAlreadyConfirmed": "對方已確認——佢喺度等緊您！",
-      "dateConfirmed": "約會已確認！",
+      "dateConfirmed": "配對已確認！",
       "feedbackTitle": "約會感覺點樣？",
       "confirmed": "已確認",
       "icebreakerTitle": "Dopa 撮合官",
       "icebreakerLoading": "正在為您準備破冰介紹…",
-      "talkAbout": "傾偈話題"
+      "talkAbout": "傾偈話題",
+      "responseTitle": "您願意認識佢嗎？",
+      "responseDesc": "如果您選擇 Confirm，Dopa 會喺雙方都確認後分享聯絡方式；如果選擇 Cancel，我哋亦會溫柔記低，繼續幫您搵更適合嘅人。",
+      "confirmToast": "已記錄，謝謝！如果對方都確認，Dopa 會再通知您。",
+      "cancelToast": "多謝回饋，Dopa 會繼續幫您配對更適合嘅人。",
+      "confirmedGentle": "已記錄您嘅 Confirm。Dopa 會等雙方都確認後再分享聯絡方式。",
+      "cancelledGentle": "已記錄您嘅回饋。Dopa 會繼續幫您尋找更適合嘅配對。",
+      "saving": "記錄中…"
     }
   },
   "admin": {

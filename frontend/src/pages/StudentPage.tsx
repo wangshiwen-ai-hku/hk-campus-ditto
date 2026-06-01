@@ -1079,6 +1079,7 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
 }) {
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
+  const [responseBusy, setResponseBusy] = useState<"yes" | "no" | null>(null);
   const [icebreaker, setIcebreaker] = useState<{ introForA: string; introForB: string; conversationStarters: string[]; dateVibe: string } | null>(null);
   const [icebreakerLoading, setIcebreakerLoading] = useState(false);
 
@@ -1087,6 +1088,7 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
   const canFeedback = ["happened", "feedback-collected"].includes(view.match.status);
 
   const acceptances = view.match.acceptances ?? [];
+  const myAcceptance = acceptances.find((x) => x.userId === profile.id);
   const bothAccepted = acceptances.some((x) => x.userId === view.match.userAId && x.choice === "yes") &&
     acceptances.some((x) => x.userId === view.match.userBId && x.choice === "yes");
   const isPostDate = ["happened", "feedback-collected", "closed"].includes(view.match.status);
@@ -1104,6 +1106,20 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
       if (res.icebreaker) setIcebreaker(res.icebreaker);
     }).catch(() => {}).finally(() => setIcebreakerLoading(false));
   }, [isComplete, view.match.id, locale, icebreaker, icebreakerLoading]);
+
+  async function respond(choice: "yes" | "no") {
+    setResponseBusy(choice);
+    setMessage("");
+    try {
+      await api.respondToMatch(view.match.id, choice);
+      setMessage(choice === "yes" ? t("student.matchFlow.confirmToast") : t("student.matchFlow.cancelToast"));
+      onRefresh();
+    } catch (e: any) {
+      setMessage(e.message);
+    } finally {
+      setResponseBusy(null);
+    }
+  }
 
   async function sendFeedback(sentiment: "love" | "pass" | "rematch") {
     try {
@@ -1247,6 +1263,42 @@ function MatchDetail({ view, profile, locale, onClose, onRefresh, t }: {
                   ))}
                 </ul>
               </div>
+            </div>
+          )}
+
+          {/* Confirm / Cancel */}
+          {!isPostDate && (
+            <div className="rounded-3xl border border-aura/20 bg-gradient-to-br from-aura/10 via-pink-500/8 to-harbour/8 p-6">
+              <div className="mb-5">
+                <div className="text-sm font-black uppercase tracking-[0.24em] text-aura/75">{t("student.matchFlow.responseTitle")}</div>
+                <p className="mt-2 text-base font-bold leading-relaxed text-white/55">{t("student.matchFlow.responseDesc")}</p>
+              </div>
+              {myAcceptance ? (
+                <div className={`rounded-2xl border px-5 py-4 text-base font-black ${
+                  myAcceptance.choice === "yes"
+                    ? "border-green-400/20 bg-green-400/10 text-green-300"
+                    : "border-white/10 bg-white/[0.04] text-white/62"
+                }`}>
+                  {myAcceptance.choice === "yes" ? t("student.matchFlow.confirmedGentle") : t("student.matchFlow.cancelledGentle")}
+                </div>
+              ) : (
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <button
+                    disabled={!!responseBusy}
+                    onClick={() => respond("yes")}
+                    className="rounded-2xl bg-gradient-to-r from-aura to-pink-500 px-6 py-4 text-base font-black text-white shadow-xl shadow-aura/25 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {responseBusy === "yes" ? t("student.matchFlow.saving") : "Confirm"}
+                  </button>
+                  <button
+                    disabled={!!responseBusy}
+                    onClick={() => respond("no")}
+                    className="rounded-2xl border border-white/15 bg-white/[0.06] px-6 py-4 text-base font-black text-white/75 transition-all hover:bg-white/[0.1] active:scale-[0.98] disabled:opacity-50"
+                  >
+                    {responseBusy === "no" ? t("student.matchFlow.saving") : "Cancel"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

@@ -508,12 +508,19 @@
       "waitingPartnerDesc": "You've shown your sincerity! We've notified your match — once they confirm, you'll both get each other's contact info.",
       "emailSent": "Email notification sent to your match",
       "partnerAlreadyConfirmed": "Your match has already confirmed — they're waiting for you!",
-      "dateConfirmed": "Date Confirmed!",
+      "dateConfirmed": "Match Confirmed!",
       "feedbackTitle": "How was the date?",
       "confirmed": "Confirmed",
       "icebreakerTitle": "Dopa Matchmaker",
       "icebreakerLoading": "Preparing your icebreaker intro…",
-      "talkAbout": "Conversation Starters"
+      "talkAbout": "Conversation Starters",
+      "responseTitle": "Would you like to meet them?",
+      "responseDesc": "If you choose Confirm, Dopa will share contact details only after both sides confirm. If you choose Cancel, we will record it gently and keep looking for a better fit.",
+      "confirmToast": "Recorded. Thank you! If they also confirm, Dopa will let you know.",
+      "cancelToast": "Thank you for the feedback. Dopa will keep looking for a better fit.",
+      "confirmedGentle": "Your Confirm has been recorded. Dopa will share contact details only after both sides confirm.",
+      "cancelledGentle": "Your feedback has been recorded. Dopa will keep looking for a better match.",
+      "saving": "Saving…"
     }
   },
   "admin": {

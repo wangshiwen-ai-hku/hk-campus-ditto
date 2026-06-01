@@ -507,12 +507,19 @@
       "waitingPartnerDesc": "您已经表明了诚意！我们已通知对方——一旦 TA 也确认，双方就可以互换联系方式啦。",
       "emailSent": "已发送邮件通知对方",
       "partnerAlreadyConfirmed": "对方已确认——TA在等您哦！",
-      "dateConfirmed": "约会已确认！",
+      "dateConfirmed": "匹配已确认！",
       "feedbackTitle": "约会感觉怎么样？",
       "confirmed": "已确认",
       "icebreakerTitle": "Dopa 撮合官",
       "icebreakerLoading": "正在为您准备破冰介绍…",
-      "talkAbout": "聊天话题"
+      "talkAbout": "聊天话题",
+      "responseTitle": "您愿意认识 TA 吗？",
+      "responseDesc": "如果您选择 Confirm，Dopa 会在双方都确认后分享联系方式；如果选择 Cancel，我们也会温柔记录下来，继续为您寻找更合适的人。",
+      "confirmToast": "已记录，谢谢！如果对方也确认，Dopa 会再通知您。",
+      "cancelToast": "谢谢反馈，Dopa 会继续帮您匹配更合适的人。",
+      "confirmedGentle": "已记录您的 Confirm。Dopa 会等双方都确认后再分享联系方式。",
+      "cancelledGentle": "已记录您的反馈。Dopa 会继续帮您寻找更合适的匹配。",
+      "saving": "记录中…"
     }
   },
   "admin": {
