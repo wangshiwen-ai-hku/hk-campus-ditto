@@ -1,5 +1,5 @@
 {
-  "brand": "Aura HK",
+  "brand": "DopaMine",
   "nav": {
     "how": "如何运作",
     "safety": "安全保障",
@@ -9,9 +9,9 @@
   },
   "home": {
     "hero": {
-      "getADate": "每个星期三为你送上",
-      "wednesday": "一个约会",
-      "atYourSchool": "@你的大学",
+      "getADate": "每周三为您送上",
+      "wednesday": "一次心动约会",
+      "atYourSchool": "@您的大学",
       "nextDrop": "下一次匹配发布：周三 7PM",
       "joinDrop": "加入下一次匹配 →"
     },
@@ -19,9 +19,9 @@
     "why": {
       "badge": "打破香港的无脑滑动文化",
       "title": "周三的<br/> <1>走心约会</1>",
-      "desc": "厌倦了无止尽的左滑右滑和石沉大海的“Hi”？我们每周三为你送上一位高质量匹配对象。拒绝无聊游戏，只交本校朋友。",
+      "desc": "厌倦了无止尽的左滑右滑和石沉大海的“Hi”？我们每周三为您送上一位高质量匹配对象。拒绝无聊游戏，只交本校朋友。",
       "noSwiping": "无需滑动",
-      "noSwipingDesc": "我们的算法会为你包揽一切。",
+      "noSwipingDesc": "我们的算法会为您包揽一切。",
       "campusSafe": "校园安全",
       "campusSafeDesc": "仅限验证过 .edu.hk 邮箱的个人。",
       "personalized": "个性化推荐",
@@ -29,21 +29,21 @@
     },
     "curated": {
       "title": "真正可以<br/>成行的<br/>校园约会。",
-      "desc": "我们不仅为你提供匹配；还会为你推荐校园内安全、氛围好的地点，以及轻松的破冰话题。",
+      "desc": "我们不仅为您提供匹配；还会为您推荐校园内安全、氛围好的地点，以及轻松的破冰话题。",
       "cta": "即刻开始 →"
     },
     "stepsTitle": "如何获得一次约会",
     "steps": {
       "step1": {
-        "title": "告诉我们你的偏好",
+        "title": "告诉我们您的偏好",
         "desc": "在周二晚上之前完善个人资料。",
         "example": "例如：“我喜欢尖沙咀的夜景”",
-        "detailQuote": "\"你的主页就是你的电子名片。我们不仅想知道你的专业，更想了解你的灵魂。\" ✨",
+        "detailQuote": "\"您的主页就是您的电子名片。我们不仅想知道您的专业，更想了解您的灵魂。\" ✨",
         "interests": "兴趣爱好",
         "interestsDesc": "从粤语流行到科技伦理",
         "vibeTags": "氛围标签",
         "vibeTagsDesc": "追云者、夜猫子或是图书馆常驻",
-        "encryptionNote": "你的数据已加密，仅向匹配对象展示。"
+        "encryptionNote": "您的数据已加密，仅向匹配对象展示。"
       },
       "step2": {
         "title": "周三匹配发布",
@@ -55,10 +55,10 @@
         "userQuote": "\"七点零一分打开手机，看到同学院的他。感觉像命中注定般巧妙。\" — 港中大 大三个人"
       },
       "step3": {
-        "title": "分享你的空闲时间",
+        "title": "分享您的空闲时间",
         "desc": "确认一个简单的见面时间。",
         "example": "例如：“不如 Book Cafe 见！”",
-        "detailQuote": "\"系统会自动寻找你们的时间交集，省去来回扯皮。\" ☕",
+        "detailQuote": "\"系统会自动寻找双方的时间交集，省去来回扯皮。\" ☕",
         "check1": "在预设的校园安全地点中选择。",
         "check2": "强烈推荐时长控制在一小时内。",
         "check3": "高诚意、低压力的初次会面。"
@@ -71,15 +71,15 @@
         "match": "来电！",
         "friends": "当朋友就好",
         "retry": "再试一次",
-        "userQuote": "\"你的反馈能提升所有人的匹配质量。下周三的匹配将因你而更精准。\""
+        "userQuote": "\"您的反馈能提升所有人的匹配质量。下周三的匹配将因您而更精准。\""
       }
     },
     "faqTitle": "常见问题",
-    "faqSubtitle": "关于周三匹配，你想知道的一切",
+    "faqSubtitle": "关于周三匹配，您想知道的一切",
     "faqs": [
       {
         "q": "匹配机制是如何工作的？",
-        "a": "我们的算法不仅仅看‘脸’。它会综合分析你的兴趣爱好、价值观，甚至是一周日程，致力于促成极具默契的校园初见。"
+        "a": "我们的算法不仅仅看‘脸’。它会综合分析您的兴趣爱好、价值观，甚至是一周日程，致力于促成极具默契的校园初见。"
       },
       {
         "q": "仅限 .edu.hk 邮箱注册吗？",
@@ -87,11 +87,11 @@
       },
       {
         "q": "为什么要每周匹配一次？",
-        "a": "无止境的列表会造成审美疲劳。每周三送上唯一的高质量匹配，让你专注于好好认识眼前人。"
+        "a": "无止境的列表会造成审美疲劳。每周三送上唯一的高质量匹配，让您专注于好好认识眼前人。"
       },
       {
         "q": "如果遇到不满意的对象怎么办？",
-        "a": "主动权永远在你手中。每次见面后你都可以反馈。无论是‘Pass’还是‘重新匹配’，算法都会学习你的偏好，安全与舒适永远排在第一位。"
+        "a": "主动权永远在您手中。每次见面后您都可以反馈。无论是‘Pass’还是‘重新匹配’，算法都会学习您的偏好，安全与舒适永远排在第一位。"
       },
       {
         "q": "我们在哪里见面最好？",
@@ -121,46 +121,46 @@
     "interests": "兴趣",
     "availability": "空闲时间",
     "saveBtn": "保存主页",
-    "dashboardBtn": "打开控制台",
+    "dashboardBtn": "打开个人中心",
     "verifiedMsg": "验证成功，请完善信息。",
     "verifyFirstMsg": "保存资料前，请先验证邮箱。",
-    "savedMsg": "保存成功！即将跳转至仪表盘...",
+    "savedMsg": "保存成功！即将跳转至个人中心...",
     "dev": {
-      "eyebrow": "加入 Ditto",
-      "title": "加入 Ditto",
+      "eyebrow": "加入 DopaMine",
+      "title": "加入 DopaMine",
       "subtitle": "使用学校邮箱完成验证，填写资料后进入下一次匹配。",
-      "studentDashboard": "个人仪表盘",
+      "studentDashboard": "个人中心",
       "account": "账号",
-      "profile": "资料",
+      "profile": "个人基本信息",
       "done": "完成",
-      "accountDesc": "请输入学校邮箱。验证码会发送到你的邮箱。",
+      "accountDesc": "请输入学校邮箱。验证码会发送到您的邮箱。",
       "verifyContinue": "验证并继续",
-      "profileBasics": "基础资料",
-      "profileDesc": "这些资料会帮助 Ditto 理解你的校园生活、偏好和匹配语境。",
+      "profileBasics": "个人基本信息",
+      "profileDesc": "这些资料会帮助 DopaMine 理解您的校园生活、偏好和匹配语境。",
       "year": "年级",
       "vibeTags": "氛围标签",
       "crossCampus": "允许跨校区候选人进入匹配池",
       "saveProfileContinue": "保存资料并继续",
       "saveSection": "保存{{section}}",
-      "completeTitle": "入驻完成",
-      "completeDesc": "你已经完成入驻资料和问卷。匹配发布后，可以在个人页查看结果。",
-      "openStudent": "打开个人页",
+      "completeTitle": "注册完成",
+      "completeDesc": "您已完成注册资料和问卷。匹配发布后，可以在个人中心查看结果。",
+      "openStudent": "打开个人中心",
       "codeSent": "验证码已发送。",
       "signedIn": "已登录，请继续完善资料。",
       "profileSaved": "资料已保存。现在填写真实问卷。",
       "sectionSaved": "已保存，继续下一段。",
-      "completeMsg": "入驻完成。你可以进入个人页查看状态。",
+      "completeMsg": "注册完成。您可以进入个人中心查看状态。",
       "back": "返回",
       "uploadPhotos": "上传照片",
       "uploadPhotosHint": "最多添加 {{count}} 张清晰照片。",
       "remove": "移除",
-      "chatWelcome": "你好，我是 Aura-HK。我会帮你完成资料填写；如果卡住了，也可以直接问我。",
-      "chatGroupDone": "这一部分已经完成。你可以先检查答案，然后点击左侧的「保存并继续」。",
-      "chatFormFallback": "我会保持专注，帮你完成资料流程。请继续填写当前表单，进入问卷后我会更智能地协助你。",
-      "chatPlaceholder": "输入你的回答...",
+      "chatWelcome": "您好，我是 DopaMine。我会帮您完成资料填写；如果卡住了，也可以直接问我。",
+      "chatGroupDone": "这一部分已经完成。您可以先检查答案，然后点击左侧的「保存并继续」。",
+      "chatFormFallback": "我会保持专注，帮您完成资料流程。请继续填写当前表单，进入问卷后我会更智能地协助您。",
+      "chatPlaceholder": "输入您的回答...",
       "chatTooltip": "表单填写助手",
       "uploadOnePhoto": "上传一张照片",
-      "chatSurveyAssist": "我可以辅助你填写这一部分。你可以用自己的话回答，我会帮你放到对应字段里。",
+      "chatSurveyAssist": "我可以辅助您填写这一部分。您可以用自己的话回答，我会帮您放到对应字段里。",
       "chatQuestionLabel": "问题"
     },
     "tags": {
@@ -213,7 +213,8 @@
     "faculty": "学院",
     "department": "系 / 专业",
     "errors": {
-      "required": "请填写所有必填字段以继续。"
+      "required": "请填写所有必填字段以继续。",
+      "mbti": "MBTI 请填写 4 个字母，例如 ENFP；不确定可以留空。"
     },
     "degrees": {
       "undergrad": "本科 (Undergraduate)",
@@ -265,10 +266,10 @@
     }
   },
   "student": {
-    "title": "个人仪表盘",
-    "signInPrompt": "请先登录查看仪表盘。",
+    "title": "个人中心",
+    "signInPrompt": "请先登录查看个人中心。",
     "loading": "加载中…",
-    "hi": "你好, {{name}}！",
+    "hi": "您好, {{name}}！",
     "major": "主修专业",
     "pending": "待完善",
     "languages": "语言",
@@ -287,6 +288,20 @@
     "requestRematch": "申请重新匹配",
     "findingMatch": "正在为您寻找新匹配...",
     "feedbackSaved": "反馈已保存。",
+    "status": {
+      "pending": "待处理",
+      "notified": "已通知",
+      "awaiting": "待回应",
+      "accepted": "已接受",
+      "declined": "已拒绝",
+      "scheduling": "约时间中",
+      "confirmed": "已确认",
+      "placeSet": "地点已定",
+      "scheduled": "已安排",
+      "happened": "已见面",
+      "complete": "已完成",
+      "closed": "已关闭"
+    },
     "countdown": {
       "days": "天",
       "hours": "时",
@@ -294,27 +309,127 @@
       "seconds": "秒"
     },
     "nextDropView": {
-      "title": "你已成功加入下次匹配池！",
-      "desc": "Aura 坚信质量大于数量. 告别盲目左滑, 你将在每周三晚上 7点 收到一位**认真的匹配对象**。",
+      "title": "您已成功加入下次匹配池！",
+      "desc": "DopaMine 坚信质量大于数量. 告别盲目左滑, 您将在每周三晚上 7点 收到一位**认真的匹配对象**。",
       "countdownTitle": "下一次匹配倒计时",
       "checkBack": "周三见！",
-      "verified": "仅限实名个人",
+      "verified": "仅限已认证同学",
       "verifiedDesc": "我们会确认每个人真实属于这个社区。",
       "highSignal": "高契合度匹配",
       "highSignalDesc": "算法精准捕捉共同兴趣和价值观。"
     },
     "tabs": {
       "matches": "匹配",
+      "events": "活动",
       "persona": "恋爱人格",
       "profile": "个人资料"
     },
+    "events": {
+      "eyebrow": "Campus Weekends",
+      "title": "活动",
+      "subtitle": "",
+      "contactTitle": "咨询与报名",
+      "contactDesc": "添加运营同学的 WeChat 或 WhatsApp，发送想参加的活动名称即可咨询名额和报名方式。",
+      "wechat": "WeChat",
+      "whatsapp": "WhatsApp",
+      "copied": "已复制",
+      "copyToConsult": "复制后添加咨询",
+      "openWhatsapp": "打开 WhatsApp 咨询",
+      "copyWechat": "复制 WeChat",
+      "copyWhatsapp": "复制 WhatsApp",
+      "view": "查看活动",
+      "signup": "报名进度",
+      "seatsLeft": "{{joined}} 人已报名，还可以加入 {{left}} 人",
+      "fullCount": "{{joined}}/{{capacity}} 人已报名",
+      "backToEvents": "返回活动列表",
+      "contentTitle": "活动内容",
+      "galleryTitle": "活动照片",
+      "scheduleTitle": "流程",
+      "contactCtaTitle": "想报名或问细节？",
+      "contactCtaDesc": "点击复制 Jackie 或 Liangchen 的 WeChat/WhatsApp，把活动名称发给运营同学。确认名额后会收到入群和集合信息。",
+      "items": [
+        {
+          "id": "kitchen-night",
+          "title": "香港 | 胡闹厨房大作战！一起做晚餐",
+          "category": "社交厨房",
+          "status": "报名中",
+          "date": "2026-05-31 周日 16:00",
+          "location": "香港岛共享厨房",
+          "capacity": 24,
+          "joined": 17,
+          "tags": ["做西餐", "破冰互动", "晚餐社交"],
+          "summary": "随机组队、一起备菜、料理挑战和共享晚餐。无需厨艺满分，快乐参与就行。",
+          "content": [
+            "这个周末不逛街、不刷剧，直接进厨房开火。大家会分组完成一桌有参与感的晚餐。",
+            "从切菜、摆盘、试味到饭后聊天，每个环节都给您自然认识新朋友的机会。",
+            "适合想轻松社交、喜欢美食、或者刚来香港想认识同校同城朋友的人。"
+          ],
+          "schedule": [
+            { "time": "16:00-16:30", "title": "签到与破冰", "desc": "用关键词完成趣味签到，快速认识同组伙伴。" },
+            { "time": "16:30-16:50", "title": "菜单认领与分工", "desc": "领取料理任务，分配备菜、摆盘、试味和氛围担当。" },
+            { "time": "16:50-18:30", "title": "厨房挑战正式开始", "desc": "一起切菜、翻锅、补救和装盘，让笑点和香气一起上头。" },
+            { "time": "18:30-19:30", "title": "共享晚餐", "desc": "所有料理一起上桌，边吃边聊最近的快乐瞬间。" },
+            { "time": "19:30-20:00", "title": "自由交流", "desc": "评选今日最佳料理和隐藏氛围王，留下想继续认识的人。" }
+          ],
+          "cta": "立即咨询报名"
+        },
+        {
+          "id": "love-growth",
+          "title": "爱情成长学院 | Crush 分析与关系模式",
+          "category": "恋爱工作坊",
+          "status": "报名中",
+          "date": "2026-06-07 周日 15:00",
+          "location": "线上会议",
+          "capacity": 40,
+          "joined": 31,
+          "tags": ["人类图", "爱情模式", "Crush 分析"],
+          "summary": "用轻量测试和真实案例拆解您的亲密关系模式，学会更清楚地表达喜欢。",
+          "content": [
+            "这是一场轻松但有信息量的线上工作坊，适合想更理解自己恋爱节奏的人。",
+            "我们会用 DopaMine 人格、crush 场景和聊天案例，帮您看见自己常见的心动模式。",
+            "结束后可以带走一份自己的关系观察清单。"
+          ],
+          "schedule": [
+            { "time": "15:00-15:15", "title": "快速破冰", "desc": "用几个轻量问题进入状态。" },
+            { "time": "15:15-16:00", "title": "关系模式拆解", "desc": "从心动、回避、表达和期待四个角度看自己。" },
+            { "time": "16:00-16:35", "title": "Crush 案例分析", "desc": "匿名案例一起讨论，看见聊天背后的信号。" },
+            { "time": "16:35-17:00", "title": "行动清单", "desc": "整理下一次主动表达或筛选对象的具体方法。" }
+          ],
+          "cta": "立即咨询报名"
+        },
+        {
+          "id": "ivy-ball",
+          "title": "第35届香港常春藤盟校千人舞会盛典",
+          "category": "舞会社交",
+          "status": "预告",
+          "date": "2026-06-20 周六 19:00",
+          "location": "香港 REGENT",
+          "capacity": 80,
+          "joined": 12,
+          "tags": ["Dress code", "校友社交", "舞会"],
+          "summary": "更正式的一晚：音乐、合影、圆桌交流和跨校社交，适合想认识更广圈子的同学。",
+          "content": [
+            "这是一场面向高校学生和校友的正式社交夜。",
+            "您可以邀请朋友同行，也可以让 DopaMine 帮您安排同桌介绍。",
+            "具体着装、流程和集合信息会在活动群内更新。"
+          ],
+          "schedule": [
+            { "time": "19:00-19:30", "title": "入场签到", "desc": "领取手环和同桌信息。" },
+            { "time": "19:30-20:20", "title": "圆桌交流", "desc": "用轻量话题认识同桌和邻桌。" },
+            { "time": "20:20-21:30", "title": "舞会与自由社交", "desc": "音乐、合影和自由交流。" },
+            { "time": "21:30-22:00", "title": "After chat", "desc": "交换联系方式，延续想继续认识的连接。" }
+          ],
+          "cta": "咨询预留名额"
+        }
+      ]
+    },
     "persona": {
-      "discoverTitle": "发现你的恋爱人格",
-      "discoverDesc": "完成 LDFR 恋爱人格问卷，解锁你的专属恋爱画像和个性化恋爱洞察。",
-      "analyzing": "正在分析你的恋爱人格...",
-      "analyzingDesc": "AI 正在为你生成个性化恋爱画像",
+      "discoverTitle": "发现您的恋爱人格",
+      "discoverDesc": "完成 LDFR 恋爱人格问卷，解锁您的专属恋爱画像和个性化恋爱洞察。",
+      "analyzing": "正在分析您的恋爱人格...",
+      "analyzingDesc": "AI 正在为您生成个性化恋爱画像",
       "retry": "重试",
-      "yourVibe": "你的 Vibe",
+      "yourVibe": "您的 Vibe",
       "aiAnalysis": "AI 恋爱分析",
       "strengths": "恋爱优势",
       "watchOut": "注意雷区",
@@ -324,11 +439,14 @@
       "aiSuggested": "AI 推荐",
       "bestMatchTypes": "最佳匹配人格",
       "allTypes": "8 种恋爱画像",
-      "you": "你",
+      "you": "您",
       "reanalyze": "重新分析人格"
     },
     "profile": {
       "personalInfo": "个人信息",
+      "school": "学校",
+      "major": "专业",
+      "year": "年级",
       "age": "年龄",
       "gender": "性别",
       "height": "身高",
@@ -343,16 +461,16 @@
       "goals": "目标",
       "ageRange": "年龄范围",
       "langPref": "语言偏好",
-      "attractionSignals": "吸引力信号",
-      "heightBuild": "身高体型",
+      "attractionSignals": "理想型描述",
+      "heightBuild": "理想型外型",
       "facialFeatures": "面部特征",
-      "energyVibe": "气场与氛围",
+      "energyVibe": "吸引特质",
       "status": "状态",
       "activeInPool": "匹配池中",
       "editProfile": "编辑资料",
       "aboutMe": "关于我",
       "prefsAndType": "偏好与类型",
-      "auraAnalysis": "Aura 画像分析",
+      "auraAnalysis": "DopaMine 画像",
       "romanticStyle": "恋爱风格",
       "idealMatch": "理想对象",
       "conversationStarters": "破冰话题",
@@ -364,14 +482,14 @@
       "acceptMatch": "接受匹配",
       "decline": "婉拒",
       "preferredLocale": "偏好语言",
-      "preferredLocaleHint": "用于你的 App 语言和匹配邮件。"
+      "preferredLocaleHint": "用于您的 App 语言和匹配邮件。"
     },
     "matchFlow": {
-      "whyMatched": "为什么匹配你们",
+      "whyMatched": "为什么匹配双方",
       "step1Title": "第一步 · 选择约会时间",
-      "step1Desc": "选一个你们都方便的时间段",
+      "step1Desc": "选一个双方都方便的时间段",
       "step2Title": "第二步 · 确认约会地点",
-      "step2Desc": "AI 根据你们的氛围推荐了约会地点",
+      "step2Desc": "AI 根据双方的氛围推荐了约会地点",
       "confirmSpot": "不错，确认！",
       "step3Title": "互换联系方式",
       "step3Desc": "双方已确认——可以联系对方啦",
@@ -381,31 +499,31 @@
       "giftIdeas": [
         "手写的小卡片",
         "TA 喜欢的饮品（看看 TA 的 vibe 标签！）",
-        "你学校的特色小纪念品",
-        "一个歌单二维码，放你想到 TA 时会听的歌"
+        "您学校的特色小纪念品",
+        "一个歌单二维码，放您想到 TA 时会听的歌"
       ],
       "waitingPartner": "等待对方确认中…",
       "waitingPartnerTitle": "等待对方确认",
-      "waitingPartnerDesc": "你已经表明了诚意！我们已通知对方——一旦TA也确认，你们就可以互换联系方式啦。",
+      "waitingPartnerDesc": "您已经表明了诚意！我们已通知对方——一旦 TA 也确认，双方就可以互换联系方式啦。",
       "emailSent": "已发送邮件通知对方",
-      "partnerAlreadyConfirmed": "对方已确认——TA在等你哦！",
+      "partnerAlreadyConfirmed": "对方已确认——TA在等您哦！",
       "dateConfirmed": "约会已确认！",
       "feedbackTitle": "约会感觉怎么样？",
       "confirmed": "已确认",
-      "icebreakerTitle": "AI 撮合官",
-      "icebreakerLoading": "正在为你准备破冰介绍…",
+      "icebreakerTitle": "Dopa 撮合官",
+      "icebreakerLoading": "正在为您准备破冰介绍…",
       "talkAbout": "聊天话题"
     }
   },
   "admin": {
     "title": "管理控制台",
-    "pageTitle": "运营仪表盘",
+    "pageTitle": "管理后台",
     "resetDemo": "重置演示数据",
     "runDrop": "执行周三匹配发布",
     "msgCreated": "新创建了 {{count}} 组匹配。",
     "msgReset": "演示数据已经重置。",
     "stats": {
-      "students": "注册个人",
+      "students": "已加入同学",
       "profiles": "完整档案",
       "dates": "成功约会",
       "rematch": "重新匹配"
@@ -413,7 +531,7 @@
     "recentMatches": "最新匹配记录",
     "score": "得分",
     "open": "打开",
-    "studentDir": "个人名录",
+    "studentDir": "成员名册",
     "incomplete": "未完成",
     "view": "查看",
     "loading": "加载记录中…"
@@ -422,160 +540,203 @@
     "groups": {
       "basics": {
         "title": "基本信息",
-        "desc": "让我们从你的基本信息开始。"
+        "desc": "让我们从您的基本信息开始。"
       },
       "prefs": {
         "title": "约会偏好",
-        "desc": "你在寻找什么样的人？"
+        "desc": ""
       },
       "attraction": {
         "title": "背景与吸引力",
-        "desc": "你的兴趣是什么？什么样的特质吸引你？"
+        "desc": "您的兴趣是什么？什么样的特质吸引您？"
       },
       "media": {
         "title": "媒体资料",
-        "desc": "添加能展示你面貌、风格和日常氛围的照片。"
+        "desc": "添加能展示您面貌、风格和日常氛围的照片。"
       },
       "ldfr": {
         "title": "情感人格 (LDFR)",
-        "desc": "一个简短的可选测试，发掘你专属的 Aura 人格。"
+        "desc": "一个简短的可选测试，发掘您专属的 DopaMine 人格。"
       }
     },
     "q": {
       "gender": {
-        "prompt": "你的性别是什么？",
-        "why": "这有助于我们为你找到合适的匹配对象。"
+        "prompt": "您的性别是什么？",
+        "why": "这有助于我们为您找到合适的匹配对象。"
       },
       "birthday": {
-        "prompt": "你的生日是哪天？",
-        "why": "我们只向他人显示你的年龄。",
+        "prompt": "您的生日是哪天？",
+        "why": "我们只向他人显示您的年龄。",
         "placeholder": "例如：2001-09-18"
       },
       "height": {
-        "prompt": "你的身高是多少？(cm)",
+        "prompt": "您的身高是多少？(cm)",
         "why": "有些人对身高有偏好，这有助于更精准的匹配。"
       },
       "grade": {
-        "prompt": "你现在几年级？",
-        "why": "这有助于为你匹配处于相似人生阶段的人。"
+        "prompt": "您现在几年级？",
+        "why": "这有助于为您匹配处于相似人生阶段的人。"
       },
       "targetGender": {
-        "prompt": "你想和谁约会？",
-        "why": "这是一个硬性偏好，不只是排序信号。"
+        "prompt": "您想和谁约会？",
+        "why": ""
       },
       "datingGoal": {
-        "prompt": "你现在的约会目标是什么？",
-        "why": "这能确保目标不同的人不会被强行匹配在一起。"
+        "prompt": "您现在的约会目标是什么？",
+        "why": ""
       },
       "ageRange": {
-        "prompt": "你偏好的年龄范围是？",
-        "why": "用于划定让你感到舒适的约会界限。",
+        "prompt": "您偏好的年龄范围是？",
+        "why": "",
         "placeholder": "推荐填写格式：18-26"
       },
       "matchMode": {
-        "prompt": "你希望我们多严格地筛选？",
-        "why": "控制我们是优先考虑匹配速度还是严格的偏好契合度。"
+        "prompt": "您的恋爱节奏是？",
+        "why": ""
       },
       "hobbies": {
-        "prompt": "分享一些你的爱好和兴趣",
-        "why": "开放式的回答将丰富你的个人画像。",
+        "prompt": "分享一些您的爱好和兴趣",
+        "why": "开放式的回答将丰富您的个人画像。",
         "placeholder": "例如：探店，攀岩，阅读..."
       },
       "attractHeight": {
-        "prompt": "你通常会注意的外貌特征：身高 / 体型",
-        "why": "适度的具体要求有助于避免纯凭感觉的匹配。",
-        "placeholder": "175cm，运动型，宽肩..."
+        "prompt": "您可以描绘理想型的外型吗？",
+        "why": "开放式描述即可，不需要很精确。",
+        "placeholder": "例如：高高瘦瘦、运动型、笑起来很阳光..."
       },
       "attractFace": {
-        "prompt": "你通常会注意的外貌特征：面部 / 表情",
+        "prompt": "您通常会注意的外貌特征：面部 / 表情",
         "why": "对于主观的吸引力，开放式文本比强制勾选单更灵活。",
         "placeholder": "有神的眼睛，温暖的笑容，干净无胡须..."
       },
       "attractEnergy": {
-        "prompt": "你通常会被哪种能量或气场吸引？",
-        "why": "将模糊的化学反应偏好转化为我们可以对比的信号。",
-        "placeholder": "沉稳，文艺，自信..."
+        "prompt": "",
+        "why": "",
+        "placeholder": ""
       },
       "hkMtrLocation": {
-        "prompt": "你平时主要在哪个地铁线/区域附近活动？",
+        "prompt": "您平时主要在哪个地铁线/区域附近活动？",
         "why": "跨海约会成本较高，这有助于算法就近匹配或规划约会地点。"
       },
       "hkWeekendVibe": {
-        "prompt": "在香港，你理想的周末约会安排是？",
-        "why": "通过本地化的场景直接体现个人的生活方式。"
+        "prompt": "您理想的约会安排是？",
+        "why": "通过约会场景直接体现您的生活方式。"
       },
       "mbtiE": {
         "prompt": "MBTI: 能量来源",
-        "why": "你通常如何恢复精力？"
+        "why": "您通常如何恢复精力？"
       },
       "mbtiS": {
         "prompt": "MBTI: 信息感知",
-        "why": "你更倾向于如何处理信息？"
+        "why": "您更倾向于如何处理信息？"
       },
       "mbtiT": {
         "prompt": "MBTI: 决策方式",
-        "why": "你做决定时更看重什么？"
+        "why": "您做决定时更看重什么？"
       },
       "mbtiJ": {
         "prompt": "MBTI: 生活态度",
-        "why": "你倾向于如何安排生活？"
+        "why": "您倾向于如何安排生活？"
+      },
+      "mbti": {
+        "prompt": "您的 MBTI 是什么？",
+        "why": "例如 ENFP",
+        "placeholder": "ENFP"
+      },
+      "whatsapp": {
+        "prompt": "您的 WhatsApp 是多少？",
+        "why": "每周匹配成功并进入确认流程后，Dopa会把这个 WhatsApp 分享给您的匹配对象，方便双方联系。",
+        "placeholder": "例如：+852 6123 8890"
       },
       "photos": {
-        "prompt": "添加 3 组媒体卡片",
-        "why": "每组是一张照片加一句说明，让资料更有个人感，而不是单纯堆照片。"
+        "prompt": "添加 5 组媒体资料",
+        "why": "从封面照开始，再依次补充生活照和说明，让资料更有个人感，而不是单纯堆照片。"
       },
       "mediaNotes": {
         "prompt": "关于这些照片，有什么希望系统知道的吗？",
-        "why": "可选说明，用于辅助理解你的媒体资料。",
+        "why": "可选说明，用于辅助理解您的媒体资料。",
         "placeholder": "写一句说明、场景或这张照片想表达的氛围。"
       },
+      "mediaCards": {
+        "coverTitle": "封面照片",
+        "coverDesc": "建议上传清晰头像、半身照或能看出外型与气质的照片。",
+        "coverBadge": "封面",
+        "uploadCover": "上传封面照片",
+        "lifeTitle": "生活照片",
+        "lifeDesc": "展示您的日常、兴趣、风格或某个真实场景。",
+        "card1": {
+          "title": "封面照片",
+          "desc": "头像、半身照或能清楚展示您外型和气质的照片。",
+          "placeholder": "写一句封面说明，例如：最近很喜欢的一张自然状态照片。"
+        },
+        "card2": {
+          "title": "生活照 1",
+          "desc": "放一张能体现您日常生活方式的照片。",
+          "placeholder": "这张照片是在什么场景？它体现了您怎样的一面？"
+        },
+        "card3": {
+          "title": "生活照 2",
+          "desc": "可以是兴趣、运动、展览、旅行、校园生活。",
+          "placeholder": "写一句关于这个兴趣或场景的说明。"
+        },
+        "card4": {
+          "title": "氛围照",
+          "desc": "展示您的穿搭、审美、周末 vibe 或喜欢的空间。",
+          "placeholder": "这张照片想表达什么氛围？"
+        },
+        "card5": {
+          "title": "补充照片",
+          "desc": "可以放一张更松弛、更生活化的照片。",
+          "placeholder": "给这张照片补充一句自然的说明。"
+        }
+      },
       "ldfr_q1": {
-        "prompt": "周五晚上 9 点，你的理想状态是：",
-        "why": "测试社交电池。"
+        "prompt": "周五晚上 9 点，您的理想状态是：",
+        "why": ""
       },
       "ldfr_q4": {
-        "prompt": "失恋或遇到挫折后，你的自愈方式更接近：",
-        "why": "能量恢复方式。"
+        "prompt": "失恋或遇到挫折后，您的自愈方式更接近：",
+        "why": ""
       },
       "ldfr_q5": {
-        "prompt": "跟 ta 聊天，你觉得哪种状态最满足？",
-        "why": "交流深度倾向。"
+        "prompt": "跟 ta 聊天，您觉得哪种状态最满足？",
+        "why": ""
       },
       "ldfr_q7": {
-        "prompt": "你最希望 ta 在别人面前怎么形容你？",
-        "why": "恋爱中的自我认同。"
+        "prompt": "您最希望 ta 在别人面前怎么形容您？",
+        "why": ""
       },
       "ldfr_q8": {
-        "prompt": "你最容易对哪种人一见钟情？",
-        "why": "对“可能性”心动还是对“真实温暖”心动？"
+        "prompt": "您最容易对哪种人一见钟情？",
+        "why": ""
       },
       "ldfr_q9": {
-        "prompt": "第一次约会，ta 说了哪句话最戳中你？",
-        "why": "情感接收频道。"
+        "prompt": "第一次约会，ta 说了哪句话最戳中您？",
+        "why": ""
       },
       "ldfr_q10": {
-        "prompt": "你心目中的理想恋人，更接近：",
-        "why": "故事感 vs 稳定性。"
+        "prompt": "您心目中的理想恋人，更接近：",
+        "why": ""
       },
       "ldfr_q14": {
-        "prompt": "你心目中的“灵魂伴侣”是：",
-        "why": "暗喻 vs 长久陪伴。"
+        "prompt": "您心目中的“灵魂伴侣”是：",
+        "why": ""
       },
       "ldfr_q15": {
-        "prompt": "拍拖第二个月，ta 问“我们是什么关系？”，你的第一反应是：",
-        "why": "对早期束缚的接受度。"
+        "prompt": "拍拖第二个月，ta 问“我们是什么关系？”，您的第一反应是：",
+        "why": ""
       },
       "ldfr_q16": {
-        "prompt": "你对“承诺”两个字的感觉：",
-        "why": "压力源 vs 安全感。"
+        "prompt": "您对“承诺”两个字的感觉：",
+        "why": ""
       },
       "ldfr_q18": {
-        "prompt": "你的理想恋爱状态更接近：",
-        "why": "独立空间 vs 建立日常。"
+        "prompt": "您的理想恋爱状态更接近：",
+        "why": ""
       },
       "ldfr_q19": {
-        "prompt": "ta 突然说“今晚搬到我这住一星期可以吗？”，你的反应是：",
-        "why": "对节奏突变的适应。"
+        "prompt": "ta 突然说“今晚搬到我这住一星期可以吗？”，您的反应是：",
+        "why": ""
       }
     },
     "opt": {
@@ -619,11 +780,14 @@
       "lang_mando": "普通话 (Mandarin)",
       "lang_eng": "英语 (English)",
       "lang_mixed": "混用 (如中英夹杂)",
-      "vibe_cafe": "中环/上环探店 (Cafe Hopping)",
-      "vibe_nature": "西贡行山/沙滩 (Nature)",
-      "vibe_city": "尖沙咀/铜锣湾逛街 (City)",
-      "vibe_dorm": "宅在宿舍/Hall",
-      "vibe_food": "茶餐厅/大排档地道美食",
+      "vibe_cafe": "探店",
+      "vibe_nature": "行山/沙滩",
+      "vibe_city": "逛街",
+      "vibe_food": "茶餐厅/地道美食",
+      "vibe_movie": "看电影/Live House",
+      "vibe_gallery": "艺术展/博物馆",
+      "vibe_workshop": "手作/烹饪体验",
+      "vibe_walk": "海边散步",
       "mbti_e": "E (外向 - 从人群中获取能量)",
       "mbti_i": "I (内向 - 独处时恢复能量)",
       "mbti_s": "S (实感 - 关注事实与细节)",
@@ -650,20 +814,20 @@
       "ldfr_q7_c": "“TA 很真诚”",
       "ldfr_q7_d": "“TA 很厉害”",
       "ldfr_q8_a": "那种聊两句就觉得“TA 的世界好特别”的人",
-      "ldfr_q8_b": "那种笑容温暖、对你很真诚的人",
+      "ldfr_q8_b": "那种笑容温暖、对您很真诚的人",
       "ldfr_q8_c": "长得完全中 type 的人",
-      "ldfr_q8_d": "跟你有共同朋友的人",
+      "ldfr_q8_d": "跟您有共同朋友的人",
       "ldfr_q9_a": "“我常常想，如果可以重新开始人生，我想……”",
-      "ldfr_q9_b": "“我注意到你刚才讲到家人时眼神好温柔”",
-      "ldfr_q9_c": "“你笑起来好可爱”",
+      "ldfr_q9_b": "“我注意到您刚才讲到家人时眼神好温柔”",
+      "ldfr_q9_c": "“您笑起来好可爱”",
       "ldfr_q9_d": "“今晚好开心”",
       "ldfr_q10_a": "一个有故事、有梦想、有点神秘感的灵魂",
       "ldfr_q10_b": "一个稳定、可靠、生活有节奏的人",
       "ldfr_q10_c": "又好看又有趣",
       "ldfr_q10_d": "跟自己 vibe 合拍的人",
-      "ldfr_q14_a": "一个能 read 懂你梦境和暗喻的人",
-      "ldfr_q14_b": "一个 7 年后仍然每天早晨跟你说早安的人",
-      "ldfr_q14_c": "一个能让你笑的人",
+      "ldfr_q14_a": "一个能 read 懂您梦境和暗喻的人",
+      "ldfr_q14_b": "一个 7 年后仍然每天早晨跟您说早安的人",
+      "ldfr_q14_c": "一个能让您笑的人",
       "ldfr_q14_d": "一个不会走的人",
       "ldfr_q15_a": "内心一紧：能不能不要那么早 label？",
       "ldfr_q15_b": "终于！我等了好久了。",

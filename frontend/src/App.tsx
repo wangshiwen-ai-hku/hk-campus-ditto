@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "./lib/api";
 import { getStoredLocale, getStoredUserId, getWelcomeSeen, setStoredLocale, setStoredUserId, setWelcomeSeen } from "./lib/session";
@@ -12,6 +12,7 @@ import { WelcomePage } from "./pages/WelcomePage";
 import { JoinPage } from "./pages/JoinPage";
 import { StudentPage } from "./pages/StudentPage";
 import { AdminPage } from "./pages/AdminPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 function useMeta() {
   const [meta, setMeta] = useState<MetaResponse | null>(null);
@@ -64,8 +65,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage onUser={setUser} />} />
         <Route path="/join" element={<JoinPage userId={userIdState} onUser={setUser} />} />
+        <Route path="/login" element={<Navigate to="/join" replace />} />
         <Route path="/student" element={<StudentPage userId={userIdState} onLocale={setLocale} />} />
         <Route path="/admin" element={<AdminPage onUser={setUser} />} />
+        <Route path="/settings" element={<SettingsPage userId={userIdState} onUser={setUser} locale={localeState} onLocale={setLocale} />} />
       </Routes>
     </Layout>
   );

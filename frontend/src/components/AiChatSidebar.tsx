@@ -124,7 +124,7 @@ export function AiChatSidebar({ isOpen, onClose, isExpanded, onToggleExpand, cur
           id: "welcome",
           role: "ai",
           kind: "system",
-          text: t("join.dev.chatWelcome", "Hi! I'm Aura-HK. I'm here to help you complete your profile. You can fill out the form, or just chat with me!")
+          text: t("join.dev.chatWelcome", "Hi! I'm DopaMine. I'm here to help you complete your profile. You can fill out the form, or just chat with me!")
         }
       ]);
     }
@@ -304,11 +304,11 @@ export function AiChatSidebar({ isOpen, onClose, isExpanded, onToggleExpand, cur
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
           <div className="flex items-center gap-3">
             <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-black border border-white/20 shadow-lg">
-              <span className="text-xl font-black text-white leading-none">A</span>
+              <span className="text-xl font-black text-white leading-none">D</span>
               <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500/80 border-2 border-[#020617] rounded-full shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
             </div>
             <div>
-              <h3 className="font-bold text-white tracking-wide">Aura-HK</h3>
+              <h3 className="font-bold text-white tracking-wide">DopaMine</h3>
               <p className="text-xs text-white/40 font-medium tracking-widest uppercase">Assistant</p>
             </div>
           </div>

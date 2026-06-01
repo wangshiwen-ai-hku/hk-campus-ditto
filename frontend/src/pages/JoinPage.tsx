@@ -13,6 +13,7 @@ const SLOTS = ["wed_eve", "thu_eve", "fri_aft", "fri_eve", "sat_aft", "sun_aft"]
 const TAGS = ["coffee", "cantopop", "art", "film", "night", "hiking", "citywalk", "supper", "tech", "thrifting"];
 const VIBES = ["chill", "curious", "empathetic", "playful", "grounded", "creative", "ambitious", "warm"];
 const LANGUAGES = ["english", "cantonese", "mandarin", "japanese", "korean"];
+const GENDER_OPTIONS = ["onboarding.opt.male", "onboarding.opt.female", "onboarding.opt.non_binary"];
 
 type Step = "account" | "profile" | string | "done";
 
@@ -53,6 +54,66 @@ function cleanAnswers(group: QuestionGroup, answers: Record<string, unknown>) {
   );
 }
 
+function answersFromProfile(profile: any, groups: QuestionGroup[]) {
+  const savedAnswers = profile?.onboardingAnswers && typeof profile.onboardingAnswers === "object" ? profile.onboardingAnswers : {};
+  const dp = profile?.datingPreferences ?? {};
+  const derived: Record<string, Record<string, unknown>> = {};
+
+  for (const group of groups) {
+    const savedGroup = savedAnswers[group.template] && typeof savedAnswers[group.template] === "object"
+      ? savedAnswers[group.template] as Record<string, unknown>
+      : {};
+
+    if (group.template === "onboarding_basics") {
+      derived[group.template] = {
+        gender: profile.gender,
+        birthday: dp.birthday,
+        height: dp.heightCm,
+        hkMtrLocation: dp.hkMtrLocations,
+        mbti: mbtiStringFromPrefs(dp.mbti),
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_preferences") {
+      const savedAttraction = savedAnswers.onboarding_attraction && typeof savedAnswers.onboarding_attraction === "object"
+        ? savedAnswers.onboarding_attraction as Record<string, unknown>
+        : {};
+      derived[group.template] = {
+        targetGender: dp.dateGenders,
+        datingGoal: dp.datingGoals ?? (dp.datingGoal ? [dp.datingGoal] : undefined),
+        ageRange: dp.ageRange,
+        languagePref: dp.languagePreferences,
+        matchMode: dp.matchMode,
+        hkWeekendVibe: profile.lifeSignals?.weekendVibes,
+        attractionHeightAndBuild: dp.attractionSignals?.heightAndBuild,
+        attractionEnergyAndVibe: dp.attractionSignals?.energyAndVibe,
+        ...savedAttraction,
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_attraction") {
+      derived[group.template] = {
+        hkWeekendVibe: profile.lifeSignals?.weekendVibes,
+        attractionHeightAndBuild: dp.attractionSignals?.heightAndBuild,
+        attractionEnergyAndVibe: dp.attractionSignals?.energyAndVibe,
+        ...savedGroup,
+      };
+    } else if (group.template === "onboarding_media") {
+      derived[group.template] = {
+        mediaCards: dp.mediaCards?.length ? dp.mediaCards : dp.photoUrls?.map((photoUrl: string) => ({ photoUrl, caption: "" })),
+        photoUrls: dp.photoUrls,
+        ...savedGroup,
+      };
+    } else {
+      derived[group.template] = savedGroup;
+    }
+
+    derived[group.template] = Object.fromEntries(
+      Object.entries(derived[group.template]).filter(([, value]) => value !== undefined)
+    );
+  }
+
+  return derived;
+}
+
 function toggleAnswer(current: unknown, option: string) {
   const values = Array.isArray(current) ? current.filter((x) => typeof x === "string") as string[] : [];
   return values.includes(option) ? values.filter((x) => x !== option) : [...values, option];
@@ -74,6 +135,26 @@ function splitKnownAndOther(values: string[] | undefined, known: string[]) {
   return {
     selected,
     other: Array.from(new Set(other)).join(", "),
+  };
+}
+
+function mbtiStringFromPrefs(mbti: any) {
+  const raw = [mbti?.energy, mbti?.information, mbti?.decision, mbti?.lifestyle]
+    .map((value) => typeof value === "string" ? value.trim() : "")
+    .map((value) => value.startsWith("onboarding.opt.mbti_") ? value.slice(-1).toUpperCase() : value.toUpperCase())
+    .join("");
+  return /^[EI][SN][TF][JP]$/.test(raw) ? raw : "";
+}
+
+function mbtiPrefsFromString(value: string) {
+  const normalized = value.trim().toUpperCase();
+  if (!normalized) return undefined;
+  if (!/^[EI][SN][TF][JP]$/.test(normalized)) return null;
+  return {
+    energy: normalized[0],
+    information: normalized[1],
+    decision: normalized[2],
+    lifestyle: normalized[3],
   };
 }
 
@@ -148,11 +229,19 @@ function QuestionField({
     ? value as { min: number; max: number }
     : { min: question.min ?? 18, max: Math.min(question.max ?? 60, 28) };
 
+  const fieldChrome = question.kind === "mediaCards"
+    ? "grid gap-0"
+    : "rounded-2xl border border-white/10 bg-white/[0.04] p-5";
+
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+    <div className={fieldChrome}>
+      {question.kind !== "mediaCards" && (
+        <>
       <div className="text-lg font-black text-white">{prompt}</div>
-      <div className="mt-1 text-sm text-white/45">{why}</div>
+      {why ? <div className="mt-1 text-sm text-white/45">{why}</div> : null}
       {question.kind === "range" && hint ? <div className="mt-2 text-xs font-bold text-aura/70">{hint}</div> : null}
+        </>
+      )}
 
       {question.kind === "text" || question.kind === "date" ? (
         <textarea
@@ -206,8 +295,9 @@ function QuestionField({
           type="number"
           min={question.min ?? 1}
           max={question.max ?? 10}
-          value={typeof value === "number" ? value : question.min ?? 5}
-          onChange={(e) => onChange(Number(e.target.value))}
+          value={typeof value === "number" ? String(value) : typeof value === "string" ? value : ""}
+          placeholder={String(question.min ?? 5)}
+          onChange={(e) => onChange(e.target.value === "" ? "" : Number(e.target.value))}
         />
       ) : null}
 
@@ -221,7 +311,7 @@ function QuestionField({
               min={question.min ?? 18}
               max={rangeValue.max}
               value={rangeValue.min}
-              onChange={(e) => onChange({ ...rangeValue, min: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...rangeValue, min: e.target.value === "" ? "" : Number(e.target.value) })}
             />
           </label>
           <label className="grid gap-2 text-sm font-bold text-white/50">
@@ -232,7 +322,7 @@ function QuestionField({
               min={rangeValue.min}
               max={question.max ?? 60}
               value={rangeValue.max}
-              onChange={(e) => onChange({ ...rangeValue, max: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...rangeValue, max: e.target.value === "" ? "" : Number(e.target.value) })}
             />
           </label>
         </div>
@@ -276,10 +366,29 @@ function QuestionField({
       ) : null}
 
       {question.kind === "mediaCards" ? (
-        <div className={`mt-4 grid gap-4 ${isChatExpanded ? "grid-cols-1" : "md:grid-cols-3"}`}>
+        <div className="grid gap-5">
           {mediaCards.map((card, index) => (
-            <div key={index} className="grid gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <label className="flex aspect-[4/5] cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed border-white/20 bg-white/[0.03] text-center transition-all hover:bg-white/[0.06]">
+            <div key={index} className="grid gap-4 rounded-3xl border border-white/10 bg-white/[0.035] p-5 shadow-xl shadow-black/10">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-aura text-base font-black text-white shadow-lg shadow-aura/20">{index + 1}</span>
+                    <h3 className="text-xl font-black text-white">
+                      {t(`onboarding.q.mediaCards.card${index + 1}.title`, { defaultValue: index === 0 ? t("onboarding.q.mediaCards.coverTitle") : t("onboarding.q.mediaCards.lifeTitle", { index }) })}
+                    </h3>
+                  </div>
+                  <p className="mt-2 text-base font-medium leading-relaxed text-white/50">
+                    {t(`onboarding.q.mediaCards.card${index + 1}.desc`, { defaultValue: index === 0 ? t("onboarding.q.mediaCards.coverDesc") : t("onboarding.q.mediaCards.lifeDesc") })}
+                  </p>
+                </div>
+                {index === 0 && (
+                  <span className="rounded-full border border-aura/30 bg-aura/15 px-4 py-2 text-sm font-black text-aura">
+                    {t("onboarding.q.mediaCards.coverBadge")}
+                  </span>
+                )}
+              </div>
+
+              <label className="flex min-h-[300px] cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-dashed border-white/20 bg-white/[0.04] text-center transition-all hover:border-aura/35 hover:bg-white/[0.07]">
                 <input
                   className="sr-only"
                   type="file"
@@ -297,13 +406,15 @@ function QuestionField({
                 {card.photoUrl ? (
                   <img className="h-full w-full object-cover" src={card.photoUrl} alt="" />
                 ) : (
-                  <span className="px-4 text-sm font-black text-white/60">{t("join.dev.uploadOnePhoto")}</span>
+                  <span className="px-6 text-lg font-black text-white/65">
+                    {index === 0 ? t("onboarding.q.mediaCards.uploadCover") : t("join.dev.uploadOnePhoto")}
+                  </span>
                 )}
               </label>
               <textarea
-                className="min-h-[92px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all hover:bg-white/10 focus:ring-2 focus:ring-aura/50"
+                className="min-h-[112px] rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-medium text-white placeholder:text-white/35 outline-none transition-all hover:bg-white/10 focus:ring-2 focus:ring-aura/50"
                 value={card.caption ?? ""}
-                placeholder={question.placeholderKey ? t(question.placeholderKey) : ""}
+                placeholder={t(`onboarding.q.mediaCards.card${index + 1}.placeholder`, { defaultValue: question.placeholderKey ? t(question.placeholderKey) : "" })}
                 onChange={(e) => {
                   const next = [...mediaCards];
                   next[index] = { ...next[index], caption: e.target.value };
@@ -324,6 +435,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [unlockedStepIndex, setUnlockedStepIndex] = useState(userId ? 1 : 0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hydratingProfile, setHydratingProfile] = useState(Boolean(userId));
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatExpanded, setIsChatExpanded] = useState(false);
   const [activeChatQuestionId, setActiveChatQuestionId] = useState<string | null>(null);
@@ -343,6 +455,11 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [faculty, setFaculty] = useState("");
   const [department, setDepartment] = useState("");
   const [bio, setBio] = useState("");
+  const [gender, setGender] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [height, setHeight] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [mbti, setMbti] = useState("");
   const [languages, setLanguages] = useState<string[]>([]);
   const [interests, setInterests] = useState<string[]>([]);
   const [interestOther, setInterestOther] = useState("");
@@ -350,7 +467,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
   const [vibeOther, setVibeOther] = useState("");
   const [availability, setAvailability] = useState<string[]>([]);
   const [availabilityOther, setAvailabilityOther] = useState("");
-  const [crossUniOk, setCrossUniOk] = useState(false);
+  const [crossUniOk, setCrossUniOk] = useState(true);
 
   const [groups, setGroups] = useState<QuestionGroup[]>([]);
   const [answers, setAnswers] = useState<Record<string, Record<string, unknown>>>({});
@@ -360,9 +477,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
       .then((data) => {
         const loaded = (data as { groups: QuestionGroup[] }).groups;
         setGroups(loaded);
-        setAnswers(Object.fromEntries(loaded.map((group) => [
+        setAnswers((prev) => Object.fromEntries(loaded.map((group) => [
           group.template,
-          {},
+          prev[group.template] ?? {},
         ])));
         setStep((prev) => flowSteps(loaded).includes(prev) ? prev : loaded[0]?.template ?? "profile");
       })
@@ -371,12 +488,23 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
   // Pre-populate form fields with existing profile data
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setHydratingProfile(false);
+      return;
+    }
+    if (!groups.length) return;
+    let cancelled = false;
+    setHydratingProfile(true);
     api.getProfile(userId).then((data: any) => {
-      if (!data) return;
+      if (cancelled || !data) return;
       if (data.fullName) setFullName(data.fullName);
       if (data.email) setEmail(data.email);
       if (data.bio) setBio(data.bio);
+      if (data.gender) setGender(data.gender);
+      if (data.datingPreferences?.birthday) setBirthday(data.datingPreferences.birthday);
+      if (data.datingPreferences?.heightCm) setHeight(String(data.datingPreferences.heightCm));
+      if (data.datingPreferences?.phoneNumber) setWhatsapp(data.datingPreferences.phoneNumber);
+      if (data.datingPreferences?.mbti) setMbti(mbtiStringFromPrefs(data.datingPreferences.mbti));
       if (data.preferredLocale) setPreferredLocale(data.preferredLocale);
       if (data.languages?.length) setLanguages(data.languages);
       if (data.interests?.length) {
@@ -395,17 +523,13 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         setAvailabilityOther(next.other);
       }
       if (data.crossUniOk !== undefined) setCrossUniOk(data.crossUniOk);
-      const savedProfile = Boolean(data.fullName && data.bio && data.languages?.length && data.interests?.length && data.vibeTags?.length && data.availability?.length);
+      const savedProfile = Boolean(data.fullName && data.languages?.length && data.interests?.length && data.vibeTags?.length && data.availability?.length);
       let nextUnlocked = savedProfile && groups.length ? nextUnlockIndex("profile", groups) : (userId ? 1 : 0);
-      const savedAnswers = data.onboardingAnswers && typeof data.onboardingAnswers === "object" ? data.onboardingAnswers : {};
+      const savedAnswers = answersFromProfile(data, groups);
       if (Object.keys(savedAnswers).length) {
         setAnswers((prev) => ({
           ...prev,
-          ...Object.fromEntries(
-            groups
-              .filter((group) => savedAnswers[group.template] && typeof savedAnswers[group.template] === "object")
-              .map((group) => [group.template, savedAnswers[group.template] as Record<string, unknown>])
-          ),
+          ...savedAnswers,
         }));
       }
       for (const group of groups) {
@@ -439,7 +563,12 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           setFaculty(data.major);
         }
       }
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => {
+      if (!cancelled) setHydratingProfile(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [userId, groups]);
 
   const currentGroup = useMemo(
@@ -513,7 +642,12 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
     const finalVibeTags = mergeOther(vibeTags, vibeOther);
     const finalAvailability = mergeOther(availability, availabilityOther);
     const gradeValue = profileType === "Alumni" ? "" : grade;
-    if (!fullName || !preferredLocale || !profileType || !degreeLevel || (profileType !== "Alumni" && !grade) || !faculty || !bio || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
+    const normalizedMbti = mbtiPrefsFromString(mbti);
+    if (normalizedMbti === null) {
+      alert(t("join.errors.mbti"));
+      return;
+    }
+    if (!fullName || !preferredLocale || !profileType || !degreeLevel || (profileType !== "Alumni" && !grade) || !faculty || !department || !height || languages.length === 0 || finalInterests.length === 0 || finalVibeTags.length === 0 || finalAvailability.length === 0) {
       alert(t("join.errors.required"));
       return;
     }
@@ -525,7 +659,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         preferredLocale,
         yearOfStudy: [profileType, degreeLevel, gradeValue].filter(Boolean).join(" - "),
         major: department ? `${faculty} - ${department}` : faculty,
-        gender: "Prefer not to say",
+        gender: gender || "Prefer not to say",
         seeking: "Meaningful connection",
         bio,
         languages,
@@ -535,6 +669,12 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         optedIn: true,
         crossUniOk,
         availability: finalAvailability,
+        datingPreferences: {
+          birthday: birthday.trim() || undefined,
+          heightCm: Number(height),
+          phoneNumber: whatsapp.trim() || undefined,
+          mbti: normalizedMbti || undefined,
+        },
       });
       setStep(groups[0]?.template ?? "done");
       setUnlockedStepIndex((prev) => Math.max(prev, nextUnlockIndex("profile", groups)));
@@ -555,8 +695,14 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
         const val = (answers[currentGroup.template] ?? {})[q.id];
         if (val === undefined || val === null || val === "") return true;
         if (Array.isArray(val) && val.length === 0) return true;
+        if ((q.kind === "number" || q.kind === "scale") && typeof val !== "number") return true;
+        if (q.kind === "range") {
+          const range = val as { min?: unknown; max?: unknown };
+          return typeof range?.min !== "number" || typeof range?.max !== "number";
+        }
         if (q.kind === "mediaCards" && Array.isArray(val)) {
-          return !val.some((item) => typeof item === "object" && item !== null && "photoUrl" in item && typeof item.photoUrl === "string" && item.photoUrl.length > 0);
+          const cover = val[0];
+          return !(typeof cover === "object" && cover !== null && "photoUrl" in cover && typeof cover.photoUrl === "string" && cover.photoUrl.length > 0);
         }
       }
       return false;
@@ -679,7 +825,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
               {t("join.dev.title").split(" ")[0]}
             </span>{" "}
             <span className="font-romantic italic bg-gradient-to-r from-aura via-pink-400 to-aura bg-clip-text text-transparent">
-              {t("join.dev.title").split(" ")[1] || "Ditto"}
+              {t("join.dev.title").split(" ")[1] || "DopaMine"}
             </span>
           </h1>
 
@@ -772,7 +918,17 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
 
       <div className="flex flex-col gap-8">
         <SectionCard className="w-full">
-          {step === "account" ? (
+          {hydratingProfile ? (
+            <div className="flex min-h-[260px] items-center justify-center text-center">
+              <div>
+                <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-aura" />
+                <div className="text-base font-black text-white">{t("student.loading")}</div>
+                <div className="mt-2 text-sm text-white/45">{t("join.dev.profileDesc")}</div>
+              </div>
+            </div>
+          ) : null}
+
+          {!hydratingProfile && step === "account" ? (
             <div className="grid gap-6">
               <div>
                 <h2 className="text-2xl font-black">{t("join.dev.account")}</h2>
@@ -802,18 +958,44 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {step === "profile" ? (
+          {!hydratingProfile && step === "profile" ? (
             <div className="grid gap-7">
               <div>
                 <h2 className="text-2xl font-black">{t("join.dev.profileBasics")}</h2>
                 <p className="mt-2 text-white/50">{t("join.dev.profileDesc")}</p>
               </div>
               <div className={`flex flex-col gap-6 ${isChatExpanded ? "" : "md:grid md:grid-cols-2 md:gap-4"}`}>
-                <label className={`grid gap-2 text-sm font-bold text-white/50 ${isChatExpanded ? "" : "md:col-span-2"}`}>
+                <label className={`grid gap-2 text-base font-black text-white ${isChatExpanded ? "" : "md:col-span-2"}`}>
                   <span>{t("join.nameLabel")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder={t("join.placeholders.fullName")} />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-white/50">
+                <div className={`grid gap-3 text-base font-black text-white ${isChatExpanded ? "" : "md:col-span-2"}`}>
+                  <span>{t("onboarding.q.gender.prompt")}</span>
+                  <div className="flex flex-wrap gap-3">
+                    {GENDER_OPTIONS.map((option) => {
+                      const active = gender === option;
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => setGender(option)}
+                          className={`rounded-xl px-5 py-2.5 text-base font-black transition-all ${active ? "bg-aura/90 text-white shadow-lg shadow-aura/20" : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"}`}
+                        >
+                          {t(option)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <label className="grid gap-2 text-base font-black text-white">
+                  <span>{t("onboarding.q.birthday.prompt")}</span>
+                  <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder={t("onboarding.q.birthday.placeholder")} />
+                </label>
+                <label className="grid gap-2 text-base font-black text-white">
+                  <span>{t("onboarding.q.height.prompt")} <span className="text-pink-400">*</span></span>
+                  <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" type="number" min={140} max={220} value={height} onChange={(e) => setHeight(e.target.value)} placeholder="170" />
+                </label>
+                <label className="grid gap-2 text-base font-black text-white">
                   <span>{t("join.profileType")} <span className="text-pink-400">*</span></span>
                   <select
                     className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50"
@@ -829,7 +1011,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                     <option value="Alumni">{t("join.profileTypes.alumni")}</option>
                   </select>
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-white/50">
+                <label className="grid gap-2 text-base font-black text-white">
                   <span>{t("join.degreeLevel")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={degreeLevel} onChange={(e) => setDegreeLevel(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
@@ -842,7 +1024,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                   </select>
                 </label>
                 {profileType !== "Alumni" ? (
-                  <label className="grid gap-2 text-sm font-bold text-white/50">
+                  <label className="grid gap-2 text-base font-black text-white">
                     <span>{t("join.grade")} <span className="text-pink-400">*</span></span>
                     <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={grade} onChange={(e) => setGrade(e.target.value)}>
                       <option value="" disabled>{t("join.placeholders.select")}</option>
@@ -854,7 +1036,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                     </select>
                   </label>
                 ) : null}
-                <label className="grid gap-2 text-sm font-bold text-white/50">
+                <label className="grid gap-2 text-base font-black text-white">
                   <span>{t("join.faculty")} <span className="text-pink-400">*</span></span>
                   <select className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={faculty} onChange={(e) => setFaculty(e.target.value)}>
                     <option value="" disabled>{t("join.placeholders.select")}</option>
@@ -870,14 +1052,34 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
                     <option value="Other">{t("join.faculties.other")}</option>
                   </select>
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-white/50">
+                <label className="grid gap-2 text-base font-black text-white">
                   <span>{t("join.department")} <span className="text-pink-400">*</span></span>
                   <input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors [&>option]:bg-[#0f172a] outline-none focus:ring-2 focus:ring-aura/50" value={department} onChange={(e) => setDepartment(e.target.value)} placeholder={t("join.placeholders.major")} />
                 </label>
               </div>
-              <label className="grid gap-2 text-sm font-bold text-white/50">
-                <span>{t("join.bioLabel")} <span className="text-pink-400">*</span></span>
+              <label className="grid gap-2 text-base font-black text-white">
+                <span>{t("onboarding.q.whatsapp.prompt")}</span>
+                <input
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value)}
+                  placeholder={t("onboarding.q.whatsapp.placeholder")}
+                />
+                <span className="text-xs font-medium leading-relaxed text-white/35">{t("onboarding.q.whatsapp.why")}</span>
+              </label>
+              <label className="grid gap-2 text-base font-black text-white">
+                <span>{t("join.bioLabel")}</span>
                 <textarea className="min-h-[110px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50" value={bio} onChange={(e) => setBio(e.target.value)} placeholder={t("join.placeholders.bio")} />
+              </label>
+              <label className="grid gap-2 text-base font-black text-white">
+                <span>{t("onboarding.q.mbti.prompt")}</span>
+                <input
+                  className="max-w-xs rounded-2xl border border-white/10 bg-white/5 px-4 py-3 uppercase tracking-[0.35em] text-white placeholder:text-white/30 hover:bg-white/10 transition-colors outline-none focus:ring-2 focus:ring-aura/50"
+                  value={mbti}
+                  onChange={(e) => setMbti(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4))}
+                  placeholder={t("onboarding.q.mbti.placeholder")}
+                />
+                <span className="text-xs font-medium leading-relaxed text-white/35">{t("onboarding.q.mbti.why")}</span>
               </label>
               <div className="space-y-7">
                 <TagSelector title={<span>{t("join.languages")} <span className="text-pink-400">*</span></span>} items={LANGUAGES} values={languages} setValues={setLanguages} renderLabel={(item) => t(`join.langs.${item}`)} />
@@ -901,11 +1103,15 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {currentGroup ? (
+          {!hydratingProfile && currentGroup ? (
             <div className="grid gap-6">
               <div>
                 <h2 className="text-2xl font-black">{currentGroup.titleKey ? t(currentGroup.titleKey) : currentGroup.title}</h2>
-                <p className="mt-2 text-white/50">{currentGroup.descriptionKey ? t(currentGroup.descriptionKey) : currentGroup.description}</p>
+                {currentGroup.descriptionKey && t(currentGroup.descriptionKey) ? (
+                  <p className="mt-2 text-white/50">{t(currentGroup.descriptionKey)}</p>
+                ) : !currentGroup.descriptionKey && currentGroup.description ? (
+                  <p className="mt-2 text-white/50">{currentGroup.description}</p>
+                ) : null}
               </div>
               <div className="grid gap-4">
                 {currentGroup.questions.map((question) => (
@@ -937,7 +1143,7 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
             </div>
           ) : null}
 
-          {step === "done" ? (
+          {!hydratingProfile && step === "done" ? (
             <div className="grid gap-5 text-center">
               <h2 className="text-3xl font-black">{t("join.dev.completeTitle")}</h2>
               <p className="mx-auto max-w-xl text-white/55">{t("join.dev.completeDesc")}</p>
@@ -985,9 +1191,9 @@ export function JoinPage({ userId, onUser }: { userId: string | null; onUser: (i
           <div className="absolute inset-0 bg-gradient-to-br from-aura/10 via-transparent to-harbour/20 group-hover:rotate-180 transition-transform duration-1000"></div>
         </div>
         
-        {/* The "A" Icon Branding */}
+        {/* DopaMine assistant branding */}
         <div className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/20 shadow-xl">
-          <span className="text-2xl font-black text-white tracking-tighter drop-shadow-lg">A</span>
+          <span className="text-2xl font-black text-white tracking-tighter drop-shadow-lg">D</span>
           {/* Subtle gloss line */}
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none"></div>
         </div>
