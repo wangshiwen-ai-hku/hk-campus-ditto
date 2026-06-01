@@ -201,6 +201,23 @@ function statusLabel(status: string, t: (k: string, o?: any) => string) {
     : { text: status, color: "text-white/40 bg-white/5 border-white/10" };
 }
 
+function viewerStatusLabel(match: MatchRecord, viewerId: string, t: (k: string, o?: any) => string) {
+  const myAcceptance = match.acceptances?.find((item) => item.userId === viewerId);
+  if (myAcceptance?.choice === "yes") {
+    return {
+      text: t("student.status.accepted", { defaultValue: "Accepted" }),
+      color: "text-green-400 bg-green-400/10 border-green-400/20",
+    };
+  }
+  if (myAcceptance?.choice === "no") {
+    return {
+      text: t("student.status.declined", { defaultValue: "Declined" }),
+      color: "text-red-400 bg-red-400/10 border-red-400/20",
+    };
+  }
+  return statusLabel(match.status, t);
+}
+
 function getNextDropTime() {
   const now = new Date();
   const next = new Date();
@@ -1426,7 +1443,7 @@ function MatchesTab({ matches, profile, locale, onRefresh, t }: {
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {matches.map(({ match, partner, university }) => {
-          const st = statusLabel(match.status, t);
+          const st = viewerStatusLabel(match, profile.id, t);
           const partnerPhoto = partner.datingPreferences?.photoUrls?.[0];
           return (
             <button key={match.id} onClick={() => setSelected({ match, partner, university })}
