@@ -8,7 +8,11 @@ import { pickPlace } from "./place.js";
 import { notify } from "../notify/index.js";
 import { llmCall } from "../llm/client.js";
 import { icebreakerPrompt } from "../llm/prompts.js";
-import { verifyMatchEmailAction, type MatchEmailChoice } from "./email-actions.js";
+import {
+  verifySignedMatchEmailAction,
+  verifyStoredMatchEmailAction,
+  type MatchEmailChoice,
+} from "./email-actions.js";
 import type { Database, Locale, MatchRecord } from "../types.js";
 
 export const workflowRouter = Router();
@@ -126,15 +130,19 @@ workflowRouter.get("/:matchId/email-response", async (req, res) => {
   const userId = String(req.query.userId ?? "");
   const choice = String(req.query.choice ?? "");
   const sig = String(req.query.sig ?? "");
-
-  if (!verifyMatchEmailAction(matchId, userId, choice, sig)) {
-    return res.status(400).send("Invalid or expired match response link.");
-  }
+  const token = String(req.query.token ?? "");
 
   const db = await ensureDb();
   const match = loadMatch(db, matchId);
   if (!match) return res.status(404).send("Match not found.");
   if (!userInMatch(match, userId)) return res.status(403).send("Not your match.");
+
+  const verified =
+    verifyStoredMatchEmailAction(match, userId, choice, token) ||
+    verifySignedMatchEmailAction(matchId, userId, choice, sig);
+  if (!verified) {
+    return res.status(400).send("Invalid or expired match response link.");
+  }
 
   const user = db.students.find((s) => s.id === userId);
   await applyMatchResponse(db, match, userId, choice, "email");

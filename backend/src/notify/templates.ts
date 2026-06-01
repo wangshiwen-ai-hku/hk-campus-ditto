@@ -208,13 +208,13 @@ function bulletRows(items: string[]) {
 
 function ctaButton(label: string, href: string, primary = true) {
   const styles = primary
-    ? "background:linear-gradient(135deg,#ec2f75,#7c3aed);color:#ffffff;border:1px solid #ec2f75;box-shadow:0 14px 34px rgba(236,47,117,.28);"
+    ? "background:#ec2f75;color:#ffffff;border:1px solid #be185d;box-shadow:0 14px 34px rgba(236,47,117,.32);"
     : "background:#ffffff;color:#1f2937;border:1px solid #d1d5db;";
   return `
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:12px 0 0;">
       <tr>
         <td align="center">
-          <a href="${esc(href)}" style="display:block;width:100%;box-sizing:border-box;border-radius:999px;padding:16px 18px;text-align:center;text-decoration:none;font-size:18px;font-weight:900;line-height:1;white-space:nowrap;${styles}">${esc(label)}</a>
+          <a href="${esc(href)}" style="display:block;width:100%;box-sizing:border-box;border-radius:999px;padding:18px 22px;text-align:center;text-decoration:none;font-size:20px;font-weight:900;line-height:1.1;white-space:nowrap;${styles}">${esc(label)}</a>
         </td>
       </tr>
     </table>`;
@@ -247,8 +247,8 @@ export function renderMatchDrop(to: StudentProfile, partner: StudentProfile, mat
   const facts = partnerFacts(partner, locale);
   const image = partnerImage(partner);
   const persona = partner.ldfrResult;
-  const confirmUrl = matchEmailActionUrl(match.id, to.id, "yes");
-  const cancelUrl = matchEmailActionUrl(match.id, to.id, "no");
+  const confirmUrl = matchEmailActionUrl(match, to.id, "yes");
+  const cancelUrl = matchEmailActionUrl(match, to.id, "no");
 
   const body = [
     `Hi ${firstName(to)},`,
