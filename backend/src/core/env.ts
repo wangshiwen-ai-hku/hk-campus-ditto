@@ -45,8 +45,6 @@ export const env = {
   db: {
     provider: str("DB_PROVIDER", "file") as "file" | "postgres",
     databaseUrl: str("DATABASE_URL", ""),
-    sslCaPath: str("DATABASE_SSL_CA_PATH", ""),
-    sslRejectUnauthorized: bool("DATABASE_SSL_REJECT_UNAUTHORIZED", false),
   },
   jwt: {
     secret: jwtSecret,
@@ -60,7 +58,7 @@ export const env = {
   },
   llm: {
     provider: str("LLM_PROVIDER", "gemini") as "gemini" | "mock",
-    model: str("LLM_MODEL", "gemini-3-flash"),
+    model: str("LLM_MODEL", "gemini-2.5-flash"),
     apiKey: str("LLM_API_KEY", ""),
     baseUrl: str("LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"),
     budgetPerRun: num("LLM_BUDGET_MAX_CALLS_PER_RUN", 200),
@@ -68,12 +66,17 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "DopaMine <noreply@dopamine.hk>"),
-    apiPublicUrl: str("API_PUBLIC_URL", str("FRONTEND_URL", `http://localhost:${num("PORT", 8787)}`)),
+    from: str("EMAIL_FROM", "DopaMine <support@aurahk.me>"),
+    frontendUrl: str("FRONTEND_URL", "http://localhost:5173"),
+    apiPublicUrl: str("API_PUBLIC_URL", `http://localhost:${num("PORT", 8787)}`),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),
     codeRateLimitPerHour: num("AUTH_CODE_RATE_LIMIT_PER_HOUR", 5),
     inviteRequired: bool("INVITE_REQUIRED", false),
+  },
+  scheduler: {
+    enabled: bool("SCHEDULER_ENABLED", false),
+    trigger: str("SCHEDULER_TRIGGER", "Wednesday 19:00"),
   },
 };

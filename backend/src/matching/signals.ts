@@ -144,9 +144,9 @@ export function extractSignals(student: StudentProfile): MatchSignals {
     interests: normalizeList(student.interests),
     vibeTags: normalizeList(student.vibeTags),
     availability: student.availability ?? [],
-    major: student.major.trim().toLowerCase(),
-    year: student.yearOfStudy.trim().toLowerCase(),
-    universityId: student.universityId,
+    major: (student.major ?? "").trim().toLowerCase(),
+    year: (student.yearOfStudy ?? "").trim().toLowerCase(),
+    universityId: student.universityId ?? "",
     hasPhoto: Boolean(student.photoUrl || prefs.photoUrls?.length),
     attractionText: [
       prefs.attractionSignals?.heightAndBuild,
@@ -154,7 +154,8 @@ export function extractSignals(student: StudentProfile): MatchSignals {
       prefs.attractionSignals?.energyAndVibe,
       student.socialSignals?.socialNotes,
     ].filter(Boolean).join("\n").toLowerCase(),
-    academicText: `${student.major} ${student.yearOfStudy}`.trim().toLowerCase(),
+    academicText: `${student.major ?? ""} ${student.yearOfStudy ?? ""}`.trim().toLowerCase(),
+
   };
 }
 

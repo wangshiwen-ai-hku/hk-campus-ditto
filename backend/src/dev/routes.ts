@@ -132,7 +132,7 @@ devRouter.post("/users", requireAdmin, async (req, res) => {
       optedIn: true,
       availability: [],
       profileComplete: false,
-      crossUniOk: false,
+      crossUniOk: true,
       blockedUserIds: [],
       onboardingStage: parsed.data.stage,
     };

@@ -34,7 +34,7 @@ export function generateInvites(db: Database, options: GenerateInviteOptions): I
   for (let i = 0; i < options.count; i++) {
     let code = "";
     do {
-      code = `DITTO-${options.universityId?.toUpperCase() ?? "HK"}-${randSegment()}-${randSegment()}`;
+      code = `DOPAMINE-${options.universityId?.toUpperCase() ?? "HK"}-${randSegment()}-${randSegment()}`;
     } while (existing.has(code));
     existing.add(code);
     const invite: InviteCode = {

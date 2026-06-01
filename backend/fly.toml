@@ -1,14 +1,15 @@
+# 这个 app 名称必须替换为你在 Fly.io 后台创建的名字
 app = "thrumming-island-597"
 primary_region = "sin"
 
 [build]
   dockerfile = "Dockerfile"
-
+  
 [env]
+  SCHEDULER_ENABLED = "true"
+  SCHEDULER_TRIGGER = "Wednesday 19:00" # 这里可以设置你想要的正式匹配时间
   API_PUBLIC_URL = "https://thrumming-island-597.fly.dev"
   FRONTEND_URL = "https://www.aurahk.me"
-  SCHEDULER_ENABLED = "true"
-  SCHEDULER_TRIGGER = "Wednesday 19:00"
 
 [http_service]
   internal_port = 8080

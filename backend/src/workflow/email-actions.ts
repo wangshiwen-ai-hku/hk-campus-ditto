@@ -4,22 +4,29 @@ import type { MatchRecord } from "../types.js";
 
 export type MatchEmailChoice = "yes" | "no";
 
-function signPayload(matchId: string, userId: string, choice: MatchEmailChoice): string {
+function actionPayload(matchId: string, userId: string, choice: MatchEmailChoice) {
+  return `${matchId}:${userId}:${choice}`;
+}
+
+export function signMatchEmailAction(matchId: string, userId: string, choice: MatchEmailChoice): string {
   return createHmac("sha256", env.jwt.secret)
-    .update(`${matchId}:${userId}:${choice}`)
+    .update(actionPayload(matchId, userId, choice))
     .digest("hex");
 }
 
-function baseActionUrl(matchId: string): URL {
-  const baseUrl = env.email.apiPublicUrl.replace(/\/+$/, "");
-  return new URL(`/api/workflow/${encodeURIComponent(matchId)}/email-response`, baseUrl);
+export function verifySignedMatchEmailAction(
+  matchId: string,
+  userId: string,
+  choice: MatchEmailChoice,
+  sig: string
+): boolean {
+  const expected = signMatchEmailAction(matchId, userId, choice);
+  const expectedBuffer = Buffer.from(expected, "hex");
+  const actualBuffer = Buffer.from(sig, "hex");
+  return expectedBuffer.length === actualBuffer.length && timingSafeEqual(expectedBuffer, actualBuffer);
 }
 
-export function ensureMatchEmailAction(
-  match: MatchRecord,
-  userId: string,
-  choice: MatchEmailChoice
-): string {
+export function ensureMatchEmailAction(match: MatchRecord, userId: string, choice: MatchEmailChoice): string {
   match.emailActions = match.emailActions ?? [];
   const existing = match.emailActions.find((action) => action.userId === userId && action.choice === choice);
   if (existing) return existing.token;
@@ -34,22 +41,12 @@ export function ensureMatchEmailAction(
   return token;
 }
 
-export function matchEmailActionUrl(match: MatchRecord, userId: string, choice: MatchEmailChoice): string {
-  const url = baseActionUrl(match.id);
-  url.searchParams.set("userId", userId);
-  url.searchParams.set("choice", choice);
-  url.searchParams.set("token", ensureMatchEmailAction(match, userId, choice));
-  return url.toString();
-}
-
 export function verifyStoredMatchEmailAction(
   match: MatchRecord,
   userId: string,
-  choice: string | undefined,
-  token: string | undefined
-): choice is MatchEmailChoice {
-  if (choice !== "yes" && choice !== "no") return false;
-  if (!token) return false;
+  choice: MatchEmailChoice,
+  token: string
+): boolean {
   const action = (match.emailActions ?? []).find((item) => item.userId === userId && item.choice === choice);
   if (!action) return false;
 
@@ -61,17 +58,11 @@ export function verifyStoredMatchEmailAction(
   return ok;
 }
 
-export function verifySignedMatchEmailAction(
-  matchId: string,
-  userId: string,
-  choice: string | undefined,
-  signature: string | undefined
-): choice is MatchEmailChoice {
-  if (choice !== "yes" && choice !== "no") return false;
-  if (!signature) return false;
-
-  const expected = Buffer.from(signPayload(matchId, userId, choice), "hex");
-  const actual = Buffer.from(signature, "hex");
-  if (actual.length !== expected.length) return false;
-  return timingSafeEqual(actual, expected);
+export function matchEmailActionUrl(match: MatchRecord, userId: string, choice: MatchEmailChoice): string {
+  const params = new URLSearchParams({
+    userId,
+    choice,
+    token: ensureMatchEmailAction(match, userId, choice),
+  });
+  return `${env.email.apiPublicUrl}/api/workflow/${encodeURIComponent(match.id)}/email-response?${params.toString()}`;
 }

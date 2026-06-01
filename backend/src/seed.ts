@@ -126,11 +126,11 @@ export function makeSeedDatabase(): Database {
   ];
 
   const inviteCodes = [
-    { code: "DITTO-HK-001", createdAt: new Date().toISOString(), note: "demo" },
-    { code: "DITTO-HK-002", createdAt: new Date().toISOString(), note: "demo" },
-    { code: "DITTO-HK-003", createdAt: new Date().toISOString(), note: "demo" },
-    { code: "DITTO-HK-004", createdAt: new Date().toISOString(), note: "demo" },
-    { code: "DITTO-HK-005", createdAt: new Date().toISOString(), note: "demo" }
+    { code: "DOPAMINE-HK-001", createdAt: new Date().toISOString(), note: "demo" },
+    { code: "DOPAMINE-HK-002", createdAt: new Date().toISOString(), note: "demo" },
+    { code: "DOPAMINE-HK-003", createdAt: new Date().toISOString(), note: "demo" },
+    { code: "DOPAMINE-HK-004", createdAt: new Date().toISOString(), note: "demo" },
+    { code: "DOPAMINE-HK-005", createdAt: new Date().toISOString(), note: "demo" }
   ];
 
   return {

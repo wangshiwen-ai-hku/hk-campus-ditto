@@ -12,8 +12,8 @@ en = {
   },
   "home": {
     "hero": {
-      "getADate": "get a date every",
-      "wednesday": "wednesday",
+      "getADate": "Every Wednesday you get",
+      "wednesday": "A Heart-Fluttering Date",
       "atYourSchool": "@YOUR SCHOOL",
       "nextDrop": "Next HK Campus Drop: Wednesday at 7PM",
       "joinDrop": "Join Next Drop →"
@@ -198,7 +198,7 @@ zh_hk = {
   "home": {
     "hero": {
       "getADate": "逢星期三送你",
-      "wednesday": "一個約會",
+      "wednesday": "一次心動約會",
       "atYourSchool": "@你嘅大學",
       "nextDrop": "下一次配對：星期三晚7點",
       "joinDrop": "加入下一次配對 →"
@@ -309,13 +309,13 @@ zh_hk = {
     "interests": "興趣",
     "availability": "得閒時間",
     "saveBtn": "儲存個人檔案",
-    "dashboardBtn": "打開控制面板",
+    "dashboardBtn": "打開個人中心",
     "verifiedMsg": "已驗證，繼續填寫。",
     "verifyFirstMsg": "請先驗證電郵。",
-    "savedMsg": "已儲存！即將跳轉到面板..."
+    "savedMsg": "已儲存！即將跳轉到個人中心..."
   },
   "student": {
-    "title": "學生控制面板",
+    "title": "個人中心",
     "signInPrompt": "請先登入。",
     "loading": "載入中…",
     "hi": "你好, {name}！",
@@ -349,8 +349,8 @@ zh_hk = {
     }
   },
   "admin": {
-    "title": "管理員控制面板",
-    "pageTitle": "管理員控制面板",
+    "title": "管理後台",
+    "pageTitle": "管理後台",
     "resetDemo": "重置示範數據",
     "runDrop": "運行星期三配對",
     "msgCreated": "新建立咗 {count} 個配對。",
@@ -382,8 +382,8 @@ zh_cn = {
   },
   "home": {
     "hero": {
-      "getADate": "每个星期三为你送上",
-      "wednesday": "一个约会",
+      "getADate": "每周三为你送上",
+      "wednesday": "一次心动约会",
       "atYourSchool": "@你的大学",
       "nextDrop": "下一次匹配发布：周三 7PM",
       "joinDrop": "加入下一次匹配 →"
@@ -494,14 +494,14 @@ zh_cn = {
     "interests": "兴趣",
     "availability": "空闲时间",
     "saveBtn": "保存主页",
-    "dashboardBtn": "打开控制台",
+    "dashboardBtn": "打开个人中心",
     "verifiedMsg": "验证成功，请完善信息。",
     "verifyFirstMsg": "保存资料前，请先验证邮箱。",
-    "savedMsg": "保存成功！即将跳转至仪表盘..."
+    "savedMsg": "保存成功！即将跳转至个人中心..."
   },
   "student": {
-    "title": "学生仪表盘",
-    "signInPrompt": "请先登录查看仪表盘。",
+    "title": "个人中心",
+    "signInPrompt": "请先登录查看个人中心。",
     "loading": "加载中…",
     "hi": "你好, {name}！",
     "major": "主修专业",
@@ -535,7 +535,7 @@ zh_cn = {
   },
   "admin": {
     "title": "管理控制台",
-    "pageTitle": "运营仪表盘",
+    "pageTitle": "管理后台",
     "resetDemo": "重置演示数据",
     "runDrop": "执行周三匹配发布",
     "msgCreated": "新创建了 {count} 组匹配。",

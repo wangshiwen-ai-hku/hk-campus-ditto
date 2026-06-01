@@ -29,7 +29,11 @@ export function profileAnalysisPrompt(
   surveys: Survey[],
   language = "en"
 ): { system: string; prompt: string } {
-  const langInstruction = language.startsWith("zh") ? "You MUST write ALL content in Chinese (简体中文)." : "Write all content in English.";
+  const langInstruction = language === "zh-HK" || language === "yue"
+    ? "You MUST write ALL content in Hong Kong Traditional Chinese. Use natural Hong Kong wording, but keep it clear and not overly slangy."
+    : language.startsWith("zh")
+    ? "You MUST write ALL content in Simplified Chinese."
+    : "Write all content in English.";
   const system =
     `You build structured user profile analysis for a Hong Kong campus matchmaking app. Be warm but concrete, do not over-flatter, and never invent facts beyond the supplied profile and survey answers. ${langInstruction} Return strict JSON only.`;
   const surveyPayload = surveys.map((s) => ({
@@ -140,8 +144,10 @@ export function icebreakerPrompt(
   match: MatchRecord,
   language = "en"
 ): { system: string; prompt: string } {
-  const langInstruction = language.startsWith("zh")
-    ? "You MUST write ALL content in Chinese (简体中文). Use a warm, slightly playful tone."
+  const langInstruction = language === "zh-HK" || language === "yue"
+    ? "You MUST write ALL content in Hong Kong Traditional Chinese. Use natural Hong Kong wording, but keep it clear and not overly slangy."
+    : language.startsWith("zh")
+    ? "You MUST write ALL content in Simplified Chinese. Use a warm, slightly playful tone."
     : "Write all content in English. Use a warm, slightly playful tone.";
   const system = `You are an AI matchmaker for a Hong Kong campus dating app. Your job is to introduce two matched students to each other, highlight their strengths, and help them break the ice before their first meeting. ${langInstruction}`;
   const prompt = `Create an icebreaker introduction for these two matched students who are about to meet.

@@ -52,6 +52,7 @@ export function applyOnboardingAnswers(
     return;
   }
   if (template === "onboarding_basics") {
+    const mbti = mbtiOrUndef(answers.mbti);
     user.gender = strOrUndef(answers.gender) ?? user.gender;
     user.yearOfStudy = strOrUndef(answers.grade) ?? user.yearOfStudy;
     user.datingPreferences = {
@@ -61,15 +62,32 @@ export function applyOnboardingAnswers(
       hkMtrLocations: arrOrUndef(answers.hkMtrLocation),
       mbti: {
         ...(user.datingPreferences?.mbti ?? {}),
-        energy: strOrUndef(answers.mbtiE),
-        information: strOrUndef(answers.mbtiS),
-        decision: strOrUndef(answers.mbtiT),
-        lifestyle: strOrUndef(answers.mbtiJ),
+        ...(mbti ?? {
+          energy: strOrUndef(answers.mbtiE),
+          information: strOrUndef(answers.mbtiS),
+          decision: strOrUndef(answers.mbtiT),
+          lifestyle: strOrUndef(answers.mbtiJ),
+        }),
       },
     };
   } else if (template === "onboarding_preferences") {
     const datingGoals = arrOrUndef(answers.datingGoal);
     const languagePref = arrOrUndef(answers.languagePref);
+    const hobbies = strOrUndef(answers.hobbies);
+    if (hobbies) {
+      user.interests = Array.from(new Set([
+        ...user.interests,
+        ...hobbies.split(/[,，、\n]/).map((x) => x.trim()).filter(Boolean),
+      ])).slice(0, 12);
+    }
+    const weekendVibes = arrOrUndef(answers.hkWeekendVibe);
+    if (weekendVibes?.length || strOrUndef(answers.hkWeekendVibe)) {
+      user.lifeSignals = {
+        ...(user.lifeSignals ?? {}),
+        weekendVibe: weekendVibes?.[0] ?? strOrUndef(answers.hkWeekendVibe),
+        weekendVibes,
+      };
+    }
     user.datingPreferences = {
       ...(user.datingPreferences ?? {}),
       dateGenders: arrOrUndef(answers.targetGender),
@@ -78,6 +96,11 @@ export function applyOnboardingAnswers(
       ageRange: ageRangeOrUndef(answers.ageRange),
       languagePreferences: languagePref,
       matchMode: strOrUndef(answers.matchMode) as any,
+      attractionSignals: {
+        ...(user.datingPreferences?.attractionSignals ?? {}),
+        heightAndBuild: strOrUndef(answers.attractionHeightAndBuild),
+        energyAndVibe: strOrUndef(answers.attractionEnergyAndVibe),
+      },
     };
     if (languagePref?.length) user.languages = languagePref;
   } else if (template === "onboarding_attraction") {
@@ -204,11 +227,17 @@ function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[], l
   ].filter((x): x is string => typeof x === "string" && x.length > 0))).slice(0, 8);
 
   const isZh = language.startsWith("zh");
+  const isHk = language === "zh-HK" || language === "yue";
   const interests = p.interests.slice(0, 3).join(", ");
 
   return {
     generatedAt: new Date().toISOString(),
-    summary: isZh
+    summary: isHk
+      ? [
+          `${p.fullName || "呢位同學"}正在就讀${p.major || ""}主修，興趣包括${interests || "日常生活嘅共同愛好"}。`,
+          p.bio ? `自我介紹：${p.bio}` : "",
+        ].filter(Boolean).join(" ")
+      : isZh
       ? [
           `${p.fullName || "这位同学"}正在就读${p.major || ""}专业，兴趣包括${interests || "日常生活中的共同爱好"}。`,
           p.bio ? `个人简介：${p.bio}` : "",
@@ -220,13 +249,13 @@ function fallbackProfileAnalysis(p: StudentProfile, sourceTemplates: string[], l
     romanticStyle: stripKey(p.datingPreferences?.matchMode) ?? stripKey(p.lifeSignals?.energyMode) ?? (isZh ? "尚待探索" : "Still emerging"),
     emotionalTone: p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v).join(", ") || (isZh ? "尚待探索" : "Still emerging"),
     datingIntent: stripKey(p.datingPreferences?.datingGoal) ?? stripKey(p.seeking) ?? (isZh ? "尚待探索" : "Still emerging"),
-    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v) : [isZh ? "填写更多问卷后将更清晰" : "Clearer once more form answers are available"],
-    growthEdges: [isZh ? "填写更多具体回答后匹配将更加精准" : "May need a few more specific answers before matching can be highly personalized"],
-    idealMatch: stripKey(p.seeking) || (isZh ? "与TA的偏好和节奏一致的人" : "Someone aligned with their stated preferences and pace"),
+    strengths: p.vibeTags.length ? p.vibeTags.slice(0, 3).map((v) => stripKey(v) ?? v) : [isHk ? "填寫更多問卷後將更清晰" : isZh ? "填写更多问卷后将更清晰" : "Clearer once more form answers are available"],
+    growthEdges: [isHk ? "填寫更多具體回答後配對將更加精準" : isZh ? "填写更多具体回答后匹配将更加精准" : "May need a few more specific answers before matching can be highly personalized"],
+    idealMatch: stripKey(p.seeking) || (isHk ? "與佢嘅偏好同節奏一致嘅人" : isZh ? "与TA的偏好和节奏一致的人" : "Someone aligned with their stated preferences and pace"),
     matchSignals,
     conversationHooks: p.interests.slice(0, 5),
-    firstDateSuggestions: isZh ? ["校园附近轻松咖啡", "一起散步聊天"] : ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
-    profileCompletenessNotes: sourceTemplates.length ? [] : [isZh ? "暂无问卷答案" : "No onboarding survey answers have been saved yet"],
+    firstDateSuggestions: isHk ? ["校園附近輕鬆飲杯咖啡", "一齊散步傾偈"] : isZh ? ["校园附近轻松咖啡", "一起散步聊天"] : ["Low-pressure coffee near campus", "A short walk with enough time for real conversation"],
+    profileCompletenessNotes: sourceTemplates.length ? [] : [isHk ? "暫無問卷答案" : isZh ? "暂无问卷答案" : "No onboarding survey answers have been saved yet"],
     sourceTemplates,
   };
 }
@@ -241,6 +270,18 @@ function strArray(v: unknown): string[] {
 function strOrUndef(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined;
 }
+
+function mbtiOrUndef(v: unknown): { energy: string; information: string; decision: string; lifestyle: string } | undefined {
+  if (typeof v !== "string") return undefined;
+  const value = v.trim().toUpperCase();
+  if (!/^[EI][SN][TF][JP]$/.test(value)) return undefined;
+  return {
+    energy: value[0],
+    information: value[1],
+    decision: value[2],
+    lifestyle: value[3],
+  };
+}
 function arrOrUndef(v: unknown): string[] | undefined {
   return Array.isArray(v) ? v.filter((x) => typeof x === "string") : undefined;
 }
@@ -254,7 +295,7 @@ function mediaCardsOrUndef(v: unknown): Array<{ photoUrl?: string; caption?: str
       caption: strOrUndef(x.caption),
     }))
     .filter((x) => x.photoUrl || x.caption)
-    .slice(0, 3);
+    .slice(0, 5);
 }
 
 function numOrUndef(v: unknown): number | undefined {
@@ -279,7 +320,7 @@ function ageRangeOrUndef(v: unknown): { min: number; max: number } | undefined {
 
 export function recomputeProfileComplete(user: StudentProfile): boolean {
   const hasBasic = Boolean(
-    user.fullName && user.major && user.yearOfStudy && user.bio &&
+    user.fullName && user.major && user.yearOfStudy &&
     user.languages.length && user.interests.length && user.vibeTags.length
   );
   const hasOnboardingSignal = Boolean(

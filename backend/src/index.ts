@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { ensureDb, resetDb } from "./db.js";
+import { ensureDb, getStudentById, resetDb } from "./db.js";
 import { env } from "./core/env.js";
 import { requireAdmin } from "./core/auth-middleware.js";
 import { authRouter } from "./auth/routes.js";
@@ -11,6 +11,7 @@ import { feedbackRouter } from "./feedback/routes.js";
 import { memoryRouter } from "./memory/routes.js";
 import { devRouter } from "./dev/routes.js";
 import { inviteStats } from "./auth/invite.js";
+import { startScheduler } from "./core/scheduler.js";
 
 const app = express();
 app.use(cors({
@@ -65,8 +66,7 @@ app.get("/api/meta", async (_req, res) => {
 
 // Profile read (public-ish; use auth in production)
 app.get("/api/profile/:userId", async (req, res) => {
-  const db = await ensureDb();
-  const user = db.students.find((s) => s.id === req.params.userId);
+  const user = await getStudentById(req.params.userId);
   if (!user) return res.status(404).json({ error: "User not found." });
   res.json(user);
 });
@@ -119,6 +119,7 @@ if (env.nodeEnv !== "production") {
 }
 
 app.listen(env.port, () => {
-  console.log(`Aura HK API listening on http://localhost:${env.port}`);
+  console.log(`DopaMine API listening on http://localhost:${env.port}`);
   console.log(`LLM provider=${env.llm.provider} model=${env.llm.model} | email provider=${env.email.provider}`);
+  startScheduler();
 });

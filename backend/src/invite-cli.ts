@@ -95,8 +95,8 @@ Usage:
   npm --prefix backend run invites -- list [--universityId=hku] [--batch=beta-001]
   npm --prefix backend run invites -- generate --plan=hku=10,cuhk=10 --batch=beta-001 --note="first beta batch"
   npm --prefix backend run invites -- generate --count=20 --batch=general-001 --note="general beta invites"
-  npm --prefix backend run invites -- mark-used --code=DITTO-HKU-ABCD-2345 --userId=user-id
-  npm --prefix backend run invites -- mark-unused --code=DITTO-HKU-ABCD-2345`);
+  npm --prefix backend run invites -- mark-used --code=DOPAMINE-HKU-ABCD-2345 --userId=user-id
+  npm --prefix backend run invites -- mark-unused --code=DOPAMINE-HKU-ABCD-2345`);
 }
 
 function parseArgs(argv: string[]): CliArgs {

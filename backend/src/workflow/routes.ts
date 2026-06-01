@@ -8,12 +8,12 @@ import { pickPlace } from "./place.js";
 import { notify } from "../notify/index.js";
 import { llmCall } from "../llm/client.js";
 import { icebreakerPrompt } from "../llm/prompts.js";
+import type { Locale } from "../types.js";
 import {
   verifySignedMatchEmailAction,
   verifyStoredMatchEmailAction,
   type MatchEmailChoice,
 } from "./email-actions.js";
-import type { Database, Locale, MatchRecord } from "../types.js";
 
 export const workflowRouter = Router();
 
@@ -27,96 +27,98 @@ function userInMatch(match: { userAId: string; userBId: string }, userId: string
 }
 
 async function applyMatchResponse(
-  db: Database,
-  match: MatchRecord,
+  db: Awaited<ReturnType<typeof ensureDb>>,
+  match: NonNullable<ReturnType<typeof loadMatch>>,
   userId: string,
-  choice: MatchEmailChoice,
-  source: "app" | "email"
+  choice: MatchEmailChoice
 ) {
-  const wasBothAccepted = isBothAccepted(match);
   match.acceptances = (match.acceptances ?? []).filter((x) => x.userId !== userId);
   match.acceptances.push({ userId, choice, at: new Date().toISOString() });
-  logEvent(match, "respond", { userId, choice, source });
+  logEvent(match, "respond", { userId, choice });
 
   if (eitherDeclined(match) && match.status !== "declined") {
-    if (["pending", "notified", "awaiting-acceptance"].includes(match.status)) {
-      transition(match, "declined", { by: userId, source });
-    } else {
-      logEvent(match, "declined-after-progress", { by: userId, source });
-    }
-  } else if (!wasBothAccepted && isBothAccepted(match)) {
-    if (match.status === "pending") transition(match, "notified", { source });
-    if (match.status === "notified") transition(match, "awaiting-acceptance", { source });
-    if (match.status === "awaiting-acceptance") transition(match, "mutual-accepted", { source });
+    transition(match, "declined", { by: userId });
+    return { contactShared: false };
+  }
 
-    const a = db.students.find((s) => s.id === match.userAId);
-    const b = db.students.find((s) => s.id === match.userBId);
-    if (a && b) {
-      recomputeSlotState(match, a, b);
-      const post = match.status as string;
-      if (post === "slot-proposing" || post === "slot-confirmed") {
-        match.proposedPlace = (await pickPlace(db, match)) ?? match.proposedPlace;
-      }
+  if (!isBothAccepted(match)) return { contactShared: false };
+
+  if (match.status === "pending") {
+    transition(match, "notified", { by: userId, source: "email-response" });
+  }
+  if (match.status === "notified") {
+    transition(match, "awaiting-acceptance", { by: userId, source: "email-response" });
+  }
+  if (match.status === "awaiting-acceptance") {
+    transition(match, "mutual-accepted");
+  }
+
+  const a = db.students.find((s) => s.id === match.userAId);
+  const b = db.students.find((s) => s.id === match.userBId);
+  if (a && b) {
+    recomputeSlotState(match, a, b);
+    const post = match.status as string;
+    if (post === "slot-proposing" || post === "slot-confirmed") {
+      match.proposedPlace = (await pickPlace(db, match)) ?? match.proposedPlace;
+      match.curatedDateSpot = match.proposedPlace?.name ?? match.curatedDateSpot;
+    }
+
+    const alreadySent = (match.events ?? []).some((event) => event.kind === "contacts-shared");
+    if (!alreadySent) {
       await notify(a, "contact_shared", { match, partner: b });
       await notify(b, "contact_shared", { match, partner: a });
-      logEvent(match, "contact-shared-email-sent", { source });
+      logEvent(match, "contacts-shared");
+      return { contactShared: true };
     }
   }
+
+  return { contactShared: false };
 }
 
-function responseCopy(locale: Locale | undefined, choice: MatchEmailChoice) {
-  if (locale === "zh-HK") {
-    return choice === "yes"
-      ? { title: "已記錄，謝謝！", body: "您可以關閉此頁面。" }
-      : { title: "多謝回饋，Dopa 會幫您再次配對。", body: "您可以關閉此頁面。" };
-  }
-  if (locale === "zh-CN") {
-    return choice === "yes"
-      ? { title: "已记录，谢谢！", body: "您可以关闭此页面。" }
-      : { title: "谢谢反馈，Dopa 会帮您再次匹配。", body: "您可以关闭此页面。" };
-  }
-  return choice === "yes"
-    ? { title: "Recorded. Thank you!", body: "You can close this page." }
-    : { title: "Thank you for the feedback. Dopa will match you again.", body: "You can close this page." };
+const SUPPORTED_LOCALES = new Set(["en", "zh-HK", "zh-CN"]);
+
+function normalizeLocale(value: unknown, fallback: Locale): Locale {
+  return typeof value === "string" && SUPPORTED_LOCALES.has(value) ? value as Locale : fallback;
 }
 
-function renderEmailResponsePage(locale: Locale | undefined, choice: MatchEmailChoice) {
-  const copy = responseCopy(locale, choice);
-  return `<!doctype html>
-<html lang="${locale ?? "en"}">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${copy.title}</title>
-  <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#080b18;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    main{width:min(520px,calc(100vw - 40px));padding:36px 28px;border:1px solid rgba(255,47,120,.32);border-radius:28px;background:linear-gradient(135deg,rgba(255,47,120,.16),rgba(47,132,255,.12));box-shadow:0 24px 80px rgba(0,0,0,.32)}
-    .brand{font-size:13px;font-weight:900;letter-spacing:.32em;color:#ff2f78;text-transform:uppercase;margin-bottom:22px}
-    h1{font-size:30px;line-height:1.25;margin:0 0 14px}
-    p{font-size:17px;line-height:1.7;color:#c9cedb;margin:0}
-  </style>
-</head>
-<body>
-  <main>
-    <div class="brand">DopaMine</div>
-    <h1>${copy.title}</h1>
-    <p>${copy.body}</p>
-  </main>
-</body>
-</html>`;
+function readIcebreakerByLocale(raw: string | undefined, locale: Locale) {
+  if (!raw) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed?.[locale]?.introForA) return parsed[locale];
+    if (parsed?.introForA && locale === "en") return parsed;
+  } catch {
+    return undefined;
+  }
+  return undefined;
+}
+
+function writeIcebreakerByLocale(raw: string | undefined, locale: Locale, value: unknown): string {
+  let parsed: Record<string, unknown> = {};
+  try {
+    const existing = raw ? JSON.parse(raw) : {};
+    parsed = existing?.introForA ? { en: existing } : existing;
+  } catch {
+    parsed = {};
+  }
+  parsed[locale] = value;
+  return JSON.stringify(parsed);
 }
 
 // 1. Send "drop" notifications for new pending matches (admin-triggered)
 workflowRouter.post("/drop", requireAdmin, async (_req, res) => {
   const db = await ensureDb();
   const dropped: string[] = [];
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
   for (const match of db.matches) {
     if (match.status !== "pending") continue;
     const a = db.students.find((s) => s.id === match.userAId);
     const b = db.students.find((s) => s.id === match.userBId);
     if (!a || !b) continue;
     await notify(a, "match_drop", { match, partner: b });
+    await sleep(600);
     await notify(b, "match_drop", { match, partner: a });
+    await sleep(600);
     transition(match, "notified", { dropAt: new Date().toISOString() });
     transition(match, "awaiting-acceptance");
     dropped.push(match.id);
@@ -125,30 +127,65 @@ workflowRouter.post("/drop", requireAdmin, async (_req, res) => {
   res.json({ ok: true, dropped });
 });
 
+// Public signed email action. Lets a recipient confirm/cancel directly from the email
+// without exposing partner contact details until both sides have confirmed.
 workflowRouter.get("/:matchId/email-response", async (req, res) => {
+  const choice = req.query.choice === "yes" || req.query.choice === "no" ? req.query.choice : undefined;
+  const userId = typeof req.query.userId === "string" ? req.query.userId : "";
+  const sig = typeof req.query.sig === "string" ? req.query.sig : "";
+  const token = typeof req.query.token === "string" ? req.query.token : "";
   const matchId = String(req.params.matchId);
-  const userId = String(req.query.userId ?? "");
-  const choice = String(req.query.choice ?? "");
-  const sig = String(req.query.sig ?? "");
-  const token = String(req.query.token ?? "");
 
   const db = await ensureDb();
   const match = loadMatch(db, matchId);
   if (!match) return res.status(404).send("Match not found.");
-  if (!userInMatch(match, userId)) return res.status(403).send("Not your match.");
+  if (!userInMatch(match, userId)) return res.status(403).send("This response link does not belong to this match.");
 
-  const verified =
-    verifyStoredMatchEmailAction(match, userId, choice, token) ||
-    verifySignedMatchEmailAction(matchId, userId, choice, sig);
-  if (!verified) {
+  const verified = !!choice && (
+    (token && verifyStoredMatchEmailAction(match, userId, choice, token)) ||
+    (sig && verifySignedMatchEmailAction(matchId, userId, choice, sig))
+  );
+  if (!verified || !choice) {
     return res.status(400).send("Invalid or expired match response link.");
   }
 
-  const user = db.students.find((s) => s.id === userId);
-  await applyMatchResponse(db, match, userId, choice, "email");
+  const result = await applyMatchResponse(db, match, userId, choice);
   await saveDb(db);
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  return res.send(renderEmailResponsePage(user?.preferredLocale, choice));
+
+  const user = db.students.find((s) => s.id === userId);
+  const locale = normalizeLocale(user?.preferredLocale, "en");
+  const acceptedTitle = locale === "zh-HK"
+    ? "已收到您嘅確認"
+    : locale === "zh-CN"
+    ? "已收到您的确认"
+    : "Your confirmation is in";
+  const declinedTitle = locale === "zh-HK"
+    ? "已為您取消今次配對"
+    : locale === "zh-CN"
+    ? "已为您取消本次匹配"
+    : "This match has been cancelled";
+  const acceptedBody = result.contactShared
+    ? (locale === "zh-HK" ? "已記錄，謝謝！" : locale === "zh-CN" ? "已记录，谢谢！" : "Recorded. Thank you!")
+    : (locale === "zh-HK" ? "已記錄，謝謝！" : locale === "zh-CN" ? "已记录，谢谢！" : "Recorded. Thank you!");
+  const declinedBody = locale === "zh-HK"
+    ? "多謝回饋，Dopa 會幫您再次配對。"
+    : locale === "zh-CN"
+    ? "谢谢反馈，Dopa 会帮您再次匹配。"
+    : "Thank you for the feedback. Dopa will match you again.";
+  const title = choice === "yes" ? acceptedTitle : declinedTitle;
+  const body = choice === "yes" ? acceptedBody : declinedBody;
+
+  res.send(`<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DopaMine</title></head>
+<body style="margin:0;background:#090d16;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+  <main style="min-height:100vh;display:grid;place-items:center;padding:24px;">
+    <section style="max-width:520px;border:1px solid rgba(255,255,255,0.12);background:#141b2b;border-radius:28px;padding:34px;box-shadow:0 24px 60px rgba(0,0,0,0.42);">
+      <div style="font-size:28px;font-weight:950;margin-bottom:18px;color:#ff4f8b;">DopaMine</div>
+      <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;">${title}</h1>
+      <p style="margin:0;color:#cbd5e1;font-size:16px;line-height:1.7;">${body}</p>
+    </section>
+  </main>
+</body></html>`);
 });
 
 // 2. Accept / decline a match (per user)
@@ -162,7 +199,7 @@ workflowRouter.post("/:matchId/respond", requireAuth, async (req, res) => {
   if (!match) return res.status(404).json({ error: "Match not found." });
   if (!userInMatch(match, req.auth!.sub)) return res.status(403).json({ error: "Not your match." });
 
-  await applyMatchResponse(db, match, req.auth!.sub, parsed.data.choice, "app");
+  await applyMatchResponse(db, match, req.auth!.sub, parsed.data.choice);
 
   await saveDb(db);
   res.json({ ok: true, match });
@@ -313,21 +350,19 @@ workflowRouter.post("/:matchId/icebreaker", requireAuth, async (req, res) => {
   const match = loadMatch(db, String(req.params.matchId));
   if (!match) return res.status(404).json({ error: "Match not found." });
   if (!userInMatch(match, req.auth!.sub)) return res.status(403).json({ error: "Not your match." });
+  const viewer = db.students.find((s) => s.id === req.auth!.sub);
+  if (!viewer) return res.status(404).json({ error: "User not found." });
+  const language = normalizeLocale(req.body?.language, viewer.preferredLocale ?? "en");
 
-  // Return cached icebreaker if already generated
-  if (match.icebreaker) {
-    try {
-      return res.json({ ok: true, icebreaker: JSON.parse(match.icebreaker) });
-    } catch {
-      // If cached value is not valid JSON, regenerate
-    }
-  }
+  // Cache per viewer language. A zh-HK generated intro must never be reused
+  // for a zh-CN viewer, and vice versa.
+  const cached = readIcebreakerByLocale(match.icebreaker, language);
+  if (cached) return res.json({ ok: true, icebreaker: cached });
 
   const a = db.students.find((s) => s.id === match.userAId);
   const b = db.students.find((s) => s.id === match.userBId);
   if (!a || !b) return res.status(404).json({ error: "Users not found." });
 
-  const language = (req.body?.language ?? "en") as string;
   const { system, prompt } = icebreakerPrompt(a, b, match, language);
 
   try {
@@ -336,29 +371,37 @@ workflowRouter.post("/:matchId/icebreaker", requireAuth, async (req, res) => {
       introForB: string;
       conversationStarters: string[];
       dateVibe: string;
-    }>({ system, prompt, tag: "icebreaker", maxOutputTokens: 600, temperature: 0.7 });
+    }>({ system, prompt, responseJson: true, tag: "icebreaker", maxOutputTokens: 600, temperature: 0.7 });
 
-    if (result) {
-      match.icebreaker = JSON.stringify(result);
+    if (result.json && !result.usedFallback) {
+      match.icebreaker = writeIcebreakerByLocale(match.icebreaker, language, result.json);
       await saveDb(db);
-      return res.json({ ok: true, icebreaker: result });
+      return res.json({ ok: true, icebreaker: result.json });
     }
   } catch {}
 
   // Fallback
+  const isZh = language.startsWith("zh");
+  const isHk = language === "zh-HK";
   const fallback = {
-    introForA: language.startsWith("zh")
+    introForA: isHk
+      ? `${b.fullName}同你有好多共同之處！佢對${b.interests.slice(0, 2).join("同埋")}好感興趣，${b.vibeTags[0] ? `係一個${b.vibeTags[0]}嘅人` : "期待同你見面"}。`
+      : isZh
       ? `${b.fullName}和你有很多共同点！TA对${b.interests.slice(0, 2).join("和")}很感兴趣，${b.vibeTags[0] ? `是一个${b.vibeTags[0]}的人` : "期待和你见面"}。`
       : `${b.fullName} shares your interest in ${b.interests.slice(0, 2).join(" and ")}${b.vibeTags[0] ? ` and gives off ${b.vibeTags[0]} vibes` : ""}. Looking forward to meeting you!`,
-    introForB: language.startsWith("zh")
+    introForB: isHk
+      ? `${a.fullName}同你有好多共同之處！佢對${a.interests.slice(0, 2).join("同埋")}好感興趣，${a.vibeTags[0] ? `係一個${a.vibeTags[0]}嘅人` : "期待同你見面"}。`
+      : isZh
       ? `${a.fullName}和你有很多共同点！TA对${a.interests.slice(0, 2).join("和")}很感兴趣，${a.vibeTags[0] ? `是一个${a.vibeTags[0]}的人` : "期待和你见面"}。`
       : `${a.fullName} shares your interest in ${a.interests.slice(0, 2).join(" and ")}${a.vibeTags[0] ? ` and gives off ${a.vibeTags[0]} vibes` : ""}. Looking forward to meeting you!`,
-    conversationStarters: language.startsWith("zh")
+    conversationStarters: isHk
+      ? [`聊聊你哋都鍾意嘅${a.interests[0] ?? "嘢"}`, `問下對方喺大學嘅有趣經歷`]
+      : isZh
       ? [`聊聊你们都喜欢的${a.interests[0] ?? "事情"}`, `问问对方在${a.major ?? "学校"}的有趣经历`]
       : [`Chat about ${a.interests[0] ?? "shared interests"}`, `Ask about life studying ${a.major ?? "at uni"}`],
-    dateVibe: language.startsWith("zh") ? "轻松有趣的初次见面" : "A relaxed, fun first meeting",
+    dateVibe: isHk ? "輕鬆有趣嘅初次見面" : isZh ? "轻松有趣的初次见面" : "A relaxed, fun first meeting",
   };
-  match.icebreaker = JSON.stringify(fallback);
+  match.icebreaker = writeIcebreakerByLocale(match.icebreaker, language, fallback);
   await saveDb(db);
   res.json({ ok: true, icebreaker: fallback });
 });

@@ -2,12 +2,22 @@ import { Router } from "express";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 import { createHash, randomInt } from "node:crypto";
-import { ensureDb, saveDb } from "../db.js";
+import {
+  ensureDb,
+  getInviteByCode,
+  getStudentByEmail,
+  getUniversityByEmailDomain,
+  getVerificationCode,
+  saveDb,
+  saveInvite,
+  saveStudent,
+  saveVerificationCode,
+} from "../db.js";
 import type { StudentProfile } from "../types.js";
 import { env } from "../core/env.js";
 import { requireAdmin } from "../core/auth-middleware.js";
 import { sendEmail } from "./email.js";
-import { findInvite, isInviteUsable, isInviteValidForUniversity, consumeInvite, generateInvites, inviteStats } from "./invite.js";
+import { isInviteUsable, isInviteValidForUniversity, generateInvites, inviteStats } from "./invite.js";
 import { issueToken } from "./jwt.js";
 
 export const authRouter = Router();
@@ -25,28 +35,43 @@ authRouter.post("/request-code", async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid email." });
 
-  const db = await ensureDb();
   const email = parsed.data.email.toLowerCase();
   const domain = email.split("@")[1];
-  const university = db.universities.find((uni) => uni.domains.includes(domain));
+  const university = await getUniversityByEmailDomain(domain);
   if (!university) {
     return res.status(400).json({ error: "Email domain is not from a supported Hong Kong university." });
   }
 
   // rate limit: count fresh codes for this email in the last hour
   const oneHourAgo = Date.now() - 60 * 60 * 1000;
-  const recent = db.verificationCodes.filter(
-    (c) => c.email === email && new Date(c.createdAt).getTime() > oneHourAgo
-  );
-  if (recent.length >= env.auth.codeRateLimitPerHour) {
+  const recent = await getVerificationCode(email);
+  if (recent && new Date(recent.createdAt).getTime() > oneHourAgo && env.auth.codeRateLimitPerHour <= 1) {
     return res.status(429).json({ error: "Too many code requests. Try again later." });
   }
 
   const code = generateCode();
   const emailResult = await sendEmail({
     to: email,
-    subject: "Your Aura verification code",
-    text: `Your verification code is: ${code}\n\nIt expires in ${env.auth.codeTtlMin} minutes.\n\nIf you didn't request this, ignore the email.`,
+    subject: "Your DopaMine verification code",
+    text: `Hi,
+
+Your DopaMine verification code is:
+
+${code}
+
+This code expires in ${env.auth.codeTtlMin} minutes.
+
+If you did not request this code, you can ignore this email.
+
+DopaMine`,
+    html: `
+      <p>Hi,</p>
+      <p>Your DopaMine verification code is:</p>
+      <p style="font-size:24px;font-weight:bold;letter-spacing:4px;">${code}</p>
+      <p>This code expires in ${env.auth.codeTtlMin} minutes.</p>
+      <p>If you did not request this code, you can ignore this email.</p>
+      <p>DopaMine</p>
+    `,
   });
   if (!emailResult.ok) {
     console.error(`Verification email failed for ${email}: ${emailResult.error ?? "unknown error"}`);
@@ -54,15 +79,13 @@ authRouter.post("/request-code", async (req, res) => {
   }
 
   const expiresAt = new Date(Date.now() + env.auth.codeTtlMin * 60 * 1000).toISOString();
-  db.verificationCodes = db.verificationCodes.filter((c) => c.email !== email);
-  db.verificationCodes.push({
+  await saveVerificationCode({
     email,
     codeHash: hashCode(code),
     expiresAt,
     attempts: 0,
     createdAt: new Date().toISOString(),
   });
-  await saveDb(db);
 
   res.json({ ok: true, university, emailDelivered: true });
 });
@@ -77,9 +100,8 @@ authRouter.post("/verify-code", async (req, res) => {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid verification payload." });
 
-  const db = await ensureDb();
   const email = parsed.data.email.toLowerCase();
-  const record = db.verificationCodes.find((c) => c.email === email);
+  const record = await getVerificationCode(email);
   if (!record) return res.status(400).json({ error: "Code not found. Request a new one." });
 
   if (new Date(record.expiresAt).getTime() < Date.now()) {
@@ -91,20 +113,20 @@ authRouter.post("/verify-code", async (req, res) => {
   record.attempts += 1;
 
   if (record.codeHash !== hashCode(parsed.data.code)) {
-    await saveDb(db);
+    await saveVerificationCode(record);
     return res.status(400).json({ error: "Wrong code." });
   }
 
   const domain = email.split("@")[1];
-  const university = db.universities.find((uni) => uni.domains.includes(domain));
+  const university = await getUniversityByEmailDomain(domain);
   if (!university) return res.status(400).json({ error: "University not supported." });
 
-  let user = db.students.find((s) => s.email === email);
+  let user = await getStudentByEmail(email);
   const isNew = !user;
 
   if (isNew) {
     if (env.auth.inviteRequired && parsed.data.inviteCode) {
-      const invite = findInvite(db, parsed.data.inviteCode);
+      const invite = await getInviteByCode(parsed.data.inviteCode);
       if (!isInviteUsable(invite)) {
         return res.status(400).json({ error: "Invite code is invalid or already used." });
       }
@@ -132,23 +154,32 @@ authRouter.post("/verify-code", async (req, res) => {
       optedIn: true,
       availability: [],
       profileComplete: false,
-      crossUniOk: false,
+      crossUniOk: true,
       blockedUserIds: [],
       onboardingStage: "basic",
     } satisfies StudentProfile;
-    db.students.unshift(user);
 
     if (env.auth.inviteRequired && parsed.data.inviteCode) {
-      consumeInvite(db, parsed.data.inviteCode, user.id);
+      const invite = await getInviteByCode(parsed.data.inviteCode);
+      if (invite) {
+        invite.usedBy = user.id;
+        invite.usedAt = new Date().toISOString();
+        await saveInvite(invite);
+      }
     }
   } else if (user) {
     user.fullName = parsed.data.fullName || user.fullName;
     user.verificationStatus = "verified";
   }
 
-  // consume the verification code
-  db.verificationCodes = db.verificationCodes.filter((c) => c.email !== email);
-  await saveDb(db);
+  // Consume the verification code without relying on physical row deletion.
+  record.codeHash = "consumed";
+  record.expiresAt = new Date(0).toISOString();
+  record.attempts = 999;
+  await Promise.all([
+    saveVerificationCode(record),
+    user ? saveStudent(user) : Promise.resolve(),
+  ]);
 
   if (!user) return res.status(500).json({ error: "User initialization failed." });
   const token = issueToken({ sub: user.id, email: user.email, uni: user.universityId });
@@ -195,7 +226,7 @@ authRouter.get("/invites/export.csv", requireAdmin, async (req, res) => {
     ),
   ].join("\n");
   res.header("Content-Type", "text/csv; charset=utf-8");
-  res.header("Content-Disposition", "attachment; filename=aura-hk-invites.csv");
+  res.header("Content-Disposition", "attachment; filename=dopamine-invites.csv");
   res.send(csv);
 });
 
