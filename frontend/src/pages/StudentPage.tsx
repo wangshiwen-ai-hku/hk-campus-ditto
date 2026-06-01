@@ -762,7 +762,6 @@ function PersonaTab({ profile, t, lang: currentLang, personaLoading, personaErro
                 <div className="text-base font-black text-white">{isZh ? match.nameZh : match.nameEn}</div>
                 <div className="text-xs text-white/40 font-bold mt-0.5">{code} · {isZh ? match.nameEn : match.nameZh}</div>
                 <div className="mt-2 text-aura text-sm tracking-wider">{"⭐".repeat(stars)}</div>
-                <div className="mt-2 text-xs text-white/30 font-medium italic">{archL(isZh, match.taglineZh, match.taglineEn)}</div>
               </div>
             );
           })}
