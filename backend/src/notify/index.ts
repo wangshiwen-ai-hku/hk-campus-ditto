@@ -1,5 +1,6 @@
 import type { MatchRecord, StudentProfile } from "../types.js";
 import { sendEmail } from "../auth/email.js";
+import { env } from "../core/env.js";
 import { renderDateScheduled, renderFeedbackRequest, renderMatchDrop, renderPartnerConfirmed } from "./templates.js";
 
 export type NotifyTemplate = "match_drop" | "date_scheduled" | "feedback_request" | "partner_confirmed";
@@ -27,11 +28,24 @@ export async function notify(
     return { ok: false };
   }
 
+  // Gmail (and many filters) require List-Unsubscribe on bulk/notification mail.
+  // We don't have a real one-click unsubscribe endpoint yet, so we point at the
+  // settings page (where users can opt out) and a mailto fallback.
+  const unsubscribeUrl = `${env.email.frontendUrl}/settings`;
+  const headers: Record<string, string> = {
+    "List-Unsubscribe": `<mailto:${env.email.replyTo}?subject=unsubscribe>, <${unsubscribeUrl}>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    "X-Entity-Ref-ID": `${template}-${to.id}-${Date.now()}`,
+  };
+
   const result = await sendEmail({
     to: to.email,
     subject: rendered.subject,
     text: rendered.body,
     html: rendered.html,
+    tag: template,
+    headers,
   });
   return { ok: result.ok };
 }
+

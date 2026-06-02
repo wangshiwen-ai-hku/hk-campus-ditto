@@ -69,7 +69,8 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "DopaMine <support@aurahk.me>"),
+    from: str("EMAIL_FROM", "DopaMine <hello@aurahk.me>"),
+    replyTo: str("EMAIL_REPLY_TO", "hello@aurahk.me"),
     frontendUrl: str("FRONTEND_URL", "http://localhost:5173"),
   },
   auth: {

@@ -52,26 +52,25 @@ authRouter.post("/request-code", async (req, res) => {
   const code = generateCode();
   const emailResult = await sendEmail({
     to: email,
-    subject: "Your DopaMine verification code",
-    text: `Hi,
-
-Your DopaMine verification code is:
-
-${code}
+    subject: `DopaMine verification code: ${code}`,
+    text: `Your DopaMine verification code is: ${code}
 
 This code expires in ${env.auth.codeTtlMin} minutes.
 
-If you did not request this code, you can ignore this email.
+If you did not request this code, you can safely ignore this email.
 
-DopaMine`,
-    html: `
-      <p>Hi,</p>
-      <p>Your DopaMine verification code is:</p>
-      <p style="font-size:24px;font-weight:bold;letter-spacing:4px;">${code}</p>
-      <p>This code expires in ${env.auth.codeTtlMin} minutes.</p>
-      <p>If you did not request this code, you can ignore this email.</p>
-      <p>DopaMine</p>
-    `,
+— DopaMine`,
+    html: `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1f2937;max-width:480px;margin:0 auto;padding:24px;">
+  <p style="font-size:15px;margin:0 0 16px;">Your DopaMine verification code is:</p>
+  <p style="font-size:32px;font-weight:700;letter-spacing:6px;color:#111827;margin:0 0 16px;font-family:'SF Mono',Menlo,monospace;">${code}</p>
+  <p style="font-size:14px;color:#6b7280;margin:0 0 8px;">This code expires in ${env.auth.codeTtlMin} minutes.</p>
+  <p style="font-size:14px;color:#6b7280;margin:0 0 16px;">If you did not request this code, you can safely ignore this email.</p>
+  <p style="font-size:13px;color:#9ca3af;margin:0;">— DopaMine</p>
+</body></html>`,
+    tag: "auth-code",
+    headers: {
+      "X-Entity-Ref-ID": `auth-${email}-${Date.now()}`,
+    },
   });
   if (!emailResult.ok) {
     console.error(`Verification email failed for ${email}: ${emailResult.error ?? "unknown error"}`);
