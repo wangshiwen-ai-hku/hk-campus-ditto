@@ -31,11 +31,16 @@ memoryRouter.get("/surveys", requireAuth, async (req, res) => {
 
 // User-level preference editing (vibe weights, dealbreakers, crossUniOk)
 memoryRouter.post("/preferences", requireAuth, async (req, res) => {
+  const datingPreferencesSchema = z.object({
+    datingGoal: z.enum(["life_partner", "long_term", "casual", "friends", "unsure"]).optional(),
+    matchMode: z.enum(["fast", "balanced", "intentional", "wait_for_the_one"]).optional(),
+  });
   const schema = z.object({
     crossUniOk: z.boolean().optional(),
     dealBreakers: z.array(z.string()).optional(),
     vibeWeights: z.record(z.string(), z.number()).optional(),
     optedIn: z.boolean().optional(),
+    datingPreferences: datingPreferencesSchema.optional(),
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid payload." });
@@ -47,9 +52,19 @@ memoryRouter.post("/preferences", requireAuth, async (req, res) => {
   if (parsed.data.dealBreakers) user.dealBreakers = parsed.data.dealBreakers;
   if (parsed.data.vibeWeights) user.vibeWeights = { ...(user.vibeWeights ?? {}), ...parsed.data.vibeWeights };
   if (parsed.data.optedIn !== undefined) user.optedIn = parsed.data.optedIn;
+  if (parsed.data.datingPreferences) {
+    user.datingPreferences = {
+      ...(user.datingPreferences ?? {}),
+      ...parsed.data.datingPreferences,
+    };
+  }
 
   await saveStudent(user);
-  res.json({ ok: true, memory: buildUserMemory({ universities: [], students: [user], matches: [], verificationCodes: [], inviteCodes: [], surveys: [] }, user.id) });
+  res.json({
+    ok: true,
+    user,
+    memory: buildUserMemory({ universities: [], students: [user], matches: [], verificationCodes: [], inviteCodes: [], surveys: [] }, user.id),
+  });
 });
 
 // Block / unblock a partner manually

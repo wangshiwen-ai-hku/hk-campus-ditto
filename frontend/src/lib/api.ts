@@ -89,6 +89,7 @@ export const api = {
   getMemory: () => request("/memory/me"),
   getHistory: () => request("/memory/history"),
   getSurveys: () => request("/memory/surveys"),
+  updatePreferences: (payload: unknown) => request<{ ok: boolean; user: any }>("/memory/preferences", { method: "POST", body: JSON.stringify(payload) }),
 
   // Admin / Dev
   runMatchmaking: (useLlmJudge = true) => request("/matches/run", { method: "POST", admin: true, body: JSON.stringify({ useLlmJudge }) }),

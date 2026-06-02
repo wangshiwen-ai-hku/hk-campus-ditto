@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../lib/api";
-import type { Locale, StudentProfile } from "../types";
+import type { DatingPreferences, Locale, StudentProfile } from "../types";
 import { SectionCard } from "../components/SectionCard";
 import { ArrowLeft, Languages, LogOut, LogIn, Share2, ToggleLeft, ToggleRight, Copy, Check, User, Heart, Settings, Shield } from "lucide-react";
 
@@ -56,7 +56,7 @@ export function SettingsPage({
     saving: isZhHK ? "儲存中..." : isZhCN ? "保存中..." : "Saving...",
   };
 
-  const datingGoalOptions = [
+  const datingGoalOptions: Array<{ value: NonNullable<DatingPreferences["datingGoal"]>; label: string }> = [
     { value: "life_partner", label: isZhHK ? "終生伴侶" : isZhCN ? "终生伴侣" : "Life Partner" },
     { value: "long_term", label: isZhHK ? "長期穩定關係" : isZhCN ? "长期稳定关系" : "Long-term relationship" },
     { value: "casual", label: isZhHK ? "輕鬆約會" : isZhCN ? "轻松约会" : "Casual dating" },
@@ -64,7 +64,7 @@ export function SettingsPage({
     { value: "unsure", label: isZhHK ? "還不確定" : isZhCN ? "还不确定" : "Still figuring it out" },
   ];
 
-  const matchModeOptions = [
+  const matchModeOptions: Array<{ value: NonNullable<DatingPreferences["matchMode"]>; label: string }> = [
     { value: "fast", label: isZhHK ? "速度優先 (快速配對)" : isZhCN ? "速度优先 (快速匹配)" : "Fast (Speed over perfection)" },
     { value: "balanced", label: isZhHK ? "平衡模式" : isZhCN ? "平衡模式" : "Balanced" },
     { value: "intentional", label: isZhHK ? "精準優先 (注重合適度)" : isZhCN ? "精准优先 (注重合适度)" : "Intentional (Strong preference fit)" },
@@ -104,12 +104,11 @@ export function SettingsPage({
     setSavingField("crossUniOk");
     const updatedStatus = !profile.crossUniOk;
     try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        crossUniOk: updatedStatus,
-      });
+      const res: any = await api.updatePreferences({ crossUniOk: updatedStatus });
       if (res.user) {
         setProfile(res.user);
+      } else {
+        setProfile({ ...profile, crossUniOk: updatedStatus });
       }
     } catch (e: any) {
       alert(e.message || "Failed to update preference.");
@@ -118,7 +117,7 @@ export function SettingsPage({
     }
   };
 
-  const handleDatingGoalChange = async (goal: string) => {
+  const handleDatingGoalChange = async (goal: NonNullable<DatingPreferences["datingGoal"]>) => {
     if (!profile) return;
     setSavingField("datingGoal");
     const updatedPrefs = {
@@ -126,12 +125,13 @@ export function SettingsPage({
       datingGoal: goal,
     };
     try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        datingPreferences: updatedPrefs,
+      const res: any = await api.updatePreferences({
+        datingPreferences: { datingGoal: goal },
       });
       if (res.user) {
         setProfile(res.user);
+      } else {
+        setProfile({ ...profile, datingPreferences: updatedPrefs });
       }
     } catch (e: any) {
       alert(e.message || "Failed to update dating goal.");
@@ -140,7 +140,7 @@ export function SettingsPage({
     }
   };
 
-  const handleMatchModeChange = async (mode: string) => {
+  const handleMatchModeChange = async (mode: NonNullable<DatingPreferences["matchMode"]>) => {
     if (!profile) return;
     setSavingField("matchMode");
     const updatedPrefs = {
@@ -148,12 +148,13 @@ export function SettingsPage({
       matchMode: mode,
     };
     try {
-      const res: any = await api.saveProfile({
-        ...profile,
-        datingPreferences: updatedPrefs,
+      const res: any = await api.updatePreferences({
+        datingPreferences: { matchMode: mode },
       });
       if (res.user) {
         setProfile(res.user);
+      } else {
+        setProfile({ ...profile, datingPreferences: updatedPrefs });
       }
     } catch (e: any) {
       alert(e.message || "Failed to update match mode.");
