@@ -25,7 +25,7 @@
       "campusSafe": "Campus Safe",
       "campusSafeDesc": "Exclusive to people with verified .edu.hk emails.",
       "personalized": "Personalized Matches",
-      "personalizedDesc": "We match based on values, vibe, and availability."
+      "personalizedDesc": "We match based on values, vibe, and dating preferences."
     },
     "curated": {
       "title": "Dates that<br/>actually<br/>happen.",
@@ -55,12 +55,12 @@
         "userQuote": "\"I opened my phone at 7:01 and saw a guy from my college. It felt serendipitous.\" — CUHK Year 3"
       },
       "step3": {
-        "title": "Share your availability",
-        "desc": "Confirm a simple meeting time.",
+        "title": "Confirm your match",
+        "desc": "Once both sides are interested, Dopa shares contact details.",
         "example": "E.g. 'Let's meet at Book Cafe!'",
-        "detailQuote": "\"We find your overlapping schedule automatically so you don't have to.\" ☕",
-        "check1": "Choose from curated campus safe spots.",
-        "check2": "Recommended first date length: 1 hour.",
+        "detailQuote": "\"Dopa makes the introduction; you two can choose the time naturally.\" ☕",
+        "check1": "Confirm that both sides want to connect.",
+        "check2": "Contact details are shared only after both confirm.",
         "check3": "High intent, low stakes meeting."
       },
       "step4": {
@@ -79,7 +79,7 @@
     "faqs": [
       {
         "q": "How does matching work?",
-        "a": "Our algorithm looks at more than just photos. It analyzes interests, values, and even your weekly schedule to ensure you meet someone you’ll actually enjoy talking to on campus."
+        "a": "Our algorithm looks at more than just photos. It analyzes interests, values, and dating preferences to help you meet someone you will actually enjoy talking to."
       },
       {
         "q": "Is it only for .edu.hk emails?",
@@ -131,11 +131,11 @@
       "subtitle": "Verify with your university email, complete your profile, and enter the next matching round.",
       "studentDashboard": "Personal dashboard",
       "account": "Account",
-      "profile": "Profile",
+      "profile": "Personal Basic Info",
       "done": "Done",
       "accountDesc": "Enter your university email. The verification code will be sent to your inbox.",
       "verifyContinue": "Verify + continue",
-      "profileBasics": "Profile basics",
+      "profileBasics": "Personal Basic Info",
       "profileDesc": "These details help DopaMine understand your campus life, preferences, and matching context.",
       "year": "Year",
       "vibeTags": "Vibe tags",
@@ -213,7 +213,8 @@
     "faculty": "Faculty / School",
     "department": "Department / Major",
     "errors": {
-      "required": "Please fill in all required fields to continue."
+      "required": "Please fill in all required fields to continue.",
+      "mbti": "MBTI should be 4 letters, for example ENFP. Leave it blank if you are not sure."
     },
     "degrees": {
       "undergrad": "Undergraduate",
@@ -288,6 +289,20 @@
     "requestRematch": "Request Rematch",
     "findingMatch": "Finding new match...",
     "feedbackSaved": "Feedback saved.",
+    "status": {
+      "pending": "Pending",
+      "notified": "Notified",
+      "awaiting": "Awaiting",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "scheduling": "Scheduling",
+      "confirmed": "Confirmed",
+      "placeSet": "Place Set",
+      "scheduled": "Scheduled",
+      "happened": "Happened",
+      "complete": "Complete",
+      "closed": "Closed"
+    },
     "countdown": {
       "days": "Days",
       "hours": "Hrs",
@@ -306,8 +321,108 @@
     },
     "tabs": {
       "matches": "Matches",
+      "events": "Events",
       "persona": "Love Persona",
       "profile": "Profile"
+    },
+    "events": {
+      "eyebrow": "Campus Weekends",
+      "title": "Events",
+      "subtitle": "",
+      "contactTitle": "Ask & Sign Up",
+      "contactDesc": "Add our operators on WeChat or WhatsApp, send the event name, and ask about seats and signup steps.",
+      "wechat": "WeChat",
+      "whatsapp": "WhatsApp",
+      "copied": "Copied",
+      "copyToConsult": "Copy to ask",
+      "openWhatsapp": "Open WhatsApp",
+      "copyWechat": "Copy WeChat",
+      "copyWhatsapp": "Copy WhatsApp",
+      "view": "View Event",
+      "signup": "Signup",
+      "seatsLeft": "{{joined}} joined, {{left}} seats left",
+      "fullCount": "{{joined}}/{{capacity}} joined",
+      "backToEvents": "Back to events",
+      "contentTitle": "What Happens",
+      "galleryTitle": "Event Photos",
+      "scheduleTitle": "Schedule",
+      "contactCtaTitle": "Want to join or ask details?",
+      "contactCtaDesc": "Copy Jackie or Liangchen's WeChat/WhatsApp and send the event name. After seats are confirmed, you will receive group and arrival details.",
+      "items": [
+        {
+          "id": "kitchen-night",
+          "title": "Hong Kong | Kitchen Social: Cook Dinner Together",
+          "category": "Social Kitchen",
+          "status": "Open",
+          "date": "Sun 2026-05-31 16:00",
+          "location": "Hong Kong Island shared kitchen",
+          "capacity": 24,
+          "joined": 17,
+          "tags": ["Western dinner", "Icebreakers", "Dinner social"],
+          "summary": "Random teams, cooking tasks, a relaxed dinner, and easy conversation. No perfect cooking skills needed.",
+          "content": [
+            "Skip the usual weekend scroll and step into the kitchen. Everyone will join a small team and build a shared dinner together.",
+            "From prep work and plating to tasting and post-dinner chat, each step makes meeting new people feel natural.",
+            "Great for students who want low-pressure social time, food, and a reason to meet people across campus."
+          ],
+          "schedule": [
+            { "time": "16:00-16:30", "title": "Check-in & icebreakers", "desc": "Use playful prompts to meet your small team." },
+            { "time": "16:30-16:50", "title": "Menu roles", "desc": "Pick cooking tasks across prep, plating, tasting, and vibe-keeping." },
+            { "time": "16:50-18:30", "title": "Kitchen challenge", "desc": "Cook, rescue, plate, and laugh through the process together." },
+            { "time": "18:30-19:30", "title": "Shared dinner", "desc": "Put everything on the table and talk over the meal." },
+            { "time": "19:30-20:00", "title": "Open social time", "desc": "Vote for best dish and keep talking with people you liked meeting." }
+          ],
+          "cta": "Ask to Sign Up"
+        },
+        {
+          "id": "love-growth",
+          "title": "Love Growth Lab | Crush Signals & Relationship Patterns",
+          "category": "Dating Workshop",
+          "status": "Open",
+          "date": "Sun 2026-06-07 15:00",
+          "location": "Online session",
+          "capacity": 40,
+          "joined": 31,
+          "tags": ["Love patterns", "Crush analysis", "Self awareness"],
+          "summary": "A practical session for understanding how you like, avoid, signal, and choose in early-stage dating.",
+          "content": [
+            "This is a relaxed but useful online workshop for anyone trying to understand their dating rhythm.",
+            "We will use DopaMine persona types, crush scenarios, and messaging examples to unpack your patterns.",
+            "You will leave with a simple relationship observation checklist for your next connection."
+          ],
+          "schedule": [
+            { "time": "15:00-15:15", "title": "Warm-up", "desc": "A few low-pressure prompts to get started." },
+            { "time": "15:15-16:00", "title": "Pattern breakdown", "desc": "Look at attraction, avoidance, expression, and expectation." },
+            { "time": "16:00-16:35", "title": "Crush case lab", "desc": "Discuss anonymized cases and signals behind the chat." },
+            { "time": "16:35-17:00", "title": "Action checklist", "desc": "Turn insight into practical next steps." }
+          ],
+          "cta": "Ask to Sign Up"
+        },
+        {
+          "id": "ivy-ball",
+          "title": "Hong Kong Ivy Alumni Ball Social Night",
+          "category": "Ball Social",
+          "status": "Preview",
+          "date": "Sat 2026-06-20 19:00",
+          "location": "Hong Kong REGENT",
+          "capacity": 80,
+          "joined": 12,
+          "tags": ["Dress code", "Alumni", "Ball"],
+          "summary": "A more formal night with music, photos, table conversations, and cross-campus introductions.",
+          "content": [
+            "A formal social night for university students and alumni.",
+            "Bring a friend, or let DopaMine help place you at a table with good introductions.",
+            "Dress code, schedule, and arrival details will be posted in the event group."
+          ],
+          "schedule": [
+            { "time": "19:00-19:30", "title": "Arrival", "desc": "Collect wristband and table information." },
+            { "time": "19:30-20:20", "title": "Table conversations", "desc": "Meet your table and nearby tables through light prompts." },
+            { "time": "20:20-21:30", "title": "Ball & open social", "desc": "Music, photos, and free conversation." },
+            { "time": "21:30-22:00", "title": "After chat", "desc": "Exchange contacts and continue promising connections." }
+          ],
+          "cta": "Ask to Reserve"
+        }
+      ]
     },
     "persona": {
       "discoverTitle": "Discover Your Love Persona",
@@ -330,6 +445,9 @@
     },
     "profile": {
       "personalInfo": "Personal Info",
+      "school": "School",
+      "major": "Major",
+      "year": "Year",
       "age": "Age",
       "gender": "Gender",
       "height": "Height",
@@ -344,16 +462,16 @@
       "goals": "Goals",
       "ageRange": "Age Range",
       "langPref": "Language Pref",
-      "attractionSignals": "Attraction Signals",
-      "heightBuild": "Height & Build",
+      "attractionSignals": "Ideal Type Notes",
+      "heightBuild": "Ideal Appearance",
       "facialFeatures": "Facial Features",
-      "energyVibe": "Energy & Vibe",
+      "energyVibe": "Attractive Traits",
       "status": "Status",
       "activeInPool": "Active in Pool",
       "editProfile": "Edit Profile",
       "aboutMe": "About Me",
       "prefsAndType": "Preferences & Type",
-      "auraAnalysis": "DopaMine Profile Analysis",
+      "auraAnalysis": "DopaMine Profile",
       "romanticStyle": "Romantic Style",
       "idealMatch": "Ideal Match",
       "conversationStarters": "Conversation Starters",
@@ -390,12 +508,19 @@
       "waitingPartnerDesc": "You've shown your sincerity! We've notified your match — once they confirm, you'll both get each other's contact info.",
       "emailSent": "Email notification sent to your match",
       "partnerAlreadyConfirmed": "Your match has already confirmed — they're waiting for you!",
-      "dateConfirmed": "Date Confirmed!",
+      "dateConfirmed": "Match Confirmed!",
       "feedbackTitle": "How was the date?",
       "confirmed": "Confirmed",
-      "icebreakerTitle": "AI Matchmaker Says",
+      "icebreakerTitle": "Dopa Matchmaker",
       "icebreakerLoading": "Preparing your icebreaker intro…",
-      "talkAbout": "Conversation Starters"
+      "talkAbout": "Conversation Starters",
+      "responseTitle": "Would you like to meet them?",
+      "responseDesc": "If you choose Confirm, Dopa will share contact details only after both sides confirm. If you choose Cancel, we will record it gently and keep looking for a better fit.",
+      "confirmToast": "Recorded. Thank you! If they also confirm, Dopa will let you know.",
+      "cancelToast": "Thank you for the feedback. Dopa will keep looking for a better fit.",
+      "confirmedGentle": "Your Confirm has been recorded. Dopa will share contact details only after both sides confirm.",
+      "cancelledGentle": "Your feedback has been recorded. Dopa will keep looking for a better match.",
+      "saving": "Saving…"
     }
   },
   "admin": {
@@ -427,7 +552,7 @@
       },
       "prefs": {
         "title": "Dating Preferences",
-        "desc": "Who are you looking for and what are your goals?"
+        "desc": ""
       },
       "attraction": {
         "title": "Background & Attraction",
@@ -462,20 +587,20 @@
       },
       "targetGender": {
         "prompt": "Who would you like to date?",
-        "why": "This is a hard preference, not just a ranking signal."
+        "why": ""
       },
       "datingGoal": {
         "prompt": "What are your dating goals right now?",
-        "why": "This keeps casual, friendship, and serious-intent users from being forced into the same lane."
+        "why": ""
       },
       "ageRange": {
         "prompt": "Preferred age range",
-        "why": "Useful for dating comfort boundaries.",
+        "why": "",
         "placeholder": "Recommended format: 18-26"
       },
       "matchMode": {
-        "prompt": "How selective should we be?",
-        "why": "Controls whether we prioritize speed or stricter preference fit."
+        "prompt": "What is your dating pace?",
+        "why": ""
       },
       "hobbies": {
         "prompt": "Share some of your hobbies and interests",
@@ -483,9 +608,9 @@
         "placeholder": "e.g. cafe hopping, bouldering, reading..."
       },
       "attractHeight": {
-        "prompt": "Physical traits you tend to notice: height / build",
-        "why": "Optional specificity helps avoid purely vibe-based matches.",
-        "placeholder": "5'in, athletic, broad shoulders..."
+        "prompt": "How would you describe your ideal type physically?",
+        "why": "A loose description is enough. It does not need to be exact.",
+        "placeholder": "For example: tall and lean, athletic, bright smile..."
       },
       "attractFace": {
         "prompt": "Physical traits you tend to notice: face / expression",
@@ -493,17 +618,17 @@
         "placeholder": "expressive eyes, warm smiles, clean-shaven..."
       },
       "attractEnergy": {
-        "prompt": "Energy or style you are usually drawn to",
-        "why": "Turns vague chemistry preferences into a signal we can compare.",
-        "placeholder": "calm, artistic, confident..."
+        "prompt": "",
+        "why": "",
+        "placeholder": ""
       },
       "hkMtrLocation": {
         "prompt": "Which MTR line/area do you most frequently hang out around?",
         "why": "Helps algorithm match you locally or plan the date location."
       },
       "hkWeekendVibe": {
-        "prompt": "What's your ideal weekend vibe in HK?",
-        "why": "Shows personality through local context."
+        "prompt": "What does your ideal date look like?",
+        "why": "Date scenes help us understand your lifestyle."
       },
       "mbtiE": {
         "prompt": "MBTI: Energy Source",
@@ -521,62 +646,105 @@
         "prompt": "MBTI: Lifestyle",
         "why": "How do you organize your life?"
       },
+      "mbti": {
+        "prompt": "What is your MBTI?",
+        "why": "For example: ENFP",
+        "placeholder": "ENFP"
+      },
+      "whatsapp": {
+        "prompt": "What is your WhatsApp?",
+        "why": "After a weekly match succeeds and moves into confirmation, Dopa will share this WhatsApp with your match so you can contact each other.",
+        "placeholder": "e.g. +852 6123 8890"
+      },
       "photos": {
-        "prompt": "Add 3 media cards",
-        "why": "Each card pairs one photo with a short note, so your profile feels personal instead of like a photo dump."
+        "prompt": "Add 5 media cards",
+        "why": "Start with a cover photo, then add lifestyle photos and short notes in order so your profile feels personal."
       },
       "mediaNotes": {
         "prompt": "Anything the system should know about these photos?",
         "why": "Optional notes for interpreting your media profile.",
         "placeholder": "Add a short caption, context, or the vibe this photo shows."
       },
+      "mediaCards": {
+        "coverTitle": "Cover photo",
+        "coverDesc": "Use a clear portrait, half-body photo, or anything that shows your look and presence.",
+        "coverBadge": "Cover",
+        "uploadCover": "Upload cover photo",
+        "lifeTitle": "Lifestyle photo",
+        "lifeDesc": "Show your everyday life, interests, style, or a real scene from your week.",
+        "card1": {
+          "title": "Cover photo",
+          "desc": "A portrait, half-body photo, or clear photo that shows your look and presence.",
+          "placeholder": "Add a cover note, e.g. a recent photo where I feel natural."
+        },
+        "card2": {
+          "title": "Lifestyle photo 1",
+          "desc": "Add a photo that shows your daily rhythm or lifestyle.",
+          "placeholder": "What was happening here, and what side of you does it show?"
+        },
+        "card3": {
+          "title": "Lifestyle photo 2",
+          "desc": "This can be hobbies, sports, exhibitions, travel, or campus life.",
+          "placeholder": "Add one line about this interest or scene."
+        },
+        "card4": {
+          "title": "Vibe photo",
+          "desc": "Show your style, taste, weekend vibe, or a space you like.",
+          "placeholder": "What kind of vibe does this photo express?"
+        },
+        "card5": {
+          "title": "Extra photo",
+          "desc": "Add one more relaxed, everyday photo.",
+          "placeholder": "Add a natural note for this photo."
+        }
+      },
       "ldfr_q1": {
         "prompt": "Friday night 9 PM, your ideal state is:",
-        "why": "Tests your social battery."
+        "why": ""
       },
       "ldfr_q4": {
         "prompt": "How do you heal after a setback?",
-        "why": "How you recover energy."
+        "why": ""
       },
       "ldfr_q5": {
         "prompt": "What kind of chatting satisfies you the most?",
-        "why": "Your preferred depth of communication."
+        "why": ""
       },
       "ldfr_q7": {
         "prompt": "How would you want your partner to describe you to others?",
-        "why": "Your self-identity in love."
+        "why": ""
       },
       "ldfr_q8": {
         "prompt": "Who are you most likely to fall in love with at first sight?",
-        "why": "Are you drawn to potential or reality?"
+        "why": ""
       },
       "ldfr_q9": {
         "prompt": "First date, which sentence makes your heart skip a beat?",
-        "why": "Your emotional reception channel."
+        "why": ""
       },
       "ldfr_q10": {
         "prompt": "Your ideal lover is closer to:",
-        "why": "Story vs Stability."
+        "why": ""
       },
       "ldfr_q14": {
         "prompt": "What is a 'soulmate' to you?",
-        "why": "Metaphor vs Long-term companionship."
+        "why": ""
       },
       "ldfr_q15": {
         "prompt": "Month 2 of dating, they ask 'What are we?'. Your reaction:",
-        "why": "Acceptance of early commitment."
+        "why": ""
       },
       "ldfr_q16": {
         "prompt": "Your feeling about 'commitment':",
-        "why": "Source of pressure vs security."
+        "why": ""
       },
       "ldfr_q18": {
         "prompt": "Your ideal relationship state is:",
-        "why": "Independent space vs Building a routine."
+        "why": ""
       },
       "ldfr_q19": {
         "prompt": "They suddenly ask 'Can I move in with you for a week?' Your reaction:",
-        "why": "Adaptability to sudden intimacy."
+        "why": ""
       }
     },
     "opt": {
@@ -620,11 +788,14 @@
       "lang_mando": "Mandarin",
       "lang_eng": "English",
       "lang_mixed": "Mixed (e.g. Canto+Eng)",
-      "vibe_cafe": "Cafe hopping in Central/Sheung Wan",
-      "vibe_nature": "Hiking/Beach in Sai Kung",
-      "vibe_city": "Shopping in TST/CWB",
-      "vibe_dorm": "Chilling in dorm/hall",
-      "vibe_food": "Local food (Cha Chaan Tengs/Dai Pai Dong)",
+      "vibe_cafe": "Cafe hopping",
+      "vibe_nature": "Hiking / beach",
+      "vibe_city": "Shopping",
+      "vibe_food": "Local food",
+      "vibe_movie": "Movie / live house",
+      "vibe_gallery": "Gallery / museum",
+      "vibe_workshop": "Craft / cooking workshop",
+      "vibe_walk": "Seaside walk",
       "mbti_e": "E (Extraversion - energized by people)",
       "mbti_i": "I (Introversion - energized by alone time)",
       "mbti_s": "S (Sensing - focus on facts/details)",

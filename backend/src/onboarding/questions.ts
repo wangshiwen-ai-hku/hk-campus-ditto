@@ -38,76 +38,6 @@ export interface QuestionGroup {
 
 export const onboardingGroups: QuestionGroup[] = [
   {
-    template: "onboarding_basics",
-    titleKey: "onboarding.groups.basics.title",
-    descriptionKey: "onboarding.groups.basics.desc",
-    questions: [
-      {
-        id: "gender",
-        promptKey: "onboarding.q.gender.prompt",
-        whyItMattersKey: "onboarding.q.gender.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.male", "onboarding.opt.female", "onboarding.opt.non_binary"],
-      },
-      {
-        id: "birthday",
-        promptKey: "onboarding.q.birthday.prompt",
-        whyItMattersKey: "onboarding.q.birthday.why",
-        placeholderKey: "onboarding.q.birthday.placeholder",
-        kind: "date",
-      },
-      {
-        id: "height",
-        promptKey: "onboarding.q.height.prompt",
-        whyItMattersKey: "onboarding.q.height.why",
-        kind: "number",
-        min: 140,
-        max: 220,
-        required: true,
-      },
-      {
-        id: "hkMtrLocation",
-        promptKey: "onboarding.q.hkMtrLocation.prompt",
-        whyItMattersKey: "onboarding.q.hkMtrLocation.why",
-        kind: "multi",
-        optionsKeys: ["onboarding.opt.mtr_island", "onboarding.opt.mtr_east", "onboarding.opt.mtr_tsuen_wan_kwun_tong", "onboarding.opt.mtr_tuen_ma", "onboarding.opt.mtr_other"],
-        required: true,
-      },
-      {
-        id: "mbtiE",
-        promptKey: "onboarding.q.mbtiE.prompt",
-        whyItMattersKey: "onboarding.q.mbtiE.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.mbti_e", "onboarding.opt.mbti_i", "onboarding.opt.mbti_none"],
-        required: true,
-      },
-      {
-        id: "mbtiS",
-        promptKey: "onboarding.q.mbtiS.prompt",
-        whyItMattersKey: "onboarding.q.mbtiS.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.mbti_s", "onboarding.opt.mbti_n", "onboarding.opt.mbti_none"],
-        required: true,
-      },
-      {
-        id: "mbtiT",
-        promptKey: "onboarding.q.mbtiT.prompt",
-        whyItMattersKey: "onboarding.q.mbtiT.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.mbti_t", "onboarding.opt.mbti_f", "onboarding.opt.mbti_none"],
-        required: true,
-      },
-      {
-        id: "mbtiJ",
-        promptKey: "onboarding.q.mbtiJ.prompt",
-        whyItMattersKey: "onboarding.q.mbtiJ.why",
-        kind: "single",
-        optionsKeys: ["onboarding.opt.mbti_j", "onboarding.opt.mbti_p", "onboarding.opt.mbti_none"],
-        required: true,
-      }
-    ]
-  },
-  {
     template: "onboarding_preferences",
     titleKey: "onboarding.groups.prefs.title",
     descriptionKey: "onboarding.groups.prefs.desc",
@@ -145,14 +75,7 @@ export const onboardingGroups: QuestionGroup[] = [
         kind: "single",
         optionsKeys: ["onboarding.opt.mode_fast", "onboarding.opt.mode_balanced", "onboarding.opt.mode_intentional", "onboarding.opt.mode_wait"],
         required: true,
-      }
-    ]
-  },
-  {
-    template: "onboarding_attraction",
-    titleKey: "onboarding.groups.attraction.title",
-    descriptionKey: "onboarding.groups.attraction.desc",
-    questions: [
+      },
       {
         id: "hobbies",
         promptKey: "onboarding.q.hobbies.prompt",
@@ -166,7 +89,16 @@ export const onboardingGroups: QuestionGroup[] = [
         promptKey: "onboarding.q.hkWeekendVibe.prompt",
         whyItMattersKey: "onboarding.q.hkWeekendVibe.why",
         kind: "multi",
-        optionsKeys: ["onboarding.opt.vibe_cafe", "onboarding.opt.vibe_nature", "onboarding.opt.vibe_city", "onboarding.opt.vibe_dorm", "onboarding.opt.vibe_food"],
+        optionsKeys: [
+          "onboarding.opt.vibe_cafe",
+          "onboarding.opt.vibe_nature",
+          "onboarding.opt.vibe_city",
+          "onboarding.opt.vibe_food",
+          "onboarding.opt.vibe_movie",
+          "onboarding.opt.vibe_gallery",
+          "onboarding.opt.vibe_workshop",
+          "onboarding.opt.vibe_walk",
+        ],
         required: true,
       },
       {
@@ -174,14 +106,6 @@ export const onboardingGroups: QuestionGroup[] = [
         promptKey: "onboarding.q.attractHeight.prompt",
         whyItMattersKey: "onboarding.q.attractHeight.why",
         placeholderKey: "onboarding.q.attractHeight.placeholder",
-        kind: "text",
-        required: false,
-      },
-      {
-        id: "attractionEnergyAndVibe",
-        promptKey: "onboarding.q.attractEnergy.prompt",
-        whyItMattersKey: "onboarding.q.attractEnergy.why",
-        placeholderKey: "onboarding.q.attractEnergy.placeholder",
         kind: "text",
         required: false,
       }
@@ -302,7 +226,7 @@ export const onboardingGroups: QuestionGroup[] = [
         placeholderKey: "onboarding.q.mediaNotes.placeholder",
         kind: "mediaCards",
         min: 1,
-        max: 3,
+        max: 5,
         required: true,
       }
     ]

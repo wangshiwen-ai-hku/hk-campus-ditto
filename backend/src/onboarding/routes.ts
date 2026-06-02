@@ -56,6 +56,7 @@ onboardingRouter.post("/profile", requireAuth, async (req, res) => {
     datingPreferences: z.object({
       birthday: z.string().optional(),
       heightCm: z.number().optional(),
+      hkMtrLocations: z.array(z.string()).optional(),
       datingGoal: z.enum(["life_partner", "long_term", "casual", "friends", "unsure"]).optional(),
       dateGenders: z.array(z.string()).optional(),
       ageRange: z.object({ min: z.number(), max: z.number() }).optional(),

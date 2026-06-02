@@ -72,6 +72,7 @@ export const env = {
     from: str("EMAIL_FROM", "DopaMine <hello@aurahk.me>"),
     replyTo: str("EMAIL_REPLY_TO", "hello@aurahk.me"),
     frontendUrl: str("FRONTEND_URL", "http://localhost:5173"),
+    apiPublicUrl: str("API_PUBLIC_URL", `http://localhost:${num("PORT", 8787)}`),
   },
   auth: {
     codeTtlMin: num("AUTH_CODE_TTL_MIN", 10),

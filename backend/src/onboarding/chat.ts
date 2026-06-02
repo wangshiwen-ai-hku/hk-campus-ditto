@@ -195,6 +195,70 @@ function scoreLdfr(answers: Record<string, unknown>): string {
   return `${d1}${d2}${d3}`;
 }
 
+const LDFR_ANSWER_MEANINGS: Record<string, string> = {
+  "onboarding.opt.ldfr_q1_a": "Friday night: already at a party or bar, meeting new people",
+  "onboarding.opt.ldfr_q1_b": "Friday night: staying home, Netflix on, phone quiet",
+  "onboarding.opt.ldfr_q1_c": "Friday night: late-night supper with one or two closest friends",
+  "onboarding.opt.ldfr_q1_d": "Friday night: exhausted after work or class, only wants sleep",
+  "onboarding.opt.ldfr_q4_a": "When emotionally drained: recharges by going out and filling the schedule",
+  "onboarding.opt.ldfr_q4_b": "When emotionally drained: recharges alone in a cafe, writing or zoning out",
+  "onboarding.opt.ldfr_q4_c": "When emotionally drained: throws themselves into work or projects",
+  "onboarding.opt.ldfr_q4_d": "When emotionally drained: eats well and sleeps deeply",
+  "onboarding.opt.ldfr_q5_a": "Ideal intimacy: lively group energy where everyone talks",
+  "onboarding.opt.ldfr_q5_b": "Ideal intimacy: 2 AM one-on-one conversations about deep inner things",
+  "onboarding.opt.ldfr_q5_c": "Ideal intimacy: watching a show together with occasional comments",
+  "onboarding.opt.ldfr_q5_d": "Ideal intimacy: relaxed chat while eating",
+  "onboarding.opt.ldfr_q7_a": "Desired impression: lights up the whole room",
+  "onboarding.opt.ldfr_q7_b": "Desired impression: quiet, but every sentence has depth",
+  "onboarding.opt.ldfr_q7_c": "Desired impression: sincere and real",
+  "onboarding.opt.ldfr_q7_d": "Desired impression: capable and impressive",
+  "onboarding.opt.ldfr_q8_a": "Instant attraction: someone whose inner world feels unique after a short chat",
+  "onboarding.opt.ldfr_q8_b": "Instant attraction: someone warm, genuine, and sincere",
+  "onboarding.opt.ldfr_q8_c": "Instant attraction: someone exactly their physical type",
+  "onboarding.opt.ldfr_q8_d": "Instant attraction: someone with mutual friends or social familiarity",
+  "onboarding.opt.ldfr_q9_a": "Flirt signal they notice: existential, dreamlike conversation about restarting life",
+  "onboarding.opt.ldfr_q9_b": "Flirt signal they notice: emotional observation about family and gentleness",
+  "onboarding.opt.ldfr_q9_c": "Flirt signal they notice: direct compliment about a cute smile",
+  "onboarding.opt.ldfr_q9_d": "Flirt signal they notice: simple shared happiness",
+  "onboarding.opt.ldfr_q10_a": "Ideal partner: a soul with stories, dreams, and some mystery",
+  "onboarding.opt.ldfr_q10_b": "Ideal partner: stable, reliable, and rhythmic in life",
+  "onboarding.opt.ldfr_q10_c": "Ideal partner: good-looking and fun",
+  "onboarding.opt.ldfr_q10_d": "Ideal partner: someone with a matching vibe",
+  "onboarding.opt.ldfr_q14_a": "Definition of the one: understands their dreams and metaphors",
+  "onboarding.opt.ldfr_q14_b": "Definition of the one: still says good morning seven years later",
+  "onboarding.opt.ldfr_q14_c": "Definition of the one: someone who makes them laugh",
+  "onboarding.opt.ldfr_q14_d": "Definition of the one: someone who does not leave",
+  "onboarding.opt.ldfr_q15_a": "When asked to define the relationship: feels tense and wants not to label it too early",
+  "onboarding.opt.ldfr_q15_b": "When asked to define the relationship: relieved and ready for commitment",
+  "onboarding.opt.ldfr_q15_c": "When asked to define the relationship: reads the other person's tone first",
+  "onboarding.opt.ldfr_q15_d": "When asked to define the relationship: asks what the other person wants",
+  "onboarding.opt.ldfr_q16_a": "View of commitment: pressure, as if freedom is reduced",
+  "onboarding.opt.ldfr_q16_b": "View of commitment: safety is the sexiest part of a relationship",
+  "onboarding.opt.ldfr_q16_c": "View of commitment: neutral, depends on context",
+  "onboarding.opt.ldfr_q16_d": "View of commitment: believes in it but does not say it directly",
+  "onboarding.opt.ldfr_q18_a": "Ideal rhythm: like two cats, independent space with cuddles when happy",
+  "onboarding.opt.ldfr_q18_b": "Ideal rhythm: building a home together, with routine and future",
+  "onboarding.opt.ldfr_q18_c": "Ideal rhythm: clingy, almost seeing each other every day",
+  "onboarding.opt.ldfr_q18_d": "Ideal rhythm: long distance is acceptable if they are the one",
+  "onboarding.opt.ldfr_q19_a": "Sudden move-in invitation: too sudden, needs personal space",
+  "onboarding.opt.ldfr_q19_b": "Sudden move-in invitation: nervous but excited, ready to pack",
+  "onboarding.opt.ldfr_q19_c": "Sudden move-in invitation: wants to discuss the reason first",
+  "onboarding.opt.ldfr_q19_d": "Sudden move-in invitation: feels a bit strange",
+};
+
+function summarizeLdfrAnswers(answers: Record<string, unknown>): string {
+  const lines: string[] = [];
+  for (const [questionId, raw] of Object.entries(answers)) {
+    const values = Array.isArray(raw) ? raw : [raw];
+    for (const value of values) {
+      const key = typeof value === "string" ? value : "";
+      const meaning = LDFR_ANSWER_MEANINGS[key];
+      if (meaning) lines.push(`- ${questionId}: ${meaning}`);
+    }
+  }
+  return lines.length ? lines.join("\n") : "- No readable option meanings were found; infer cautiously from the raw answer keys.";
+}
+
 const LDFR_META: Record<string, {
   titleZh: string; titleEn: string; titleZhHK?: string;
   vibeZh: string; vibeEn: string; vibeZhHK?: string;
@@ -278,10 +342,22 @@ chatRouter.post("/ldfr-analyze", requireAuth, async (req, res) => {
   // Resolve language: explicit param > user's preferredLocale > fallback "en"
   const user = await getStudentById(req.auth!.sub);
   const language = parsed.data.language ?? user?.preferredLocale ?? "en";
+  const langInstruction = language === "zh-HK" || language === "yue"
+    ? "Write every user-facing field in Hong Kong Traditional Chinese with natural Hong Kong wording. Use 您 as the second-person pronoun."
+    : language.startsWith("zh")
+    ? "Write every user-facing field in Simplified Chinese. Use 您 as the second-person pronoun."
+    : "Write every user-facing field in English.";
+
+  const answerSummary = summarizeLdfrAnswers(parsed.data.answers);
+  const analysisLengthRule = language === "zh-HK" || language === "yue" || language.startsWith("zh")
+    ? "For analysis, write about 90-120 Chinese characters. Make it one polished paragraph, not bullet points."
+    : "For analysis, write about 75-95 English words. Make it one polished paragraph, not bullet points.";
 
   const prompt = `
 You are an expert personality analyst for DopaMine. The user has completed the LDFR (Love, Desire, Flow, Rhythm) personality test.
 Based on their answers, analyze their personality and assign them one of the 8 LDFR types.
+${langInstruction}
+${analysisLengthRule}
 The 3 dimensions are:
 1. Energy (L Lumen / D Dusk)
 2. Spark (F Fantasy / R Real)
@@ -300,12 +376,21 @@ The 8 types are:
 User's Answers:
 ${JSON.stringify(parsed.data.answers, null, 2)}
 
+Selected Answer Meanings:
+${answerSummary}
+
+Analysis requirements:
+- Reference at least 3 concrete signals from Selected Answer Meanings.
+- Cover their attraction pattern, relationship rhythm, emotional need, and one gentle growth edge.
+- Be warm, precise, and useful; avoid vague praise and avoid clinical labels.
+- Do not mention MBTI.
+
 Please output a JSON with the following structure in ${language}:
 {
   "code": "LFF", // One of the 8 codes
   "title": "...", // The localized title
   "vibe": "...", // A short 1-sentence vibe description
-  "analysis": "...", // 2-3 sentences of deep, personalized romantic analysis based on their specific answers. Make it feel very personal and insightful.
+  "analysis": "...", // About 100 Chinese characters for Chinese, or 75-95 words for English. Deep, personalized romantic analysis based on their specific answers.
   "strengths": ["...", "..."], // 2 key strengths
   "traps": ["...", "..."], // 2 potential traps/blind spots
   "idealDate": "..." // A highly specific ideal date scenario
@@ -315,6 +400,7 @@ Please output a JSON with the following structure in ${language}:
   const result = await llmCall({
     prompt,
     responseJson: true,
+    maxOutputTokens: 1200,
     tag: "ldfr-analyze",
   });
 
@@ -331,10 +417,10 @@ Please output a JSON with the following structure in ${language}:
       title: isHk ? (meta.titleZhHK ?? meta.titleZh) : isZh ? meta.titleZh : meta.titleEn,
       vibe: isHk ? (meta.vibeZhHK ?? meta.vibeZh) : isZh ? meta.vibeZh : meta.vibeEn,
       analysis: isHk
-        ? `根據你嘅回答，你屬於「${meta.titleZhHK ?? meta.titleZh}」型戀愛人格。你喺感情中追求深度同真實嘅連接，你嘅情感表達方式獨特而有溫度。`
+        ? `根據您嘅回答，您屬於「${meta.titleZhHK ?? meta.titleZh}」。您會被有故事、有情緒質感嘅人吸引，關係入面既想保留真實自我，又渴望被認真理解。您嘅心動來得有畫面感，但最好留意節奏，俾安全感同自由同時存在。`
         : isZh
-        ? `根据你的回答，你属于「${meta.titleZh}」型恋爱人格。你在感情中追求深度与真实的连接，你的情感表达方式独特而有温度。`
-        : `Based on your answers, you are a "${meta.titleEn}" love persona. You seek depth and authentic connection in relationships, with a unique and warm way of expressing emotions.`,
+        ? `根据您的回答，您属于「${meta.titleZh}」。您容易被有故事、有情绪质感的人吸引，在关系里既想保留真实自我，也渴望被认真理解。您的心动来得有画面感，但最好留意节奏，让安全感和自由同时存在。`
+        : `Based on your answers, you are a "${meta.titleEn}" love persona. You are drawn to people with stories, emotional texture, and a world of their own. In relationships, you want to stay fully yourself while also being deeply understood. Your attraction often arrives with a vivid scene or feeling, so your growth edge is pacing: let safety and freedom exist together.`,
       strengths: isHk ? (meta.strengthsZhHK ?? meta.strengthsZh) : isZh ? meta.strengthsZh : meta.strengthsEn,
       traps: isHk ? (meta.trapsZhHK ?? meta.trapsZh) : isZh ? meta.trapsZh : meta.trapsEn,
       idealDate: isHk ? (meta.idealDateZhHK ?? meta.idealDateZh) : isZh ? meta.idealDateZh : meta.idealDateEn,

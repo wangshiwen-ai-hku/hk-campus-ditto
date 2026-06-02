@@ -1,9 +1,9 @@
 import type { MatchRecord, StudentProfile } from "../types.js";
 import { sendEmail } from "../auth/email.js";
 import { env } from "../core/env.js";
-import { renderDateScheduled, renderFeedbackRequest, renderMatchDrop, renderPartnerConfirmed } from "./templates.js";
+import { renderContactShared, renderDateScheduled, renderFeedbackRequest, renderMatchDrop, renderPartnerConfirmed } from "./templates.js";
 
-export type NotifyTemplate = "match_drop" | "date_scheduled" | "feedback_request" | "partner_confirmed";
+export type NotifyTemplate = "match_drop" | "contact_shared" | "date_scheduled" | "feedback_request" | "partner_confirmed";
 
 export interface NotifyContext {
   match?: MatchRecord;
@@ -18,6 +18,8 @@ export async function notify(
   let rendered;
   if (template === "match_drop" && ctx.partner && ctx.match) {
     rendered = await renderMatchDrop(to, ctx.partner, ctx.match);
+  } else if (template === "contact_shared" && ctx.partner && ctx.match) {
+    rendered = renderContactShared(to, ctx.partner, ctx.match);
   } else if (template === "date_scheduled" && ctx.partner && ctx.match) {
     rendered = renderDateScheduled(to, ctx.partner, ctx.match);
   } else if (template === "feedback_request" && ctx.match) {
@@ -48,4 +50,3 @@ export async function notify(
   });
   return { ok: result.ok };
 }
-

@@ -163,6 +163,14 @@ export interface DateConfirmation {
   at: string;
 }
 
+export interface MatchEmailAction {
+  userId: string;
+  choice: "yes" | "no";
+  token: string;
+  createdAt: string;
+  usedAt?: string;
+}
+
 export interface ProposedPlace {
   name: string;
   address?: string;
@@ -202,6 +210,7 @@ export interface MatchRecord {
   // upgrade fields
   events?: MatchEvent[];
   acceptances?: MatchAcceptance[];
+  emailActions?: MatchEmailAction[];
   proposedSlots?: string[];
   proposedPlace?: ProposedPlace;
   llmRationale?: LlmRationale;

@@ -46,6 +46,7 @@ export interface DatingPreferences {
     flexible?: string[];
   };
   matchMode?: "fast" | "balanced" | "intentional" | "wait_for_the_one";
+  phoneNumber?: string;
   photoUrls?: string[];
   mediaCards?: Array<{
     photoUrl?: string;
@@ -107,6 +108,26 @@ export interface StudentProfile {
   crossUniOk?: boolean;
   lifeSignals?: LifeSignals;
   datingPreferences?: DatingPreferences;
+}
+
+export interface PublicMatchPartner {
+  id: string;
+  fullName: string;
+  email?: string;
+  phoneNumber?: string;
+  universityId: string;
+  universityShortName?: string;
+  yearOfStudy?: string;
+  major?: string;
+  interests: string[];
+  vibeTags: string[];
+  languages: string[];
+  datingPreferences?: {
+    photoUrls?: string[];
+  };
+  ldfrResult?: {
+    code: string;
+  };
 }
 
 export type MatchStatus =
