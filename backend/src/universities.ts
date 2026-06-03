@@ -5,7 +5,7 @@ export const universities: University[] = [
     id: "hku",
     name: "The University of Hong Kong",
     shortName: "HKU",
-    domains: ["hku.hk", "connect.hku.hk"],
+    domains: ["hku.hk", "connect.hku.hk", "mails.ucas.ac.cn", "gmail.com"],
     campuses: ["Pok Fu Lam"],
     safeSpots: ["Main Library Café", "Sun Yat-sen Place", "Composite Building Coffee Corner"]
   },
