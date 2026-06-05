@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "../lib/api";
 import { useTranslation } from "react-i18next";
 import type { Locale, MatchRecord, PublicMatchPartner, StudentProfile, University, ProfileAnalysis, DatingPreferences } from "../types";
@@ -12,6 +12,7 @@ import campusBg from "../assets/campus-bg.png";
 
 type Tab = "profile" | "matches" | "events" | "persona";
 const PREFERRED_LOCALES: Locale[] = ["en", "zh-HK", "zh-CN"];
+const TABS: Tab[] = ["profile", "matches", "events", "persona"];
 const EVENT_IMAGES = [dateSpotImg, galleryImg, heroImg, campusBg];
 const EVENT_CONTACTS = [
   { name: "Jackie", wechat: "aaa1yyy133", whatsapp: "+852 44608721" },
@@ -20,6 +21,10 @@ const EVENT_CONTACTS = [
 
 function toSupportedLocale(value: string | undefined | null, fallback: Locale = "en"): Locale {
   return PREFERRED_LOCALES.includes(value as Locale) ? value as Locale : fallback;
+}
+
+function toTab(value: string | null): Tab | null {
+  return TABS.includes(value as Tab) ? value as Tab : null;
 }
 
 function fixedT(t: (k: string, o?: any) => string, locale: Locale) {
@@ -1749,7 +1754,8 @@ function EventsTab({ t }: { t: (k: string, o?: any) => string }) {
 /* ─── Main StudentPage ─── */
 export function StudentPage({ userId, onLocale }: { userId: string | null; onLocale: (locale: Locale) => void }) {
   const { t, i18n } = useTranslation();
-  const [tab, setTab] = useState<Tab>("matches");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTab] = useState<Tab>(() => toTab(searchParams.get("tab")) ?? "matches");
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [matches, setMatches] = useState<MatchView[]>([]);
   const [personaLoading, setPersonaLoading] = useState(false);
@@ -1757,6 +1763,20 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
   const effectiveLocale = toSupportedLocale(profile?.preferredLocale, toSupportedLocale(i18n.language, "en"));
   const tLocal = useMemo(() => fixedT(t, effectiveLocale), [t, effectiveLocale]);
   const ldfrLang = effectiveLocale;
+
+  const selectTab = useCallback((nextTab: Tab) => {
+    setTab(nextTab);
+    setSearchParams((params) => {
+      const next = new URLSearchParams(params);
+      next.set("tab", nextTab);
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  useEffect(() => {
+    const nextTab = toTab(searchParams.get("tab"));
+    if (nextTab && nextTab !== tab) setTab(nextTab);
+  }, [searchParams, tab]);
 
   const refresh = useCallback(async () => {
     if (!userId) return;
@@ -1842,23 +1862,23 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
       </div>
 
       <div className="mb-10 flex w-full max-w-5xl flex-wrap gap-2 rounded-3xl border border-white/10 bg-white/[0.04] p-2 shadow-2xl shadow-black/20">
-        <button onClick={() => setTab("matches")}
+        <button onClick={() => selectTab("matches")}
           className={`flex min-w-[150px] flex-1 items-center justify-center gap-3 rounded-2xl px-5 py-4 text-base font-black transition-all md:text-lg ${tab === "matches" ? "bg-gradient-to-r from-aura to-pink-500 text-white shadow-xl shadow-aura/25" : "text-white/62 hover:text-white hover:bg-white/[0.07]"}`}>
           <Heart size={20} />
           {tLocal("student.tabs.matches", "Matches")}
           {matches.length > 0 && <span className={`ml-1 rounded-full px-2.5 py-1 text-xs font-black ${tab === "matches" ? "bg-white/22 text-white" : "bg-aura/20 text-aura"}`}>{matches.length}</span>}
         </button>
-        <button onClick={() => setTab("events")}
+        <button onClick={() => selectTab("events")}
           className={`flex min-w-[150px] flex-1 items-center justify-center gap-3 rounded-2xl px-5 py-4 text-base font-black transition-all md:text-lg ${tab === "events" ? "bg-gradient-to-r from-aura to-pink-500 text-white shadow-xl shadow-aura/25" : "text-white/62 hover:text-white hover:bg-white/[0.07]"}`}>
           <Ticket size={20} />
           {tLocal("student.tabs.events", "Events")}
         </button>
-        <button onClick={() => setTab("persona")}
+        <button onClick={() => selectTab("persona")}
           className={`flex min-w-[150px] flex-1 items-center justify-center gap-3 rounded-2xl px-5 py-4 text-base font-black transition-all md:text-lg ${tab === "persona" ? "bg-gradient-to-r from-aura to-pink-500 text-white shadow-xl shadow-aura/25" : "text-white/62 hover:text-white hover:bg-white/[0.07]"}`}>
           <Flame size={20} />
           {tLocal("student.tabs.persona", "Love Persona")}
         </button>
-        <button onClick={() => setTab("profile")}
+        <button onClick={() => selectTab("profile")}
           className={`flex min-w-[150px] flex-1 items-center justify-center gap-3 rounded-2xl px-5 py-4 text-base font-black transition-all md:text-lg ${tab === "profile" ? "bg-gradient-to-r from-aura to-pink-500 text-white shadow-xl shadow-aura/25" : "text-white/62 hover:text-white hover:bg-white/[0.07]"}`}>
           <User size={20} />
           {tLocal("student.tabs.profile", "Profile")}

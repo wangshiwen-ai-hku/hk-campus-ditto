@@ -68,6 +68,10 @@ function partnerPhoto(partner: StudentProfile): string | undefined {
   return [...cards, ...urls, partner.photoUrl].find((url): url is string => Boolean(url));
 }
 
+function studentMatchPageUrl(): string {
+  return `${env.email.frontendUrl}/student?tab=matches`;
+}
+
 function ageFromBirthday(birthday: string | undefined): number | undefined {
   if (!birthday) return undefined;
   const match = birthday.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
@@ -189,7 +193,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
   const firstName = firstNameOf(to.fullName);
   const partnerFirst = firstNameOf(partner.fullName);
   const originalReasons = (match.userAId === to.id ? match.reasonsForA : match.reasonsForB) ?? match.reasonsForA ?? [];
-  const appLink = `${env.email.frontendUrl}/login`;
+  const appLink = studentMatchPageUrl();
   const confirmLink = matchEmailActionUrl(match, to.id, "yes");
   const cancelLink = matchEmailActionUrl(match, to.id, "no");
   const photo = partnerPhoto(partner);
@@ -467,7 +471,7 @@ export function renderContactShared(
   const spot = match.proposedPlace?.name ?? match.curatedDateSpot;
   const reason = match.proposedPlace?.reason;
   const contacts = contactLines(partner, locale);
-  const appLink = `${env.email.frontendUrl}/login`;
+  const appLink = studentMatchPageUrl();
 
   const copy = locale === "zh-HK"
     ? {

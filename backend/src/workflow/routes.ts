@@ -8,6 +8,7 @@ import { pickPlace } from "./place.js";
 import { notify } from "../notify/index.js";
 import { llmCall } from "../llm/client.js";
 import { icebreakerPrompt } from "../llm/prompts.js";
+import { env } from "../core/env.js";
 import type { Locale } from "../types.js";
 import {
   verifySignedMatchEmailAction,
@@ -252,13 +253,7 @@ workflowRouter.post("/:matchId/email-response", async (req, res) => {
   await applyMatchResponse(db, match, userId, choice);
   await saveDb(db);
 
-  const user = db.students.find((s) => s.id === userId);
-  const locale = normalizeLocale(user?.preferredLocale, "en");
-  const copy = emailResponseCopy(locale, choice, "done");
-  res.send(renderEmailResponsePage({
-    title: copy.title,
-    body: copy.body,
-  }));
+  res.redirect(303, `${env.email.frontendUrl}/student?tab=matches`);
 });
 
 // 2. Accept / decline a match (per user)
