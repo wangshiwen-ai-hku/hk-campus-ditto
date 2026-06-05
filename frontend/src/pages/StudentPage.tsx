@@ -1345,6 +1345,23 @@ function MatchesTab({ matches, profile, locale, onRefresh, t }: {
 }) {
   const [selected, setSelected] = useState<MatchView | null>(null);
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  const activeStatuses = new Set([
+    "pending",
+    "notified",
+    "awaiting-acceptance",
+    "mutual-accepted",
+    "slot-proposing",
+    "slot-confirmed",
+    "place-confirmed",
+    "scheduled",
+    "awaiting-availability",
+  ]);
+  const sortedMatches = [...matches].sort((a, b) => {
+    const aActive = activeStatuses.has(a.match.status);
+    const bActive = activeStatuses.has(b.match.status);
+    if (aActive !== bActive) return aActive ? -1 : 1;
+    return new Date(b.match.createdAt).getTime() - new Date(a.match.createdAt).getTime();
+  });
 
   useEffect(() => {
     setSelected(null);
@@ -1442,7 +1459,7 @@ function MatchesTab({ matches, profile, locale, onRefresh, t }: {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {matches.map(({ match, partner, university }) => {
+        {sortedMatches.map(({ match, partner, university }) => {
           const st = viewerStatusLabel(match, profile.id, t);
           const partnerPhoto = partner.datingPreferences?.photoUrls?.[0];
           return (

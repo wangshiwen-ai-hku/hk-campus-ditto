@@ -10,6 +10,15 @@ export interface NotifyContext {
   partner?: StudentProfile;
 }
 
+function canShareContacts(match: MatchRecord): boolean {
+  if (["happened", "feedback-collected", "closed"].includes(match.status)) return true;
+  const acceptances = match.acceptances ?? [];
+  return (
+    acceptances.find((item) => item.userId === match.userAId)?.choice === "yes" &&
+    acceptances.find((item) => item.userId === match.userBId)?.choice === "yes"
+  );
+}
+
 export async function notify(
   to: StudentProfile,
   template: NotifyTemplate,
@@ -19,6 +28,10 @@ export async function notify(
   if (template === "match_drop" && ctx.partner && ctx.match) {
     rendered = await renderMatchDrop(to, ctx.partner, ctx.match);
   } else if (template === "contact_shared" && ctx.partner && ctx.match) {
+    if (!canShareContacts(ctx.match)) {
+      console.warn(`[notify] blocked contact_shared before mutual confirmation match=${ctx.match.id} to=${to.email}`);
+      return { ok: false };
+    }
     rendered = renderContactShared(to, ctx.partner, ctx.match);
   } else if (template === "date_scheduled" && ctx.partner && ctx.match) {
     rendered = renderDateScheduled(to, ctx.partner, ctx.match);

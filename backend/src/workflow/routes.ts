@@ -105,6 +105,75 @@ function writeIcebreakerByLocale(raw: string | undefined, locale: Locale, value:
   return JSON.stringify(parsed);
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function emailResponseCopy(locale: Locale, choice: MatchEmailChoice, mode: "landing" | "done") {
+  if (mode === "landing") {
+    if (choice === "yes") {
+      return locale === "zh-HK"
+        ? { title: "確認今次配對？", body: "為咗保護雙方私隱，請再撳一次 Confirm。Dopa 只會喺雙方都確認後分享聯絡方式。", button: "Confirm" }
+        : locale === "zh-CN"
+        ? { title: "确认本次匹配？", body: "为了保护双方隐私，请再点击一次 Confirm。Dopa 只会在双方都确认后分享联系方式。", button: "Confirm" }
+        : { title: "Confirm this match?", body: "To protect both sides, please tap Confirm once more. Dopa only shares contact details after both people confirm.", button: "Confirm" };
+    }
+    return locale === "zh-HK"
+      ? { title: "取消今次配對？", body: "如果您覺得今次唔太適合，可以放心取消。Dopa 會溫柔記錄，之後再幫您配對。", button: "Cancel" }
+      : locale === "zh-CN"
+      ? { title: "取消本次匹配？", body: "如果您觉得这次不太适合，可以放心取消。Dopa 会温柔记录，之后再帮您匹配。", button: "Cancel" }
+      : { title: "Cancel this match?", body: "If this does not feel right, you can cancel with no pressure. Dopa will record it gently and keep looking.", button: "Cancel" };
+  }
+
+  if (choice === "yes") {
+    return locale === "zh-HK"
+      ? { title: "已收到您嘅確認", body: "已記錄，謝謝！" }
+      : locale === "zh-CN"
+      ? { title: "已收到您的确认", body: "已记录，谢谢！" }
+      : { title: "Your confirmation is in", body: "Recorded. Thank you!" };
+  }
+  return locale === "zh-HK"
+    ? { title: "已為您取消今次配對", body: "多謝回饋，Dopa 會幫您再次配對。" }
+    : locale === "zh-CN"
+    ? { title: "已为您取消本次匹配", body: "谢谢反馈，Dopa 会帮您再次匹配。" }
+    : { title: "This match has been cancelled", body: "Thank you for the feedback. Dopa will match you again." };
+}
+
+function renderEmailResponsePage(options: {
+  title: string;
+  body: string;
+  button?: string;
+  method?: "post";
+  fields?: Record<string, string>;
+  action?: string;
+}) {
+  const hiddenFields = Object.entries(options.fields ?? {})
+    .map(([key, value]) => `<input type="hidden" name="${escapeHtml(key)}" value="${escapeHtml(value)}">`)
+    .join("");
+  const form = options.button && options.action
+    ? `<form method="${options.method ?? "post"}" action="${escapeHtml(options.action)}" style="margin-top:24px;">
+        ${hiddenFields}
+        <button type="submit" style="width:100%;border:0;border-radius:18px;background:linear-gradient(90deg,#ec2f72,#8b5cf6);color:white;font-size:18px;font-weight:900;padding:16px 22px;white-space:nowrap;box-shadow:0 16px 34px rgba(236,47,114,0.28);">${escapeHtml(options.button)}</button>
+      </form>`
+    : "";
+  return `<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DopaMine</title></head>
+<body style="margin:0;background:#090d16;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+  <main style="min-height:100vh;display:grid;place-items:center;padding:24px;">
+    <section style="max-width:520px;border:1px solid rgba(255,255,255,0.12);background:#141b2b;border-radius:28px;padding:34px;box-shadow:0 24px 60px rgba(0,0,0,0.42);">
+      <div style="font-size:28px;font-weight:950;margin-bottom:18px;color:#ff4f8b;">DopaMine</div>
+      <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;">${escapeHtml(options.title)}</h1>
+      <p style="margin:0;color:#cbd5e1;font-size:16px;line-height:1.7;">${escapeHtml(options.body)}</p>
+      ${form}
+    </section>
+  </main>
+</body></html>`;
+}
+
 // 1. Send "drop" notifications for new pending matches (admin-triggered)
 workflowRouter.post("/drop", requireAdmin, async (_req, res) => {
   const db = await ensureDb();
@@ -127,13 +196,44 @@ workflowRouter.post("/drop", requireAdmin, async (_req, res) => {
   res.json({ ok: true, dropped });
 });
 
-// Public signed email action. Lets a recipient confirm/cancel directly from the email
-// without exposing partner contact details until both sides have confirmed.
+// Public signed email action. GET only renders a confirmation page so email
+// security scanners cannot accidentally confirm/cancel by prefetching links.
 workflowRouter.get("/:matchId/email-response", async (req, res) => {
   const choice = req.query.choice === "yes" || req.query.choice === "no" ? req.query.choice : undefined;
   const userId = typeof req.query.userId === "string" ? req.query.userId : "";
   const sig = typeof req.query.sig === "string" ? req.query.sig : "";
   const token = typeof req.query.token === "string" ? req.query.token : "";
+  const matchId = String(req.params.matchId);
+
+  const db = await ensureDb();
+  const match = loadMatch(db, matchId);
+  if (!match) return res.status(404).send("Match not found.");
+  if (!userInMatch(match, userId)) return res.status(403).send("This response link does not belong to this match.");
+
+  const verified = !!choice && (
+    (token && verifyStoredMatchEmailAction(match, userId, choice, token, { markUsed: false })) ||
+    (sig && verifySignedMatchEmailAction(matchId, userId, choice, sig))
+  );
+  if (!verified || !choice) {
+    return res.status(400).send("Invalid or expired match response link.");
+  }
+
+  const user = db.students.find((s) => s.id === userId);
+  const locale = normalizeLocale(user?.preferredLocale, "en");
+  const copy = emailResponseCopy(locale, choice, "landing");
+  res.send(renderEmailResponsePage({
+    ...copy,
+    action: `/api/workflow/${encodeURIComponent(matchId)}/email-response`,
+    fields: { userId, choice, token, sig },
+  }));
+});
+
+workflowRouter.post("/:matchId/email-response", async (req, res) => {
+  const body = req.body as Record<string, unknown>;
+  const choice = body.choice === "yes" || body.choice === "no" ? body.choice : undefined;
+  const userId = typeof body.userId === "string" ? body.userId : "";
+  const sig = typeof body.sig === "string" ? body.sig : "";
+  const token = typeof body.token === "string" ? body.token : "";
   const matchId = String(req.params.matchId);
 
   const db = await ensureDb();
@@ -149,43 +249,16 @@ workflowRouter.get("/:matchId/email-response", async (req, res) => {
     return res.status(400).send("Invalid or expired match response link.");
   }
 
-  const result = await applyMatchResponse(db, match, userId, choice);
+  await applyMatchResponse(db, match, userId, choice);
   await saveDb(db);
 
   const user = db.students.find((s) => s.id === userId);
   const locale = normalizeLocale(user?.preferredLocale, "en");
-  const acceptedTitle = locale === "zh-HK"
-    ? "已收到您嘅確認"
-    : locale === "zh-CN"
-    ? "已收到您的确认"
-    : "Your confirmation is in";
-  const declinedTitle = locale === "zh-HK"
-    ? "已為您取消今次配對"
-    : locale === "zh-CN"
-    ? "已为您取消本次匹配"
-    : "This match has been cancelled";
-  const acceptedBody = result.contactShared
-    ? (locale === "zh-HK" ? "已記錄，謝謝！" : locale === "zh-CN" ? "已记录，谢谢！" : "Recorded. Thank you!")
-    : (locale === "zh-HK" ? "已記錄，謝謝！" : locale === "zh-CN" ? "已记录，谢谢！" : "Recorded. Thank you!");
-  const declinedBody = locale === "zh-HK"
-    ? "多謝回饋，Dopa 會幫您再次配對。"
-    : locale === "zh-CN"
-    ? "谢谢反馈，Dopa 会帮您再次匹配。"
-    : "Thank you for the feedback. Dopa will match you again.";
-  const title = choice === "yes" ? acceptedTitle : declinedTitle;
-  const body = choice === "yes" ? acceptedBody : declinedBody;
-
-  res.send(`<!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DopaMine</title></head>
-<body style="margin:0;background:#090d16;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
-  <main style="min-height:100vh;display:grid;place-items:center;padding:24px;">
-    <section style="max-width:520px;border:1px solid rgba(255,255,255,0.12);background:#141b2b;border-radius:28px;padding:34px;box-shadow:0 24px 60px rgba(0,0,0,0.42);">
-      <div style="font-size:28px;font-weight:950;margin-bottom:18px;color:#ff4f8b;">DopaMine</div>
-      <h1 style="margin:0 0 12px;font-size:28px;line-height:1.15;">${title}</h1>
-      <p style="margin:0;color:#cbd5e1;font-size:16px;line-height:1.7;">${body}</p>
-    </section>
-  </main>
-</body></html>`);
+  const copy = emailResponseCopy(locale, choice, "done");
+  res.send(renderEmailResponsePage({
+    title: copy.title,
+    body: copy.body,
+  }));
 });
 
 // 2. Accept / decline a match (per user)

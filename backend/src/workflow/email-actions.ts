@@ -45,7 +45,8 @@ export function verifyStoredMatchEmailAction(
   match: MatchRecord,
   userId: string,
   choice: MatchEmailChoice,
-  token: string
+  token: string,
+  options: { markUsed?: boolean } = {}
 ): boolean {
   const action = (match.emailActions ?? []).find((item) => item.userId === userId && item.choice === choice);
   if (!action) return false;
@@ -54,7 +55,7 @@ export function verifyStoredMatchEmailAction(
   const actual = Buffer.from(token);
   if (actual.length !== expected.length) return false;
   const ok = timingSafeEqual(actual, expected);
-  if (ok && !action.usedAt) action.usedAt = new Date().toISOString();
+  if (ok && options.markUsed !== false && !action.usedAt) action.usedAt = new Date().toISOString();
   return ok;
 }
 
