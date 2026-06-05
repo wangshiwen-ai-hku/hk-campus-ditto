@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Settings } from "lucide-react";
+import { Settings, UserCircle } from "lucide-react";
 
 export function Layout({ locale, onLocale, userId, onUser, children }: { locale: Locale; onLocale: (v: Locale) => void; userId: string | null; onUser: (v: string | null) => void; children: React.ReactNode; }) {
   const { t } = useTranslation();
@@ -25,12 +25,22 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
             )}
             
             {userId && (
-              <button 
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-white/10" 
-                onClick={() => onUser(null)}
-              >
-                {t("nav.signOut")}
-              </button>
+              <>
+                <Link
+                  to="/student?tab=profile"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 transition-all hover:scale-105 hover:bg-white/10 hover:text-white active:scale-95"
+                  title="Profile"
+                  aria-label="Profile"
+                >
+                  <UserCircle size={20} />
+                </Link>
+                <button 
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-white/10" 
+                  onClick={() => onUser(null)}
+                >
+                  {t("nav.signOut")}
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -45,6 +55,17 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
       >
         <Settings size={20} />
       </Link>
+
+      {userId && (
+        <Link
+          to="/student?tab=profile"
+          className="fixed bottom-6 left-24 z-[100] flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/70 backdrop-blur-md shadow-2xl transition-all duration-300 hover:scale-110 hover:border-white/20 hover:text-white active:scale-95"
+          title="Profile"
+          aria-label="Profile"
+        >
+          <UserCircle size={21} />
+        </Link>
+      )}
     </div>
   );
 }

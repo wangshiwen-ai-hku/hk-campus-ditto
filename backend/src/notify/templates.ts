@@ -72,6 +72,10 @@ function studentMatchPageUrl(): string {
   return `${env.email.frontendUrl}/student?tab=matches`;
 }
 
+function studentProfilePageUrl(): string {
+  return `${env.email.frontendUrl}/student?tab=profile`;
+}
+
 function ageFromBirthday(birthday: string | undefined): number | undefined {
   if (!birthday) return undefined;
   const match = birthday.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
@@ -194,6 +198,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
   const partnerFirst = firstNameOf(partner.fullName);
   const originalReasons = (match.userAId === to.id ? match.reasonsForA : match.reasonsForB) ?? match.reasonsForA ?? [];
   const appLink = studentMatchPageUrl();
+  const profileLink = studentProfilePageUrl();
   const confirmLink = matchEmailActionUrl(match, to.id, "yes");
   const cancelLink = matchEmailActionUrl(match, to.id, "no");
   const photo = partnerPhoto(partner);
@@ -232,6 +237,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
     confirmText: string;
     cancelText: string;
     footer: string;
+    profileText: string;
   }) => `
 <!DOCTYPE html>
 <html>
@@ -327,7 +333,12 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
           </td>
         </tr>
       </table>
-      <div style="margin-top:16px;font-size:13px;color:#8a8171;line-height:1.55;">${escapeHtml(opts.footer)} <a href="${escapeHtml(appLink)}" style="color:#7c3aed;text-decoration:none;font-weight:800;">DopaMine</a></div>
+      <div style="margin-top:16px;font-size:13px;color:#8a8171;line-height:1.55;">
+        ${escapeHtml(opts.footer)}
+        <a href="${escapeHtml(appLink)}" style="color:#7c3aed;text-decoration:none;font-weight:800;">DopaMine</a>
+        <span style="color:#b9ad99;"> · </span>
+        <a href="${escapeHtml(profileLink)}" style="color:#7c3aed;text-decoration:none;font-weight:800;">${escapeHtml(opts.profileText)}</a>
+      </div>
     </div>
 
     <div style="text-align:center;padding:22px 0 0;font-size:12px;color:#8a8171;">
@@ -352,6 +363,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
       ``,
       `Confirm: ${confirmLink}`,
       `Cancel: ${cancelLink}`,
+      `個人資料: ${profileLink}`,
     ].join("\n");
     const html = getHtml({
       pretitle: `${partnerFirst} 想認識您。雙方都確認後，DopaMine 先會分享聯絡方式。`,
@@ -373,7 +385,8 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
       reasonsTitle: "點解配您哋",
       confirmText: "CONFIRM",
       cancelText: "Cancel",
-      footer: "您亦可以登入"
+      footer: "您亦可以登入",
+      profileText: "個人資料"
     });
     return { subject, body, html };
   }
@@ -392,6 +405,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
       ``,
       `Confirm: ${confirmLink}`,
       `Cancel: ${cancelLink}`,
+      `个人资料: ${profileLink}`,
     ].join("\n");
     const html = getHtml({
       pretitle: `${partnerFirst} 想认识您。双方都确认后，DopaMine 才会分享联系方式。`,
@@ -413,7 +427,8 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
       reasonsTitle: "为什么匹配您们",
       confirmText: "CONFIRM",
       cancelText: "Cancel",
-      footer: "您也可以登录"
+      footer: "您也可以登录",
+      profileText: "个人资料"
     });
     return { subject, body, html };
   }
@@ -432,6 +447,7 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
     ``,
     `Confirm: ${confirmLink}`,
     `Cancel: ${cancelLink}`,
+    `Profile: ${profileLink}`,
   ].join("\n");
   const html = getHtml({
     pretitle: `${partnerFirst} would like to meet you. Contact details are only shared after both sides confirm.`,
@@ -453,7 +469,8 @@ export async function renderMatchDrop(to: StudentProfile, partner: StudentProfil
     reasonsTitle: "Why You're Matched",
     confirmText: "CONFIRM",
     cancelText: "Cancel",
-    footer: "You can also open"
+    footer: "You can also open",
+    profileText: "Profile"
   });
 
   return { subject, body, html };
@@ -472,6 +489,7 @@ export function renderContactShared(
   const reason = match.proposedPlace?.reason;
   const contacts = contactLines(partner, locale);
   const appLink = studentMatchPageUrl();
+  const profileLink = studentProfilePageUrl();
 
   const copy = locale === "zh-HK"
     ? {
@@ -487,6 +505,7 @@ export function renderContactShared(
         tipsTitle: "第一次見面 tips",
         tips: ["第一句可以由共同興趣開始，唔需要太用力。", "第一次見面建議 45-60 分鐘，留一點餘地反而更自然。", "如果臨時要改時間，提前講清楚會好加分。"],
         cta: "打開 DopaMine",
+        profileCta: "個人資料",
       }
     : locale === "zh-CN"
     ? {
@@ -502,6 +521,7 @@ export function renderContactShared(
         tipsTitle: "第一次见面 tips",
         tips: ["第一句可以从共同兴趣开始，不需要太用力。", "第一次见面建议 45-60 分钟，留一点余地反而更自然。", "如果临时需要改时间，提前说清楚会很加分。"],
         cta: "打开 DopaMine",
+        profileCta: "个人资料",
       }
     : {
         subject: "DopaMine match confirmed",
@@ -516,6 +536,7 @@ export function renderContactShared(
         tipsTitle: "First-date tips",
         tips: ["Start from one shared interest. It does not need to be a perfect opening line.", "Keep the first meet around 45-60 minutes so it stays easy.", "If plans change, a clear early message is always appreciated."],
         cta: "Open DopaMine",
+        profileCta: "Profile",
       };
 
   const body = [
@@ -574,6 +595,9 @@ export function renderContactShared(
 
       <div style="text-align:center;margin-top:28px;">
         <a href="${escapeHtml(appLink)}" style="display:inline-block;background:linear-gradient(135deg,#ec3370,#7c3aed);color:#ffffff;text-decoration:none;border-radius:999px;padding:14px 30px;font-size:16px;font-weight:900;">${escapeHtml(copy.cta)}</a>
+        <div style="margin-top:14px;font-size:13px;">
+          <a href="${escapeHtml(profileLink)}" style="color:#c4b5fd;text-decoration:none;font-weight:850;">${escapeHtml(copy.profileCta)}</a>
+        </div>
       </div>
     </div>
   </div>
