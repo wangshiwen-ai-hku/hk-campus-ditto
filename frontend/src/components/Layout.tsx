@@ -23,49 +23,42 @@ export function Layout({ locale, onLocale, userId, onUser, children }: { locale:
                 {t("nav.join")}
               </Link>
             )}
-            
+
+            {/* Settings button */}
+            <div className="relative group">
+              <Link 
+                to="/settings" 
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white hover:rotate-45 active:scale-95"
+                aria-label="Settings"
+              >
+                <Settings size={20} />
+              </Link>
+              {/* Tooltip */}
+              <div className="absolute top-[120%] left-1/2 -translate-x-1/2 scale-90 opacity-0 pointer-events-none group-hover:scale-100 group-hover:opacity-100 transition-all duration-200 z-[110] bg-black/90 border border-white/10 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                {t("nav.settings")}
+              </div>
+            </div>
+
+            {/* Profile button */}
             {userId && (
-              <>
+              <div className="relative group">
                 <Link
                   to="/student?tab=profile"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 transition-all hover:scale-105 hover:bg-white/10 hover:text-white active:scale-95"
-                  title="Profile"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:text-white active:scale-95"
                   aria-label="Profile"
                 >
                   <UserCircle size={20} />
                 </Link>
-                <button 
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-white/10" 
-                  onClick={() => onUser(null)}
-                >
-                  {t("nav.signOut")}
-                </button>
-              </>
+                {/* Tooltip */}
+                <div className="absolute top-[120%] left-1/2 -translate-x-1/2 scale-90 opacity-0 pointer-events-none group-hover:scale-100 group-hover:opacity-100 transition-all duration-200 z-[110] bg-black/90 border border-white/10 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                  {t("nav.profile")}
+                </div>
+              </div>
             )}
           </div>
         </div>
       </header>
       {children}
-
-      {/* Floating Settings Gear Icon in Bottom Left */}
-      <Link 
-        to="/settings" 
-        className="fixed bottom-6 left-6 z-[100] flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/70 backdrop-blur-md shadow-2xl transition-all hover:scale-110 hover:text-white hover:border-white/20 hover:rotate-45 active:scale-95 duration-300"
-        title="Settings"
-      >
-        <Settings size={20} />
-      </Link>
-
-      {userId && (
-        <Link
-          to="/student?tab=profile"
-          className="fixed bottom-6 left-24 z-[100] flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white/70 backdrop-blur-md shadow-2xl transition-all duration-300 hover:scale-110 hover:border-white/20 hover:text-white active:scale-95"
-          title="Profile"
-          aria-label="Profile"
-        >
-          <UserCircle size={21} />
-        </Link>
-      )}
     </div>
   );
 }

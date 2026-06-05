@@ -5,7 +5,9 @@
     "safety": "Safety",
     "faq": "FAQ",
     "join": "Join Now",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "settings": "Settings",
+    "profile": "Profile"
   },
   "home": {
     "hero": {

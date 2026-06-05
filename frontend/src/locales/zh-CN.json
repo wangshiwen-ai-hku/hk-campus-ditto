@@ -5,7 +5,9 @@
     "safety": "安全保障",
     "faq": "常见问题",
     "join": "立即加入",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "settings": "设置",
+    "profile": "个人主页"
   },
   "home": {
     "hero": {
