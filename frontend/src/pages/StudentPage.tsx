@@ -1760,12 +1760,13 @@ export function StudentPage({ userId, onLocale }: { userId: string | null; onLoc
 
   const refresh = useCallback(async () => {
     if (!userId) return;
-    const [profileRes, matchesRes] = await Promise.all([
+    const [profileRes, currentMatchRes] = await Promise.all([
       api.getProfile(userId),
-      api.getAllMatches(),
+      api.getCurrentMatch(),
     ]);
     setProfile(profileRes as StudentProfile);
-    setMatches((matchesRes.matches ?? []).filter((m: any) => m.partner !== null) as MatchView[]);
+    const matchView = (currentMatchRes as any).matchView;
+    setMatches(matchView?.partner ? [matchView as MatchView] : []);
     return profileRes as StudentProfile;
   }, [userId]);
 

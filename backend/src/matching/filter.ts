@@ -50,6 +50,7 @@ function dealbreakerHit(a: StudentProfile, b: StudentProfile): boolean {
 export function isEligibleForRound(s: StudentProfile, ctx: FilterContext): boolean {
   if (s.verificationStatus !== "verified") return false;
   if (!s.optedIn) return false;
+  if (hasActiveMatch(ctx.matches, s.id)) return false;
   return true;
 }
 
@@ -63,6 +64,8 @@ export function isEligiblePair(
     return { ok: false, reason: "blocked" };
   }
   if (dealbreakerHit(a, b) || dealbreakerHit(b, a)) return { ok: false, reason: "dealbreaker" };
+  if (pairWasRecentlyMatched(ctx.matches, a.id, b.id)) return { ok: false, reason: "recent match" };
+  if (pairHasPassFeedback(ctx.matches, a.id, b.id)) return { ok: false, reason: "passed before" };
   const constraints = hardConstraints(a, b);
   if (!constraints.ok) return { ok: false, reason: constraints.reasons.join("; ") };
   return { ok: true };
