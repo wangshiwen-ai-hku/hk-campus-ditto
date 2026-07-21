@@ -65,14 +65,14 @@ If this was not you, you can safely ignore this email.
 
 DopaMine
 aurahk.me
-support@aurahk.me`,
+${env.email.replyTo}`,
     html: `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1f2937;max-width:480px;margin:0 auto;padding:24px;">
   <p style="font-size:15px;margin:0 0 16px;">Your DopaMine verification code is:</p>
   <p style="font-size:32px;font-weight:700;letter-spacing:6px;color:#111827;margin:0 0 16px;font-family:'SF Mono',Menlo,monospace;">${code}</p>
   <p style="font-size:14px;color:#6b7280;margin:0 0 8px;">This code expires in ${env.auth.codeTtlMin} minutes.</p>
   <p style="font-size:14px;color:#6b7280;margin:0 0 16px;">You received this email because someone requested to sign in to DopaMine using this email address.</p>
   <p style="font-size:14px;color:#6b7280;margin:0 0 16px;">If this was not you, you can safely ignore this email.</p>
-  <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.6;">DopaMine<br>aurahk.me<br>support@aurahk.me</p>
+  <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.6;">DopaMine<br>aurahk.me<br>${env.email.replyTo}</p>
 </body></html>`,
     tag: "auth-code",
     headers: {

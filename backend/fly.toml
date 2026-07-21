@@ -10,8 +10,8 @@ primary_region = "sin"
   SCHEDULER_TRIGGER = "Wednesday 19:00" # 这里可以设置你想要的正式匹配时间
   API_PUBLIC_URL = "https://thrumming-island-597.fly.dev"
   FRONTEND_URL = "https://www.aurahk.me"
-  EMAIL_FROM = "DopaMine <verify@auth.aurahk.me>"
-  EMAIL_REPLY_TO = "support@aurahk.me"
+  EMAIL_FROM = "DopaMine <hi@dopa.aurahk.me>"
+  EMAIL_REPLY_TO = "hi@dopa.aurahk.me"
 
 [http_service]
   internal_port = 8080

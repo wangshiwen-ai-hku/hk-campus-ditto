@@ -7,24 +7,6 @@ export interface FilterContext {
   matches: MatchRecord[];
 }
 
-function hasActiveMatch(matches: MatchRecord[], userId: string): boolean {
-  return matches.some(
-    (m) =>
-      (m.userAId === userId || m.userBId === userId) &&
-      [
-        "pending",
-        "notified",
-        "awaiting-acceptance",
-        "mutual-accepted",
-        "slot-proposing",
-        "slot-confirmed",
-        "place-confirmed",
-        "scheduled",
-        "awaiting-availability",
-      ].includes(m.status)
-  );
-}
-
 function pairWasRecentlyMatched(matches: MatchRecord[], a: string, b: string): boolean {
   const cutoff = Date.now() - NINETY_DAYS_MS;
   return matches.some(
@@ -47,10 +29,9 @@ function dealbreakerHit(a: StudentProfile, b: StudentProfile): boolean {
   return (a.dealBreakers ?? []).some((db) => lowerB.has(db.toLowerCase()));
 }
 
-export function isEligibleForRound(s: StudentProfile, ctx: FilterContext): boolean {
+export function isEligibleForRound(s: StudentProfile, _ctx: FilterContext): boolean {
   if (s.verificationStatus !== "verified") return false;
   if (!s.optedIn) return false;
-  if (hasActiveMatch(ctx.matches, s.id)) return false;
   return true;
 }
 

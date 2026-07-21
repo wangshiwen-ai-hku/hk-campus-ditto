@@ -22,14 +22,21 @@ function list(name: string, fallback: string[]): string[] {
 const jwtSecret = str("JWT_SECRET", "dev-secret-change-me");
 const adminSecret = str("ADMIN_SECRET", jwtSecret);
 const nodeEnv = str("NODE_ENV", "development");
-const emailProvider = str("EMAIL_PROVIDER", "console") as "console" | "resend";
+const emailProviderValue = str("EMAIL_PROVIDER", "console");
+if (!["console", "resend", "smtp"].includes(emailProviderValue)) {
+  throw new Error(`Unsupported EMAIL_PROVIDER=${emailProviderValue}. Use console, resend or smtp.`);
+}
+const emailProvider = emailProviderValue as "console" | "resend" | "smtp";
 
 if (nodeEnv === "production") {
   if (emailProvider === "console") {
-    throw new Error("EMAIL_PROVIDER=console is not allowed in production. Use EMAIL_PROVIDER=resend.");
+    throw new Error("EMAIL_PROVIDER=console is not allowed in production. Use EMAIL_PROVIDER=resend or smtp.");
   }
-  if (!str("RESEND_API_KEY", "")) {
+  if (emailProvider === "resend" && !str("RESEND_API_KEY", "")) {
     throw new Error("RESEND_API_KEY is required in production.");
+  }
+  if (emailProvider === "smtp" && (!str("SMTP_HOST", "") || !str("SMTP_USER", "") || !str("SMTP_PASSWORD", ""))) {
+    throw new Error("SMTP_HOST, SMTP_USER and SMTP_PASSWORD are required when EMAIL_PROVIDER=smtp.");
   }
   if (!str("FRONTEND_URL", "")) {
     throw new Error("FRONTEND_URL is required in production.");
@@ -74,8 +81,15 @@ export const env = {
   email: {
     provider: emailProvider,
     resendApiKey: str("RESEND_API_KEY", ""),
-    from: str("EMAIL_FROM", "DopaMine <verify@auth.aurahk.me>"),
-    replyTo: str("EMAIL_REPLY_TO", "support@aurahk.me"),
+    smtp: {
+      host: str("SMTP_HOST", ""),
+      port: num("SMTP_PORT", 465),
+      secure: bool("SMTP_SECURE", true),
+      user: str("SMTP_USER", ""),
+      password: str("SMTP_PASSWORD", ""),
+    },
+    from: str("EMAIL_FROM", "DopaMine <hi@dopa.aurahk.me>"),
+    replyTo: str("EMAIL_REPLY_TO", "hi@dopa.aurahk.me"),
     frontendUrl: str("FRONTEND_URL", "http://localhost:5173"),
     apiPublicUrl: str("API_PUBLIC_URL", `http://localhost:${num("PORT", 8787)}`),
   },

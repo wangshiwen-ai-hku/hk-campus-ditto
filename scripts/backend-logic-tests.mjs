@@ -45,8 +45,13 @@ const b = student({
 const c = student({ id: "c", universityId: "cuhk", email: "c@link.cuhk.edu.hk" });
 
 const emptyCtx = buildContext({ universities: [], students: [a, b, c], matches: [], verificationCodes: [], inviteCodes: [], surveys: [] });
+const activeMatchCtx = buildContext({
+  universities: [], students: [a, b, c], verificationCodes: [], inviteCodes: [], surveys: [],
+  matches: [{ userAId: "a", userBId: "b", status: "awaiting-acceptance" }],
+});
 
 assert(isEligibleForRound(a, emptyCtx), "verified complete opted-in user should be eligible");
+assert(isEligibleForRound(a, activeMatchCtx), "active match should not exclude a user from the next round");
 assert(!isEligibleForRound({ ...a, optedIn: false }, emptyCtx), "opted-out user should not be eligible");
 assert(isEligiblePair(a, b, emptyCtx).ok, "compatible pair should be eligible");
 assert(!isEligiblePair({ ...a, blockedUserIds: ["b"] }, b, emptyCtx).ok, "blocked partner should be filtered");
